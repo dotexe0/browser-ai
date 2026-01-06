@@ -1,0 +1,52 @@
+# Chromium checkout (too large to track directly)
+chromium/
+depot_tools/
+
+# Build outputs
+out/
+build/
+*.pyc
+*.pyo
+__pycache__/
+
+# IDE specific
+.vscode/
+.idea/
+.vs/
+.history/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Compiled Object files
+*.o
+*.obj
+*.lo
+*.slo
+
+# Compiled Dynamic libraries
+*.so
+*.dylib
+*.dll
+
+# Compiled Static libraries
+*.a
+*.lib
+*.lai
+*.la
+
+# Executables
+*.exe
+*.out
+*.app
+
+# Logs
+*.log
+
+# Node modules
+node_modules/
+
+# Python virtual environments
+venv/
+env/
