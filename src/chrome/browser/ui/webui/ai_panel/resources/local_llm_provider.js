@@ -95,26 +95,44 @@ class LocalLLMProvider extends AIProvider {
    */
   async sendNativeMessage(message) {
     return new Promise((resolve, reject) => {
-      // TODO: This will be implemented when we add Native Messaging support
-      // For now, return a stub response
+      // Check if running in browser context
+      if (typeof chrome === 'undefined' || !chrome.runtime) {
+        console.warn('Chrome runtime not available, using stub');
+        // Fallback for testing outside of Chrome
+        setTimeout(() => {
+          if (message.action === 'check_local_llm') {
+            resolve({
+              available: false,
+              error: 'Chrome runtime not available'
+            });
+          } else {
+            reject(new Error('Chrome runtime not available'));
+          }
+        }, 100);
+        return;
+      }
       
-      // In the real implementation, this will be:
-      // chrome.runtime.sendNativeMessage('com.your.automation', message, resolve);
-      
-      // Stub response for development
-      console.log('Native message (stub):', message);
-      
-      setTimeout(() => {
-        if (message.action === 'check_local_llm') {
-          // Simulate local LLM not available yet
-          resolve({
-            available: false,
-            error: 'Automation service not implemented yet'
-          });
-        } else {
-          reject(new Error('Native messaging not implemented yet'));
+      // Send message to native automation service
+      chrome.runtime.sendNativeMessage(
+        'com.browser_ai.automation',
+        message,
+        response => {
+          // Check for errors
+          if (chrome.runtime.lastError) {
+            console.error('Native messaging error:', chrome.runtime.lastError);
+            reject(new Error(chrome.runtime.lastError.message));
+            return;
+          }
+          
+          // Check if response is valid
+          if (!response) {
+            reject(new Error('No response from automation service'));
+            return;
+          }
+          
+          resolve(response);
         }
-      }, 100);
+      );
     });
   }
 

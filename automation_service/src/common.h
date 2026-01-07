@@ -1,9 +1,14 @@
 #pragma once
 
+#define NOMINMAX  // Prevent Windows.h from defining min/max macros
+
 #include <string>
 #include <vector>
 #include <memory>
 #include <cstdint>
+#include <iostream>
+#include <stdexcept>
+#include <algorithm>
 #include <windows.h>
 
 // Common types

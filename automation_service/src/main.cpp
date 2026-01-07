@@ -11,9 +11,7 @@
  */
 
 int main(int argc, char* argv[]) {
-    // Redirect stderr for logging (stdout is used for Native Messaging)
-    std::wcerr.rdbuf(std::cerr.rdbuf());
-    
+    // stdout is used for Native Messaging, stderr for logging
     LOG_INFO(L"Browser AI Automation Service starting...");
     
     // Initialize action executor
