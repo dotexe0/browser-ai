@@ -13,9 +13,11 @@ fi
 echo "Syncing files to chromium source tree..."
 
 # Sync all files from src/ to chromium/src/
-rsync -av --exclude='.git' "$SCRIPT_DIR/src/" "$CHROMIUM_SRC/"
+# Using cp -r since rsync may not be available on all systems
+cp -r "$SCRIPT_DIR/src/"* "$CHROMIUM_SRC/"
 
 echo "✓ Sync complete!"
 echo ""
 echo "Files synced to: $CHROMIUM_SRC"
+
 
