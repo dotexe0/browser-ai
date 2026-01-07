@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Interactive Demo Debug</title>
+  <link rel="stylesheet" href="../src/chrome/browser/ui/webui/ai_panel/resources/ai_panel.css">
+  <style>
+    body { padding: 20px; font-family: system-ui; }
+    .debug-info { background: #f0f0f0; padding: 15px; margin: 10px 0; border-radius: 5px; }
+    .error { background: #ffebee; color: #c62828; }
+    .success { background: #e8f5e9; color: #2e7d32; }
+  </style>
+</head>
+<body>
+  <h1>🔍 Interactive Demo Debug</h1>
+  
+  <div id="debug-output"></div>
+
+  <hr>
+
+  <!-- AI Panel UI -->
+  <div class="panel-container" style="max-width: 800px; margin: 20px auto;">
+    <header class="panel-header">
+      <h1>AI Automation</h1>
+      <button id="settings-btn" class="icon-btn" title="Settings">⚙️</button>
+    </header>
+
+    <!-- Settings Panel -->
+    <div id="settings-panel" class="settings-panel hidden">
+      <h2>Settings</h2>
+      
+      <div class="setting-group">
+        <label for="provider-select">AI Provider:</label>
+        <select id="provider-select" class="provider-select">
+          <option value="">Loading...</option>
+        </select>
+        <div id="provider-info" class="provider-info"></div>
+      </div>
+
+      <div id="api-key-section" class="setting-group hidden">
+        <label for="api-key-input">API Key:</label>
+        <div class="api-key-container">
+          <input 
+            type="password" 
+            id="api-key-input" 
+            placeholder="Enter API key..."
+            class="api-key-input"
+          >
+          <button id="toggle-api-key" class="icon-btn" title="Show/Hide">👁️</button>
+        </div>
+        <button id="save-api-key" class="btn btn-primary">Save API Key</button>
+        <div id="api-key-status" class="status-message"></div>
+      </div>
+
+      <div class="setting-group">
+        <button id="clear-history" class="btn">Clear Conversation History</button>
+      </div>
+
+      <button id="close-settings" class="btn">Close</button>
+    </div>
+
+    <!-- Main Panel -->
+    <div id="main-panel" class="main-panel">
+      <div class="status-bar">
+        <div class="status-indicator">
+          <span id="provider-status" class="status-badge">Not configured</span>
+          <span id="automation-status" class="status-badge">Ready</span>
+        </div>
+      </div>
+
+      <div class="request-section">
+        <label for="user-request">What would you like to automate?</label>
+        <textarea 
+          id="user-request" 
+          placeholder="Example: Open Notepad and type 'Hello World'"
+          rows="4"
+        ></textarea>
+        
+        <div class="request-actions">
+          <button id="execute-btn" class="btn btn-primary" disabled>
+            Execute Automation
+          </button>
+          <button id="capture-screen-btn" class="btn">
+            Preview Screen
+          </button>
+        </div>
+      </div>
+
+      <div id="preview-section" class="preview-section hidden">
+        <h3>Screen Preview</h3>
+        <div id="screenshot-preview" class="screenshot-preview">
+          <p class="placeholder-text">Click "Preview Screen" to capture current desktop</p>
+        </div>
+      </div>
+
+      <div id="actions-section" class="actions-section hidden">
+        <h3>Planned Actions</h3>
+        <div id="actions-list" class="actions-list"></div>
+        <div class="actions-controls">
+          <button id="confirm-actions-btn" class="btn btn-success">
+            Confirm & Execute
+          </button>
+          <button id="cancel-actions-btn" class="btn">
+            Cancel
+          </button>
+        </div>
+      </div>
+
+      <div class="execution-log">
+        <h3>Execution Log</h3>
+        <div id="log-output" class="log-output">
+          <p class="log-entry info">Ready to automate. Configure an AI provider to begin.</p>
+        </div>
+        <button id="clear-log" class="btn btn-small">Clear Log</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Load AI Panel scripts -->
+  <script src="../src/chrome/browser/ui/webui/ai_panel/resources/ai_provider_interface.js"></script>
+  <script src="../src/chrome/browser/ui/webui/ai_panel/resources/openai_provider.js"></script>
+  <script src="../src/chrome/browser/ui/webui/ai_panel/resources/local_llm_provider.js"></script>
+  <script src="../src/chrome/browser/ui/webui/ai_panel/resources/ai_provider_manager.js"></script>
+  <script src="../src/chrome/browser/ui/webui/ai_panel/resources/ai_panel.js"></script>
+
+  <script>
+    const debugOutput = document.getElementById('debug-output');
+    
+    function debugLog(message, type = 'info') {
+      const div = document.createElement('div');
+      div.className = `debug-info ${type}`;
+      div.textContent = message;
+      debugOutput.appendChild(div);
+      console.log(`[DEBUG] ${message}`);
+    }
+
+    // Check if scripts loaded
+    debugLog('✓ Page loaded', 'success');
+    debugLog(`✓ AIProvider class: ${typeof AIProvider}`, typeof AIProvider === 'function' ? 'success' : 'error');
+    debugLog(`✓ OpenAIProvider class: ${typeof OpenAIProvider}`, typeof OpenAIProvider === 'function' ? 'success' : 'error');
+    debugLog(`✓ LocalLLMProvider class: ${typeof LocalLLMProvider}`, typeof LocalLLMProvider === 'function' ? 'success' : 'error');
+    debugLog(`✓ AIProviderManager class: ${typeof AIProviderManager}`, typeof AIProviderManager === 'function' ? 'success' : 'error');
+    debugLog(`✓ AutomationPanel class: ${typeof AutomationPanel}`, typeof AutomationPanel === 'function' ? 'success' : 'error');
+
+    // Check if DOM elements exist
+    debugLog(`✓ Settings button exists: ${!!document.getElementById('settings-btn')}`, document.getElementById('settings-btn') ? 'success' : 'error');
+    debugLog(`✓ Settings panel exists: ${!!document.getElementById('settings-panel')}`, document.getElementById('settings-panel') ? 'success' : 'error');
+    debugLog(`✓ Provider select exists: ${!!document.getElementById('provider-select')}`, document.getElementById('provider-select') ? 'success' : 'error');
+
+    // Try to initialize AutomationPanel
+    let panel;
+    try {
+      debugLog('Attempting to initialize AutomationPanel...', 'info');
+      panel = new AutomationPanel();
+      debugLog('✓ AutomationPanel initialized successfully!', 'success');
+      
+      // Test the settings button manually
+      const settingsBtn = document.getElementById('settings-btn');
+      debugLog(`Settings button click handler attached: ${settingsBtn.onclick !== null || settingsBtn.addEventListener !== undefined}`, 'info');
+      
+      // Add a manual test
+      settingsBtn.addEventListener('click', () => {
+        debugLog('⚙️ Settings button clicked!', 'success');
+      });
+      
+    } catch (error) {
+      debugLog(`✗ Error initializing AutomationPanel: ${error.message}`, 'error');
+      console.error('Full error:', error);
+    }
+
+    // Add manual test button
+    const testBtn = document.createElement('button');
+    testBtn.textContent = 'Test Settings Toggle Manually';
+    testBtn.className = 'btn btn-primary';
+    testBtn.style.margin = '10px 0';
+    testBtn.onclick = () => {
+      const settingsPanel = document.getElementById('settings-panel');
+      settingsPanel.classList.toggle('hidden');
+      debugLog('Manually toggled settings panel', 'success');
+    };
+    debugOutput.appendChild(testBtn);
+  </script>
+</body>
+</html>
+
