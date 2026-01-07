@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>AI Panel Demo - Interactive</title>
+  <link rel="stylesheet" href="../src/chrome/browser/ui/webui/ai_panel/resources/ai_panel.css">
+  <style>
+    body { 
+      padding: 20px; 
+      font-family: system-ui; 
+      background: #f5f5f5;
+    }
+    .demo-wrapper {
+      max-width: 900px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+      overflow: hidden;
+    }
+    
+    /* Make settings panel an overlay */
+    .settings-panel {
+      position: fixed !important;
+      top: 0;
+      right: -400px; /* Start off-screen */
+      width: 400px;
+      height: 100vh;
+      background: white;
+      box-shadow: -2px 0 10px rgba(0,0,0,0.2);
+      padding: 20px;
+      transition: right 0.3s ease;
+      z-index: 1000;
+      overflow-y: auto;
+    }
+    
+    .settings-panel.open {
+      right: 0; /* Slide in */
+    }
+    
+    .settings-panel.hidden {
+      display: block !important; /* Override, we use position instead */
+    }
+    
+    /* Overlay backdrop */
+    .settings-backdrop {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0,0,0,0.5);
+      z-index: 999;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+    
+    .settings-backdrop.show {
+      opacity: 1;
+      pointer-events: all;
+    }
+    
+    .demo-header {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      padding: 20px;
+      text-align: center;
+    }
+    
+    .demo-header h1 {
+      margin: 0;
+      font-size: 24px;
+    }
+    
+    .demo-header p {
+      margin: 10px 0 0;
+      opacity: 0.9;
+    }
+  </style>
+</head>
+<body>
+  <div class="demo-header">
+    <h1>🤖 AI-Powered Desktop Automation</h1>
+    <p>Interactive Demo - Click the ⚙️ icon to configure</p>
+  </div>
+
+  <div class="demo-wrapper">
+    <!-- Settings Backdrop -->
+    <div id="settings-backdrop" class="settings-backdrop"></div>
+
+    <!-- AI Panel UI -->
+    <div class="panel-container">
+      <header class="panel-header">
+        <h1>AI Automation Panel</h1>
+        <button id="settings-btn" class="icon-btn" title="Settings">⚙️</button>
+      </header>
+
+      <!-- Settings Panel (overlay) -->
+      <div id="settings-panel" class="settings-panel">
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+          <h2 style="margin: 0;">Settings</h2>
+          <button id="close-settings" class="icon-btn" style="font-size: 24px;">✖</button>
+        </div>
+        
+        <div class="setting-group">
+          <label for="provider-select">AI Provider:</label>
+          <select id="provider-select" class="provider-select">
+            <option value="">Loading...</option>
+          </select>
+          <div id="provider-info" class="provider-info"></div>
+        </div>
+
+        <div id="api-key-section" class="setting-group hidden">
+          <label for="api-key-input">API Key:</label>
+          <div class="api-key-container">
+            <input 
+              type="password" 
+              id="api-key-input" 
+              placeholder="Enter API key..."
+              class="api-key-input"
+            >
+            <button id="toggle-api-key" class="icon-btn" title="Show/Hide">👁️</button>
+          </div>
+          <button id="save-api-key" class="btn btn-primary">Save API Key</button>
+          <div id="api-key-status" class="status-message"></div>
+        </div>
+
+        <div class="setting-group">
+          <button id="clear-history" class="btn">Clear Conversation History</button>
+        </div>
+      </div>
+
+      <!-- Main Panel -->
+      <div id="main-panel" class="main-panel">
+        <div class="status-bar">
+          <div class="status-indicator">
+            <span id="provider-status" class="status-badge">Not configured</span>
+            <span id="automation-status" class="status-badge">Ready</span>
+          </div>
+        </div>
+
+        <div class="request-section">
+          <label for="user-request">What would you like to automate?</label>
+          <textarea 
+            id="user-request" 
+            placeholder="Example: Open Notepad and type 'Hello World'&#10;Example: Search for 'Chromium' in File Explorer&#10;Example: Click the start menu"
+            rows="4"
+          ></textarea>
+          
+          <div class="request-actions">
+            <button id="execute-btn" class="btn btn-primary" disabled>
+              Execute Automation
+            </button>
+            <button id="capture-screen-btn" class="btn">
+              Preview Screen
+            </button>
+          </div>
+        </div>
+
+        <div id="preview-section" class="preview-section hidden">
+          <h3>Screen Preview</h3>
+          <div id="screenshot-preview" class="screenshot-preview">
+            <p class="placeholder-text">Click "Preview Screen" to capture current desktop</p>
+          </div>
+        </div>
+
+        <div id="actions-section" class="actions-section hidden">
+          <h3>Planned Actions</h3>
+          <div id="actions-list" class="actions-list"></div>
+          <div class="actions-controls">
+            <button id="confirm-actions-btn" class="btn btn-success">
+              Confirm & Execute
+            </button>
+            <button id="cancel-actions-btn" class="btn">
+              Cancel
+            </button>
+          </div>
+        </div>
+
+        <div class="execution-log">
+          <h3>Execution Log</h3>
+          <div id="log-output" class="log-output">
+            <p class="log-entry info">Ready to automate. Configure an AI provider to begin.</p>
+          </div>
+          <button id="clear-log" class="btn btn-small">Clear Log</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Load AI Panel scripts -->
+  <script src="../src/chrome/browser/ui/webui/ai_panel/resources/ai_provider_interface.js"></script>
+  <script src="../src/chrome/browser/ui/webui/ai_panel/resources/openai_provider.js"></script>
+  <script src="../src/chrome/browser/ui/webui/ai_panel/resources/local_llm_provider.js"></script>
+  <script src="../src/chrome/browser/ui/webui/ai_panel/resources/ai_provider_manager.js"></script>
+
+  <script>
+    // Custom AutomationPanel for demo with fixed settings toggle
+    class DemoAutomationPanel {
+      constructor() {
+        this.providerManager = new AIProviderManager();
+        this.currentScreenshot = null;
+        this.currentUITree = null;
+        this.plannedActions = null;
+        
+        this.initializeUI();
+        this.attachEventListeners();
+        this.updateProviderStatus();
+        
+        console.log('[INFO] Demo Automation Panel initialized');
+      }
+
+      initializeUI() {
+        this.populateProviderDropdown();
+        
+        const activeProvider = this.providerManager.getActiveProvider();
+        if (activeProvider && activeProvider.isConfigured()) {
+          this.enableAutomation();
+          this.log('AI provider configured and ready', 'success');
+        } else {
+          this.log('Please configure an AI provider in settings', 'warning');
+        }
+      }
+
+      populateProviderDropdown() {
+        const select = document.getElementById('provider-select');
+        const providers = this.providerManager.getAvailableProviders();
+        
+        select.innerHTML = '';
+        
+        providers.forEach(provider => {
+          const option = document.createElement('option');
+          option.value = provider.name;
+          option.textContent = provider.name;
+          
+          if (!provider.configured && provider.requiresApiKey) {
+            option.textContent += ' (needs API key)';
+          }
+          
+          select.appendChild(option);
+        });
+        
+        const activeProvider = this.providerManager.getActiveProvider();
+        if (activeProvider) {
+          select.value = activeProvider.name;
+          this.updateProviderInfo(activeProvider.name);
+        }
+      }
+
+      updateProviderInfo(providerName) {
+        const provider = this.providerManager.getProvider(providerName);
+        const infoDiv = document.getElementById('provider-info');
+        const apiKeySection = document.getElementById('api-key-section');
+        
+        if (!provider) return;
+        
+        let infoText = provider.supportsVision ? '✓ Supports vision' : '✗ No vision support';
+        if (provider.requiresApiKey) {
+          infoText += ' | Requires API key';
+          apiKeySection.classList.remove('hidden');
+          
+          const input = document.getElementById('api-key-input');
+          input.value = provider.apiKey || '';
+        } else {
+          apiKeySection.classList.add('hidden');
+        }
+        
+        infoDiv.textContent = infoText;
+      }
+
+      attachEventListeners() {
+        // Settings toggle - FIXED VERSION
+        document.getElementById('settings-btn').addEventListener('click', () => {
+          this.openSettings();
+        });
+        
+        document.getElementById('close-settings').addEventListener('click', () => {
+          this.closeSettings();
+        });
+        
+        document.getElementById('settings-backdrop').addEventListener('click', () => {
+          this.closeSettings();
+        });
+        
+        // Provider selection
+        document.getElementById('provider-select').addEventListener('change', (e) => {
+          this.onProviderChanged(e.target.value);
+        });
+        
+        // API key management
+        document.getElementById('toggle-api-key').addEventListener('click', () => {
+          this.toggleApiKeyVisibility();
+        });
+        
+        document.getElementById('save-api-key').addEventListener('click', () => {
+          this.saveApiKey();
+        });
+        
+        // Clear history
+        document.getElementById('clear-history').addEventListener('click', () => {
+          this.clearConversationHistory();
+        });
+        
+        // Automation controls
+        document.getElementById('execute-btn').addEventListener('click', () => {
+          this.log('Execute button clicked (demo mode - no actual execution)', 'info');
+        });
+        
+        document.getElementById('capture-screen-btn').addEventListener('click', () => {
+          this.log('Capture screen clicked (demo mode - requires service)', 'info');
+        });
+        
+        // Clear log
+        document.getElementById('clear-log').addEventListener('click', () => {
+          this.clearLog();
+        });
+      }
+
+      openSettings() {
+        document.getElementById('settings-panel').classList.add('open');
+        document.getElementById('settings-backdrop').classList.add('show');
+        this.log('Settings opened', 'info');
+      }
+
+      closeSettings() {
+        document.getElementById('settings-panel').classList.remove('open');
+        document.getElementById('settings-backdrop').classList.remove('show');
+        this.log('Settings closed', 'info');
+      }
+
+      onProviderChanged(providerName) {
+        this.log(`Switching to provider: ${providerName}`, 'info');
+        
+        if (this.providerManager.setActiveProvider(providerName)) {
+          this.updateProviderInfo(providerName);
+          this.updateProviderStatus();
+          
+          const provider = this.providerManager.getProvider(providerName);
+          if (provider.isConfigured()) {
+            this.enableAutomation();
+            this.log(`Provider ${providerName} is ready`, 'success');
+          } else {
+            this.disableAutomation();
+          }
+        }
+      }
+
+      toggleApiKeyVisibility() {
+        const input = document.getElementById('api-key-input');
+        input.type = input.type === 'password' ? 'text' : 'password';
+      }
+
+      saveApiKey() {
+        const input = document.getElementById('api-key-input');
+        const apiKey = input.value.trim();
+        
+        if (!apiKey) {
+          this.log('Please enter an API key', 'error');
+          return;
+        }
+        
+        const activeProvider = this.providerManager.getActiveProvider();
+        if (activeProvider) {
+          activeProvider.setApiKey(apiKey);
+          this.updateProviderStatus();
+          this.enableAutomation();
+          this.log('API key saved successfully!', 'success');
+          
+          const statusDiv = document.getElementById('api-key-status');
+          statusDiv.textContent = '✓ API key saved';
+          statusDiv.className = 'status-message success';
+        }
+      }
+
+      clearConversationHistory() {
+        this.log('Conversation history cleared', 'info');
+      }
+
+      updateProviderStatus() {
+        const activeProvider = this.providerManager.getActiveProvider();
+        const statusBadge = document.getElementById('provider-status');
+        
+        if (activeProvider && activeProvider.isConfigured()) {
+          statusBadge.textContent = `✓ ${activeProvider.name}`;
+          statusBadge.className = 'status-badge success';
+        } else if (activeProvider) {
+          statusBadge.textContent = `${activeProvider.name} (not configured)`;
+          statusBadge.className = 'status-badge warning';
+        } else {
+          statusBadge.textContent = 'Not configured';
+          statusBadge.className = 'status-badge';
+        }
+      }
+
+      enableAutomation() {
+        document.getElementById('execute-btn').disabled = false;
+      }
+
+      disableAutomation() {
+        document.getElementById('execute-btn').disabled = true;
+      }
+
+      log(message, type = 'info') {
+        const logOutput = document.getElementById('log-output');
+        const entry = document.createElement('p');
+        entry.className = `log-entry ${type}`;
+        entry.textContent = `[${type.toUpperCase()}] ${message}`;
+        logOutput.appendChild(entry);
+        logOutput.scrollTop = logOutput.scrollHeight;
+        
+        console.log(`[${type.toUpperCase()}] ${message}`);
+      }
+
+      clearLog() {
+        const logOutput = document.getElementById('log-output');
+        logOutput.innerHTML = '<p class="log-entry info">Log cleared</p>';
+      }
+    }
+
+    // Initialize on page load
+    window.addEventListener('DOMContentLoaded', () => {
+      try {
+        const panel = new DemoAutomationPanel();
+        window.demoPanel = panel; // Expose for debugging
+      } catch (error) {
+        console.error('[ERROR] Failed to initialize:', error);
+        alert('Failed to initialize demo: ' + error.message);
+      }
+    });
+  </script>
+</body>
+</html>
+
