@@ -34,14 +34,17 @@ Important guidelines:
 Respond with a JSON object containing an "actions" array.`;
 
 /**
- * OpenAI Provider implementation
+ * OpenAI Provider implementation (via secure backend proxy)
+ * 
+ * Note: This provider routes through backend/server.py to keep API keys secure.
+ * API keys are NEVER exposed to the browser.
  */
 class OpenAIProvider extends AIProvider {
   constructor() {
-    super('OpenAI GPT-4 Vision', true);
-    this.apiEndpoint = 'https://api.openai.com/v1/chat/completions';
+    super('OpenAI GPT-4 Vision', false); // No API key needed in browser!
+    this.backendEndpoint = 'http://localhost:5000/api/get-actions';
+    this.providerId = 'openai';
     this.model = 'gpt-4-vision-preview';
-    this.temperature = 0.2; // Low temperature for more deterministic actions
   }
 
   getCapabilities() {
@@ -54,104 +57,82 @@ class OpenAIProvider extends AIProvider {
   }
 
   /**
-   * Get actions from OpenAI GPT-4 Vision
-   * @param {AIProviderParams} params 
-   * @returns {Promise<Action[]>}
+   * Check if provider is configured (backend has API key)
    */
-  async getActions(params) {
-    if (!this.isConfigured()) {
-      throw new Error(this.getConfigError());
-    }
-
+  async isConfigured() {
     try {
-      const response = await this.callOpenAI(params);
-      return this.parseResponse(response);
+      const response = await fetch('http://localhost:5000/api/health');
+      const data = await response.json();
+      return data.providers.openai === true;
     } catch (error) {
-      console.error('OpenAI Provider error:', error);
-      throw new Error(`OpenAI API error: ${error.message}`);
+      console.error('Failed to check OpenAI configuration:', error);
+      return false;
     }
   }
 
   /**
-   * Call OpenAI API with screenshot and UI tree
-   * @private
+   * Get actions from OpenAI GPT-4 Vision (via backend proxy)
+   * @param {AIProviderParams} params 
+   * @returns {Promise<Action[]>}
    */
-  async callOpenAI(params) {
-    const messages = [
-      {
-        role: 'system',
-        content: AUTOMATION_SYSTEM_PROMPT
-      },
-      {
-        role: 'user',
-        content: [
-          {
-            type: 'text',
-            text: `User Request: ${params.userRequest}\n\nUI Tree:\n${JSON.stringify(params.uiTree, null, 2)}`
-          },
-          {
-            type: 'image_url',
-            image_url: {
-              url: `data:image/png;base64,${params.screenshot}`,
-              detail: 'high' // High detail for better accuracy
-            }
-          }
-        ]
-      }
-    ];
-
-    // Add conversation history if provided
-    if (params.conversationHistory && params.conversationHistory.length > 0) {
-      messages.push(...params.conversationHistory);
+  async getActions(params) {
+    const configured = await this.isConfigured();
+    if (!configured) {
+      throw new Error('OpenAI provider not configured. Start backend server with OPENAI_API_KEY.');
     }
 
+    try {
+      const response = await this.callBackend(params);
+      return this.parseResponse(response);
+    } catch (error) {
+      console.error('OpenAI Provider error:', error);
+      throw new Error(`OpenAI error: ${error.message}`);
+    }
+  }
+
+  /**
+   * Call backend proxy with screenshot and UI tree
+   * @private
+   */
+  async callBackend(params) {
     const requestBody = {
-      model: this.model,
-      messages: messages,
-      temperature: this.temperature,
-      max_tokens: 4096,
-      response_format: { type: 'json_object' }
+      provider: this.providerId,
+      screenshot: params.screenshot,
+      ui_tree: params.uiTree,
+      user_request: params.userRequest
     };
 
-    const response = await fetch(this.apiEndpoint, {
+    const response = await fetch(this.backendEndpoint, {
       method: 'POST',
       headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${this.apiKey}`
+        'Content-Type': 'application/json'
       },
       body: JSON.stringify(requestBody)
     });
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.error?.message || `HTTP ${response.status}: ${response.statusText}`);
+      throw new Error(errorData.error || `HTTP ${response.status}: ${response.statusText}`);
     }
 
     return await response.json();
   }
 
   /**
-   * Parse OpenAI response into actions array
+   * Parse backend response into actions array
    * @private
    */
   parseResponse(response) {
-    try {
-      const content = response.choices[0].message.content;
-      const parsed = JSON.parse(content);
-      
-      // Handle both {"actions": [...]} and direct array formats
-      const actions = parsed.actions || parsed;
-      
-      if (!Array.isArray(actions)) {
-        throw new Error('Response is not an array of actions');
-      }
-
-      // Validate each action
-      return actions.map(action => this.validateAction(action));
-    } catch (error) {
-      console.error('Failed to parse OpenAI response:', error);
-      throw new Error(`Invalid response format: ${error.message}`);
+    if (response.error) {
+      throw new Error(response.error);
     }
+
+    if (!response.success || !Array.isArray(response.actions)) {
+      throw new Error('Invalid response from backend');
+    }
+
+    // Validate each action
+    return response.actions.map(action => this.validateAction(action));
   }
 
   /**

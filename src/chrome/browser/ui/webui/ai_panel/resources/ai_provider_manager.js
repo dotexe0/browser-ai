@@ -23,11 +23,15 @@ class AIProviderManager {
    * Initialize the manager and register available providers
    */
   initialize() {
-    // Register OpenAI provider (always available)
+    // Register OpenAI provider (cloud, via backend proxy)
     const openaiProvider = new OpenAIProvider();
     this.registerProvider(openaiProvider);
     
-    // Register Local LLM provider (will be available when service supports it)
+    // Register Ollama provider (local, private, FREE!)
+    const ollamaProvider = new OllamaProvider();
+    this.registerProvider(ollamaProvider);
+    
+    // Register Local LLM provider (via C++ Native Messaging service)
     const localProvider = new LocalLLMProvider();
     this.registerProvider(localProvider);
     
