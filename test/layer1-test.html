@@ -315,8 +315,8 @@
     document.addEventListener('DOMContentLoaded', () => {
       const tester = new Layer1Tests();
       
-      document.getElementById('run-tests').addEventListener('click', () => {
-        tester.runAllTests();
+      document.getElementById('run-tests').addEventListener('click', async () => {
+        await tester.runAllTests();
       });
 
       // Load the actual UI into demo container
@@ -339,7 +339,7 @@
         });
 
       // Auto-run tests on load
-      setTimeout(() => tester.runAllTests(), 500);
+      setTimeout(async () => await tester.runAllTests(), 500);
     });
   </script>
 </body>
