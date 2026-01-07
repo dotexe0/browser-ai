@@ -25,7 +25,15 @@ A Chromium browser with AI-powered desktop automation:
 - Screen capture (GPU-accelerated)
 - Mouse/keyboard control
 - Native Messaging protocol
-- **Status**: Code complete, needs building
+- **Status**: Complete and tested ✓
+
+### Layer 3: AI Integration ✓ COMPLETE
+- Provider-agnostic architecture
+- OpenAI GPT-4 Vision support (cloud)
+- Ollama support (local, private, free)
+- Backend proxy server
+- Easy provider switching
+- **Status**: Code complete, needs testing
 
 ---
 
@@ -172,12 +180,29 @@ http://localhost:8000/test/layer1-test.html
 2. **Day 3-4**: Build Layer 2 (automation service)
    - Install Visual Studio if needed
    - Build the C++ service
-   - Test standalone
+   - Test standalone (mouse control, typing, etc.)
 
-3. **Day 5**: Connect OpenAI
-   - Get API key from OpenAI
-   - Test with Layer 1 UI
-   - Verify OpenAI provider works
+3. **Day 5**: Setup Layer 3 (AI Integration)
+   - **Option A: OpenAI** (fastest, $0.03/req)
+     ```bash
+     cd backend
+     setup.bat
+     # Edit .env, add OPENAI_API_KEY=sk-...
+     python server.py
+     python test_backend.py
+     ```
+   - **Option B: Ollama** (free, private)
+     ```bash
+     # Install from https://ollama.ai
+     ollama pull llava
+     cd backend
+     python server.py
+     python test_backend.py
+     ```
+   - **Option C: Both!** (recommended)
+     - Set up both providers
+     - Switch between them in UI
+     - Compare quality vs. privacy tradeoffs
 
 ### Week 2: Full Integration (Optional)
 
