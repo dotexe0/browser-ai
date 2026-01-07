@@ -49,13 +49,13 @@ def test_health():
         print(f"   Response: {json.dumps(data, indent=2)}")
         
         if data['status'] == 'ok':
-            print("   ✅ Health check passed")
+            print("   [OK] Health check passed")
             return True
         else:
-            print("   ❌ Health check failed")
+            print("   [FAIL] Health check failed")
             return False
     except Exception as e:
-        print(f"   ❌ Error: {e}")
+        print(f"   [ERROR] {e}")
         return False
 
 def test_providers():
@@ -71,13 +71,13 @@ def test_providers():
         
         for provider in data['providers']:
             privacy_badge = f" 🔒 [{provider.get('privacy', 'cloud')}]" if 'privacy' in provider else ""
-            config_badge = "✓" if provider['configured'] else "✗"
+            config_badge = "[OK]" if provider['configured'] else "[X]"
             print(f"      {config_badge} {provider['name']} ({provider['type']}){privacy_badge}")
         
-        print("   ✅ Providers list retrieved")
+        print("   [OK] Providers list retrieved")
         return True
     except Exception as e:
-        print(f"   ❌ Error: {e}")
+        print(f"   [FAIL] Error: {e}")
         return False
 
 def test_openai():
@@ -90,7 +90,7 @@ def test_openai():
         health_data = health_response.json()
         
         if not health_data['providers']['openai']:
-            print("   ⏭️  OpenAI not configured (skipping)")
+            print("   [SKIP]  OpenAI not configured (skipping)")
             return True
         
         # Make request
@@ -112,23 +112,23 @@ def test_openai():
         print(f"   Status: {response.status_code}")
         
         if 'error' in data:
-            print(f"   ❌ Error: {data['error']}")
+            print(f"   [FAIL] Error: {data['error']}")
             return False
         
         if data.get('success') and 'actions' in data:
-            print(f"   ✅ Received {len(data['actions'])} actions:")
+            print(f"   [OK] Received {len(data['actions'])} actions:")
             for i, action in enumerate(data['actions'][:3]):  # Show first 3
                 print(f"      {i+1}. {action['action']}: {action.get('params', {})}")
             return True
         else:
-            print(f"   ❌ Unexpected response: {data}")
+            print(f"   [FAIL] Unexpected response: {data}")
             return False
             
     except requests.exceptions.Timeout:
-        print("   ❌ Request timed out (OpenAI may be slow)")
+        print("   [FAIL] Request timed out (OpenAI may be slow)")
         return False
     except Exception as e:
-        print(f"   ❌ Error: {e}")
+        print(f"   [FAIL] Error: {e}")
         return False
 
 def test_ollama():
@@ -145,12 +145,12 @@ def test_ollama():
             has_llava = any('llava' in model['name'] for model in ollama_data.get('models', []))
             
             if not has_llava:
-                print("   ⏭️  Ollama running but llava model not installed")
+                print("   [SKIP]  Ollama running but llava model not installed")
                 print("      Run: ollama pull llava")
                 return True
                 
         except:
-            print("   ⏭️  Ollama not running (skipping)")
+            print("   [SKIP]  Ollama not running (skipping)")
             return True
         
         # Make request
@@ -172,36 +172,36 @@ def test_ollama():
         print(f"   Status: {response.status_code}")
         
         if 'error' in data:
-            print(f"   ❌ Error: {data['error']}")
+            print(f"   [FAIL] Error: {data['error']}")
             return False
         
         if data.get('success') and 'actions' in data:
-            print(f"   ✅ Received {len(data['actions'])} actions:")
+            print(f"   [OK] Received {len(data['actions'])} actions:")
             for i, action in enumerate(data['actions'][:3]):
                 print(f"      {i+1}. {action['action']}: {action.get('params', {})}")
             return True
         else:
-            print(f"   ❌ Unexpected response: {data}")
+            print(f"   [FAIL] Unexpected response: {data}")
             return False
             
     except requests.exceptions.Timeout:
-        print("   ❌ Request timed out (local inference is slow)")
+        print("   [FAIL] Request timed out (local inference is slow)")
         print("      Note: First request to Ollama can take 30+ seconds")
         return False
     except Exception as e:
-        print(f"   ❌ Error: {e}")
+        print(f"   [FAIL] Error: {e}")
         return False
 
 def main():
     print("=" * 70)
-    print("🧪 Backend Proxy Server Tests")
+    print("Backend Proxy Server Tests")
     print("=" * 70)
     
     # Check if server is running
     try:
         requests.get('http://localhost:5000/api/health', timeout=2)
     except:
-        print("\n❌ Backend server not running!")
+        print("\n[FAIL] Backend server not running!")
         print("\nStart it with:")
         print("   cd backend")
         print("   python server.py")
@@ -217,11 +217,11 @@ def main():
     
     # Summary
     print("\n" + "=" * 70)
-    print("📊 Test Summary")
+    print("==== Test Summary")
     print("=" * 70)
     
     for name, passed in results:
-        status = "✅ PASS" if passed else "❌ FAIL"
+        status = "[OK] PASS" if passed else "[FAIL] FAIL"
         print(f"   {status} - {name}")
     
     passed_count = sum(1 for _, passed in results if passed)
@@ -232,9 +232,9 @@ def main():
     print("=" * 70)
     
     if passed_count == total_count:
-        print("\n🎉 All tests passed! Backend is working correctly.")
+        print("\nSuccess! All tests passed! Backend is working correctly.")
     else:
-        print("\n⚠️  Some tests failed. Check configuration:")
+        print("\n[WARN]  Some tests failed. Check configuration:")
         print("   - OpenAI: Set OPENAI_API_KEY in .env")
         print("   - Ollama: Install from https://ollama.ai and run 'ollama pull llava'")
     

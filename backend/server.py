@@ -216,6 +216,18 @@ Return ONLY JSON array, no other text."""
         result = response.json()
         actions_text = result.get('response', '')
         
+        # Strip markdown code fences if present
+        actions_text = actions_text.strip()
+        if actions_text.startswith('```'):
+            # Remove opening fence
+            lines = actions_text.split('\n')
+            if lines[0].startswith('```'):
+                lines = lines[1:]  # Remove ```json or ```
+            # Remove closing fence
+            if lines and lines[-1].strip() == '```':
+                lines = lines[:-1]
+            actions_text = '\n'.join(lines).strip()
+        
         try:
             actions = json.loads(actions_text)
             return {'success': True, 'actions': actions}
@@ -341,33 +353,33 @@ def add_provider():
 
 
 if __name__ == '__main__':
-    print("=" * 70)
-    print("🚀 Provider-Agnostic AI Proxy Server")
-    print("=" * 70)
-    print()
-    print("Configured providers:")
+    print("=" * 70, flush=True)
+    print("Provider-Agnostic AI Proxy Server", flush=True)
+    print("=" * 70, flush=True)
+    print(flush=True)
+    print("Configured providers:", flush=True)
     
     if PROVIDERS['openai']['api_key']:
-        print("  ✓ OpenAI GPT-4 Vision (cloud)")
+        print("  [OK] OpenAI GPT-4 Vision (cloud)", flush=True)
     else:
-        print("  ✗ OpenAI (no API key)")
+        print("  [ ] OpenAI (no API key)", flush=True)
     
     if PROVIDERS['anthropic']['api_key']:
-        print("  ✓ Anthropic Claude (cloud)")
+        print("  [OK] Anthropic Claude (cloud)", flush=True)
     else:
-        print("  ✗ Anthropic (no API key)")
+        print("  [ ] Anthropic (no API key)", flush=True)
     
-    print("  ○ Ollama (local) - check if running")
-    print()
-    print("Endpoints:")
-    print("  GET  /api/health - Health check")
-    print("  GET  /api/providers - List available providers")
-    print("  POST /api/get-actions - Get AI actions")
-    print("  POST /api/add-provider - Add custom provider")
-    print()
-    print("Starting server on http://localhost:5000")
-    print("=" * 70)
-    print()
+    print("  [?] Ollama (local) - check if running", flush=True)
+    print(flush=True)
+    print("Endpoints:", flush=True)
+    print("  GET  /api/health - Health check", flush=True)
+    print("  GET  /api/providers - List available providers", flush=True)
+    print("  POST /api/get-actions - Get AI actions", flush=True)
+    print("  POST /api/add-provider - Add custom provider", flush=True)
+    print(flush=True)
+    print("Starting server on http://localhost:5000", flush=True)
+    print("=" * 70, flush=True)
+    print(flush=True)
     
     app.run(host='0.0.0.0', port=5000, debug=True)
 
