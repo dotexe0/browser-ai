@@ -34,9 +34,54 @@ sync-from-chromium.sh           # Script to copy changes back from chromium/src
 ## Features
 
 - **AI Panel UI**: Custom WebUI controller for the AI panel
-- **AI Panel Handler**: Backend handler for AI panel interactions
-- **Side Panel Integration**: Integration with Chrome's side panel system
-- **Modern UI**: HTML/CSS/JS resources for the AI panel interface
+- **Pluggable AI Providers**: OpenAI GPT-4 Vision (default), Local LLM (privacy mode)
+- **Provider Management**: Easy switching between AI backends with settings UI
+- **Modern Automation Interface**: Request input, action preview, execution log
+- **Side Panel Integration**: Integration with Chrome's side panel system (coming soon)
+- **Desktop Automation**: Screen capture, UI inspection, input control (Layer 2)
+
+## Verification & Testing
+
+Before building Chromium, you can verify Layer 1 (browser-side architecture) is working:
+
+### Quick Test (No Chromium Build Required)
+
+```bash
+# Start test server
+cd test
+chmod +x run-test-server.sh
+./run-test-server.sh
+
+# Open browser to: http://localhost:8000/test/layer1-test.html
+```
+
+This will run automated tests for:
+- ✓ AI Provider interface and base class
+- ✓ OpenAI Provider implementation
+- ✓ Local LLM Provider stub
+- ✓ Provider Manager (registration, switching, configuration)
+- ✓ UI integration and styling
+
+**Expected result**: All 30+ tests should pass ✓
+
+See [`test/README.md`](test/README.md) for detailed testing instructions.
+
+### What Layer 1 Tests Verify
+
+- JavaScript architecture and provider abstraction
+- Provider registration and management
+- API key configuration and storage
+- Action validation and formatting
+- UI component rendering
+- CSS styling application
+
+### What Requires Chromium Build
+
+The following features require building Chromium:
+- WebUI integration (`chrome://ai-panel`)
+- C++ message handlers
+- Native Messaging with automation service
+- Actual screen capture and automation (Layer 2)
 
 ## Installation
 

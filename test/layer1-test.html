@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Layer 1 Test - AI Provider Architecture</title>
+  <link rel="stylesheet" href="../src/chrome/browser/ui/webui/ai_panel/resources/ai_panel.css">
+  <style>
+    .test-section {
+      margin: 20px;
+      padding: 20px;
+      background: #f0f0f0;
+      border-radius: 8px;
+      border: 2px solid #667eea;
+    }
+    .test-result {
+      padding: 10px;
+      margin: 10px 0;
+      border-radius: 4px;
+      font-family: monospace;
+    }
+    .test-pass {
+      background: #d4edda;
+      color: #155724;
+      border: 1px solid #c3e6cb;
+    }
+    .test-fail {
+      background: #f8d7da;
+      color: #721c24;
+      border: 1px solid #f5c6cb;
+    }
+    .test-info {
+      background: #d1ecf1;
+      color: #0c5460;
+      border: 1px solid #bee5eb;
+    }
+  </style>
+</head>
+<body>
+  <div class="panel-container">
+    <header class="panel-header">
+      <h1>Layer 1 Verification Tests</h1>
+    </header>
+
+    <div class="main-panel">
+      <div class="test-section">
+        <h2>Test Results</h2>
+        <div id="test-results"></div>
+        <button id="run-tests" class="btn btn-primary">Run All Tests</button>
+      </div>
+
+      <div class="test-section">
+        <h2>Interactive Demo</h2>
+        <p>This is the actual AI Panel UI running standalone (without Chromium build):</p>
+        <hr>
+        <div id="demo-container"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Load the actual AI Panel scripts -->
+  <script src="../src/chrome/browser/ui/webui/ai_panel/resources/ai_provider_interface.js"></script>
+  <script src="../src/chrome/browser/ui/webui/ai_panel/resources/openai_provider.js"></script>
+  <script src="../src/chrome/browser/ui/webui/ai_panel/resources/local_llm_provider.js"></script>
+  <script src="../src/chrome/browser/ui/webui/ai_panel/resources/ai_provider_manager.js"></script>
+
+  <!-- Test Script -->
+  <script>
+    class Layer1Tests {
+      constructor() {
+        this.results = [];
+        this.testsRun = 0;
+        this.testsPassed = 0;
+      }
+
+      log(message, type = 'info') {
+        console.log(`[${type.toUpperCase()}] ${message}`);
+        this.results.push({ message, type });
+      }
+
+      assert(condition, message) {
+        this.testsRun++;
+        if (condition) {
+          this.testsPassed++;
+          this.log(`✓ ${message}`, 'pass');
+          return true;
+        } else {
+          this.log(`✗ ${message}`, 'fail');
+          return false;
+        }
+      }
+
+      async runAllTests() {
+        this.results = [];
+        this.testsRun = 0;
+        this.testsPassed = 0;
+
+        this.log('Starting Layer 1 verification tests...', 'info');
+
+        // Test 1: AIProvider base class
+        this.testAIProviderInterface();
+
+        // Test 2: OpenAI Provider
+        this.testOpenAIProvider();
+
+        // Test 3: Local LLM Provider
+        this.testLocalLLMProvider();
+
+        // Test 4: AI Provider Manager
+        await this.testAIProviderManager();
+
+        // Test 5: UI Integration
+        this.testUIIntegration();
+
+        // Summary
+        this.log(`\n=== Test Summary ===`, 'info');
+        this.log(`Tests Run: ${this.testsRun}`, 'info');
+        this.log(`Tests Passed: ${this.testsPassed}`, this.testsPassed === this.testsRun ? 'pass' : 'fail');
+        this.log(`Tests Failed: ${this.testsRun - this.testsPassed}`, this.testsPassed === this.testsRun ? 'info' : 'fail');
+
+        this.displayResults();
+      }
+
+      testAIProviderInterface() {
+        this.log('\n--- Testing AIProvider Base Class ---', 'info');
+
+        try {
+          const provider = new AIProvider('Test Provider', true);
+          
+          this.assert(provider.name === 'Test Provider', 'Provider name is set correctly');
+          this.assert(provider.requiresApiKey === true, 'Provider requires API key flag is correct');
+          this.assert(provider.supportsVision === true, 'Provider supports vision by default');
+          this.assert(provider.isConfigured() === false, 'Provider is not configured without API key');
+          
+          provider.setApiKey('test-key-123');
+          this.assert(provider.apiKey === 'test-key-123', 'API key is set correctly');
+          this.assert(provider.isConfigured() === true, 'Provider is configured after setting API key');
+          
+          const caps = provider.getCapabilities();
+          this.assert(caps.supportsVision === true, 'Capabilities include vision support');
+          this.assert(caps.contextWindow === 128000, 'Default context window is correct');
+
+          // Test abstract method throws
+          let threw = false;
+          try {
+            await provider.getActions({});
+          } catch (e) {
+            threw = e.message.includes('must be implemented');
+          }
+          this.assert(threw, 'Abstract getActions() throws error as expected');
+
+        } catch (error) {
+          this.log(`Error in AIProvider test: ${error.message}`, 'fail');
+        }
+      }
+
+      testOpenAIProvider() {
+        this.log('\n--- Testing OpenAI Provider ---', 'info');
+
+        try {
+          const provider = new OpenAIProvider();
+          
+          this.assert(provider.name === 'OpenAI GPT-4 Vision', 'OpenAI provider name is correct');
+          this.assert(provider.requiresApiKey === true, 'OpenAI provider requires API key');
+          this.assert(provider.supportsVision === true, 'OpenAI provider supports vision');
+          this.assert(provider.apiEndpoint === 'https://api.openai.com/v1/chat/completions', 'API endpoint is correct');
+          this.assert(provider.model === 'gpt-4-vision-preview', 'Model is set to GPT-4 Vision');
+          
+          const caps = provider.getCapabilities();
+          this.assert(caps.supportsVision === true, 'Capabilities confirm vision support');
+          this.assert(caps.maxImageSize === 20 * 1024 * 1024, 'Max image size is 20MB');
+
+          // Test validation method
+          const validAction = provider.validateAction({
+            action: 'click',
+            params: { x: 100, y: 200 }
+          });
+          this.assert(validAction.action === 'click', 'Valid action passes validation');
+          this.assert(validAction.confidence === 0.8, 'Default confidence is added');
+
+          // Test invalid action
+          let threw = false;
+          try {
+            provider.validateAction({ action: 'invalid', params: {} });
+          } catch (e) {
+            threw = true;
+          }
+          this.assert(threw, 'Invalid action type is rejected');
+
+          // Test cost estimation
+          const cost = provider.estimateCost({
+            screenshot: 'base64data',
+            uiTree: { elements: [] },
+            userRequest: 'test'
+          });
+          this.assert(cost > 0 && cost < 0.1, 'Cost estimation returns reasonable value');
+
+        } catch (error) {
+          this.log(`Error in OpenAI provider test: ${error.message}`, 'fail');
+        }
+      }
+
+      testLocalLLMProvider() {
+        this.log('\n--- Testing Local LLM Provider ---', 'info');
+
+        try {
+          const provider = new LocalLLMProvider();
+          
+          this.assert(provider.name === 'Local LLM (Privacy)', 'Local LLM provider name is correct');
+          this.assert(provider.requiresApiKey === false, 'Local LLM provider does not require API key');
+          this.assert(provider.supportsVision === true, 'Local LLM provider supports vision');
+          this.assert(provider.isConfigured() === true, 'Local LLM provider is always "configured"');
+          this.assert(provider.available === false, 'Local LLM is not available by default');
+          
+          const caps = provider.getCapabilities();
+          this.assert(caps.supportsVision === true, 'Capabilities confirm vision support');
+
+          // Test validation method
+          const validAction = provider.validateAction({
+            action: 'type',
+            params: { text: 'Hello' }
+          });
+          this.assert(validAction.action === 'type', 'Valid action passes validation');
+          this.assert(validAction.confidence === 0.7, 'Local LLM default confidence is 0.7');
+
+        } catch (error) {
+          this.log(`Error in Local LLM provider test: ${error.message}`, 'fail');
+        }
+      }
+
+      async testAIProviderManager() {
+        this.log('\n--- Testing AI Provider Manager ---', 'info');
+
+        try {
+          const manager = new AIProviderManager();
+          
+          const providers = manager.getAvailableProviders();
+          this.assert(providers.length >= 2, 'At least 2 providers registered (OpenAI, Local LLM)');
+          
+          const openaiProvider = providers.find(p => p.name.includes('OpenAI'));
+          this.assert(openaiProvider !== undefined, 'OpenAI provider is registered');
+          this.assert(openaiProvider.requiresApiKey === true, 'OpenAI provider requires API key');
+          
+          const localProvider = providers.find(p => p.name.includes('Local'));
+          this.assert(localProvider !== undefined, 'Local LLM provider is registered');
+          this.assert(localProvider.requiresApiKey === false, 'Local LLM does not require API key');
+          
+          const activeProvider = manager.getActiveProvider();
+          this.assert(activeProvider !== null, 'Active provider is set by default');
+          
+          // Test provider switching
+          const switched = manager.setActiveProvider('OpenAI GPT-4 Vision');
+          this.assert(switched === true, 'Can switch to OpenAI provider');
+          this.assert(manager.getActiveProvider().name === 'OpenAI GPT-4 Vision', 'Active provider changed');
+          
+          // Test provider configuration
+          manager.configureProvider('OpenAI GPT-4 Vision', 'test-api-key');
+          const configured = manager.getProvider('OpenAI GPT-4 Vision');
+          this.assert(configured.isConfigured() === true, 'Provider is configured after setting API key');
+          
+          // Test conversation history
+          manager.clearConversationHistory();
+          this.assert(manager.conversationHistory.length === 0, 'Conversation history can be cleared');
+
+        } catch (error) {
+          this.log(`Error in Provider Manager test: ${error.message}`, 'fail');
+        }
+      }
+
+      testUIIntegration() {
+        this.log('\n--- Testing UI Integration ---', 'info');
+
+        try {
+          // Check that CSS is loaded
+          const styles = document.styleSheets;
+          let cssLoaded = false;
+          for (let sheet of styles) {
+            if (sheet.href && sheet.href.includes('ai_panel.css')) {
+              cssLoaded = true;
+              break;
+            }
+          }
+          this.assert(cssLoaded, 'CSS stylesheet is loaded');
+
+          // Test that we can create UI elements with the correct classes
+          const testBtn = document.createElement('button');
+          testBtn.className = 'btn btn-primary';
+          document.body.appendChild(testBtn);
+          
+          const computedStyle = window.getComputedStyle(testBtn);
+          const hasGradient = computedStyle.background.includes('gradient') || 
+                             computedStyle.backgroundImage.includes('gradient');
+          this.assert(hasGradient, 'CSS classes apply gradient styling to buttons');
+          
+          document.body.removeChild(testBtn);
+
+        } catch (error) {
+          this.log(`Error in UI integration test: ${error.message}`, 'fail');
+        }
+      }
+
+      displayResults() {
+        const container = document.getElementById('test-results');
+        container.innerHTML = '';
+
+        this.results.forEach(result => {
+          const div = document.createElement('div');
+          div.className = `test-result test-${result.type}`;
+          div.textContent = result.message;
+          container.appendChild(div);
+        });
+      }
+    }
+
+    // Run tests when button is clicked
+    document.addEventListener('DOMContentLoaded', () => {
+      const tester = new Layer1Tests();
+      
+      document.getElementById('run-tests').addEventListener('click', () => {
+        tester.runAllTests();
+      });
+
+      // Load the actual UI into demo container
+      fetch('../src/chrome/browser/ui/webui/ai_panel/resources/ai_panel.html')
+        .then(response => response.text())
+        .then(html => {
+          // Extract just the body content
+          const parser = new DOMParser();
+          const doc = parser.parseFromString(html, 'text/html');
+          const mainPanel = doc.querySelector('.panel-container');
+          if (mainPanel) {
+            document.getElementById('demo-container').innerHTML = mainPanel.innerHTML;
+            // Re-run the initialization script
+            eval(doc.querySelector('script:last-of-type').textContent);
+          }
+        })
+        .catch(err => {
+          document.getElementById('demo-container').innerHTML = 
+            '<p class="test-fail">Could not load demo. Make sure to open this file via a local server (not file://)</p>';
+        });
+
+      // Auto-run tests on load
+      setTimeout(() => tester.runAllTests(), 500);
+    });
+  </script>
+</body>
+</html>
+
