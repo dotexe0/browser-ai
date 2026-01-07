@@ -97,7 +97,7 @@
         this.log('Starting Layer 1 verification tests...', 'info');
 
         // Test 1: AIProvider base class
-        this.testAIProviderInterface();
+        await this.testAIProviderInterface();
 
         // Test 2: OpenAI Provider
         this.testOpenAIProvider();
@@ -120,7 +120,7 @@
         this.displayResults();
       }
 
-      testAIProviderInterface() {
+      async testAIProviderInterface() {
         this.log('\n--- Testing AIProvider Base Class ---', 'info');
 
         try {
