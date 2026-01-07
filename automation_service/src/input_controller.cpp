@@ -133,20 +133,33 @@ void InputController::PressKey(WORD virtualKey, bool down) {
 
 void InputController::TypeText(const std::wstring& text) {
     for (wchar_t ch : text) {
-        // Use KEYEVENTF_UNICODE for direct character input
-        INPUT input = {};
-        input.type = INPUT_KEYBOARD;
-        input.ki.wScan = ch;
-        input.ki.dwFlags = KEYEVENTF_UNICODE;
-        
-        // Key down
-        SendInput(1, &input, sizeof(INPUT));
-        
-        // Key up
-        input.ki.dwFlags = KEYEVENTF_UNICODE | KEYEVENTF_KEYUP;
-        SendInput(1, &input, sizeof(INPUT));
-        
-        std::this_thread::sleep_for(std::chrono::milliseconds(20));
+        // Handle special characters as virtual keys
+        if (ch == L'\n' || ch == L'\r') {
+            // Newline: press Enter key
+            PressKey(VK_RETURN, true);
+            PressKey(VK_RETURN, false);
+            std::this_thread::sleep_for(std::chrono::milliseconds(20));
+        } else if (ch == L'\t') {
+            // Tab: press Tab key
+            PressKey(VK_TAB, true);
+            PressKey(VK_TAB, false);
+            std::this_thread::sleep_for(std::chrono::milliseconds(20));
+        } else {
+            // Regular character: use Unicode input
+            INPUT input = {};
+            input.type = INPUT_KEYBOARD;
+            input.ki.wScan = ch;
+            input.ki.dwFlags = KEYEVENTF_UNICODE;
+            
+            // Key down
+            SendInput(1, &input, sizeof(INPUT));
+            
+            // Key up
+            input.ki.dwFlags = KEYEVENTF_UNICODE | KEYEVENTF_KEYUP;
+            SendInput(1, &input, sizeof(INPUT));
+            
+            std::this_thread::sleep_for(std::chrono::milliseconds(20));
+        }
     }
 }
 
