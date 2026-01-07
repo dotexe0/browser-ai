@@ -52,7 +52,105 @@
         <h2>Interactive Demo</h2>
         <p>This is the actual AI Panel UI running standalone (without Chromium build):</p>
         <hr>
-        <div id="demo-container"></div>
+        <div id="demo-container">
+          <!-- AI Panel UI will be inserted here -->
+          <div class="panel-container" style="max-width: 800px; margin: 0 auto;">
+            <header class="panel-header">
+              <h1>AI Automation</h1>
+              <button id="settings-btn" class="icon-btn" title="Settings">⚙️</button>
+            </header>
+
+            <!-- Settings Panel -->
+            <div id="settings-panel" class="settings-panel hidden">
+              <h2>Settings</h2>
+              
+              <div class="setting-group">
+                <label for="provider-select">AI Provider:</label>
+                <select id="provider-select" class="provider-select">
+                  <option value="">Loading...</option>
+                </select>
+                <div id="provider-info" class="provider-info"></div>
+              </div>
+
+              <div id="api-key-section" class="setting-group hidden">
+                <label for="api-key-input">API Key:</label>
+                <div class="api-key-container">
+                  <input 
+                    type="password" 
+                    id="api-key-input" 
+                    placeholder="Enter API key..."
+                    class="api-key-input"
+                  >
+                  <button id="toggle-api-key" class="icon-btn" title="Show/Hide">👁️</button>
+                </div>
+                <button id="save-api-key" class="btn btn-primary">Save API Key</button>
+                <div id="api-key-status" class="status-message"></div>
+              </div>
+
+              <div class="setting-group">
+                <button id="clear-history" class="btn">Clear Conversation History</button>
+              </div>
+
+              <button id="close-settings" class="btn">Close</button>
+            </div>
+
+            <!-- Main Panel -->
+            <div id="main-panel" class="main-panel">
+              <div class="status-bar">
+                <div class="status-indicator">
+                  <span id="provider-status" class="status-badge">Not configured</span>
+                  <span id="automation-status" class="status-badge">Ready</span>
+                </div>
+              </div>
+
+              <div class="request-section">
+                <label for="user-request">What would you like to automate?</label>
+                <textarea 
+                  id="user-request" 
+                  placeholder="Example: Open Notepad and type 'Hello World'&#10;Example: Search for 'Chromium' in File Explorer"
+                  rows="4"
+                ></textarea>
+                
+                <div class="request-actions">
+                  <button id="execute-btn" class="btn btn-primary" disabled>
+                    Execute Automation
+                  </button>
+                  <button id="capture-screen-btn" class="btn">
+                    Preview Screen
+                  </button>
+                </div>
+              </div>
+
+              <div id="preview-section" class="preview-section hidden">
+                <h3>Screen Preview</h3>
+                <div id="screenshot-preview" class="screenshot-preview">
+                  <p class="placeholder-text">Click "Preview Screen" to capture current desktop</p>
+                </div>
+              </div>
+
+              <div id="actions-section" class="actions-section hidden">
+                <h3>Planned Actions</h3>
+                <div id="actions-list" class="actions-list"></div>
+                <div class="actions-controls">
+                  <button id="confirm-actions-btn" class="btn btn-success">
+                    Confirm & Execute
+                  </button>
+                  <button id="cancel-actions-btn" class="btn">
+                    Cancel
+                  </button>
+                </div>
+              </div>
+
+              <div class="execution-log">
+                <h3>Execution Log</h3>
+                <div id="log-output" class="log-output">
+                  <p class="log-entry info">Ready to automate. Configure an AI provider to begin.</p>
+                </div>
+                <button id="clear-log" class="btn btn-small">Clear Log</button>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -62,6 +160,7 @@
   <script src="../src/chrome/browser/ui/webui/ai_panel/resources/openai_provider.js"></script>
   <script src="../src/chrome/browser/ui/webui/ai_panel/resources/local_llm_provider.js"></script>
   <script src="../src/chrome/browser/ui/webui/ai_panel/resources/ai_provider_manager.js"></script>
+  <script src="../src/chrome/browser/ui/webui/ai_panel/resources/ai_panel.js"></script>
 
   <!-- Test Script -->
   <script>
@@ -319,24 +418,16 @@
         await tester.runAllTests();
       });
 
-      // Load the actual UI into demo container
-      fetch('../src/chrome/browser/ui/webui/ai_panel/resources/ai_panel.html')
-        .then(response => response.text())
-        .then(html => {
-          // Extract just the body content
-          const parser = new DOMParser();
-          const doc = parser.parseFromString(html, 'text/html');
-          const mainPanel = doc.querySelector('.panel-container');
-          if (mainPanel) {
-            document.getElementById('demo-container').innerHTML = mainPanel.innerHTML;
-            // Re-run the initialization script
-            eval(doc.querySelector('script:last-of-type').textContent);
-          }
-        })
-        .catch(err => {
-          document.getElementById('demo-container').innerHTML = 
-            '<p class="test-fail">Could not load demo. Make sure to open this file via a local server (not file://)</p>';
-        });
+      // Initialize the interactive demo
+      let automationPanel;
+      try {
+        automationPanel = new AutomationPanel();
+        console.log('[INFO] Interactive demo initialized successfully');
+      } catch (err) {
+        console.error('[ERROR] Failed to initialize demo:', err);
+        document.getElementById('demo-container').innerHTML = 
+          '<p class="test-fail">Could not initialize demo: ' + err.message + '</p>';
+      }
 
       // Auto-run tests on load
       setTimeout(async () => await tester.runAllTests(), 500);
