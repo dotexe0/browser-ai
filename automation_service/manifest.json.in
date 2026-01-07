@@ -1,0 +1,11 @@
+{
+  "name": "com.browser_ai.automation",
+  "description": "Browser AI Automation Service",
+  "path": "@CMAKE_BINARY_DIR@\\bin\\automation_service.exe",
+  "type": "stdio",
+  "allowed_origins": [
+    "chrome-extension://INSERT_EXTENSION_ID/",
+    "chrome://ai-panel/"
+  ]
+}
+
