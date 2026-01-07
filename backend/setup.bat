@@ -33,15 +33,15 @@ if not exist .env (
     echo .env not found, creating from template...
     copy env-template.txt .env
     echo.
-    echo IMPORTANT: Edit .env and add your API keys!
+    echo IMPORTANT - Edit .env and add your API keys!
     echo.
-    echo For OpenAI:
-    echo   1. Get key from: https://platform.openai.com/api-keys
-    echo   2. Edit .env and set: OPENAI_API_KEY=sk-your-key-here
+    echo For OpenAI -
+    echo   1. Get key from https://platform.openai.com/api-keys
+    echo   2. Edit .env and set OPENAI_API_KEY=sk-your-key-here
     echo.
-    echo For Ollama (local, private, FREE!):
-    echo   1. Download from: https://ollama.ai
-    echo   2. Run: ollama pull llava
+    echo For Ollama ^(local, private, FREE!^) -
+    echo   1. Download from https://ollama.ai
+    echo   2. Run ollama pull llava
     echo   3. No API key needed!
     echo.
 ) else (
@@ -52,24 +52,24 @@ echo.
 echo [3/3] Setup complete!
 echo ========================================
 echo.
-echo Next steps:
+echo Next steps -
 echo.
-echo 1. Choose your AI provider:
+echo 1. Choose your AI provider -
 echo.
-echo    Option A: OpenAI (cloud, fast, ~$0.03/request)
+echo    Option A - OpenAI ^(cloud, fast, ~$0.03/request^)
 echo      - Edit .env and add OPENAI_API_KEY=sk-...
 echo.
-echo    Option B: Ollama (local, private, FREE!)
+echo    Option B - Ollama ^(local, private, FREE!^)
 echo      - Install from https://ollama.ai
-echo      - Run: ollama pull llava
+echo      - Run ollama pull llava
 echo.
-echo    Option C: Both (recommended!)
+echo    Option C - Both ^(recommended!^)
 echo      - Set up both and switch in the browser UI
 echo.
-echo 2. Start the backend server:
+echo 2. Start the backend server -
 echo      python server.py
 echo.
-echo 3. Test it works:
+echo 3. Test it works -
 echo      python test_backend.py
 echo.
 echo ========================================

@@ -9,9 +9,9 @@ echo.
 REM Check if dependencies are installed
 python -c "import flask" 2>nul
 if %errorlevel% neq 0 (
-    echo ERROR: Dependencies not installed!
+    echo ERROR - Dependencies not installed!
     echo.
-    echo Run setup.bat first:
+    echo Run setup.bat first -
     echo   setup.bat
     echo.
     pause
@@ -20,12 +20,12 @@ if %errorlevel% neq 0 (
 
 REM Check if .env exists
 if not exist .env (
-    echo WARNING: No .env file found!
+    echo WARNING - No .env file found!
     echo.
     echo Creating from template...
     copy env-template.txt .env
     echo.
-    echo IMPORTANT: Edit .env and add your API keys before using!
+    echo IMPORTANT - Edit .env and add your API keys before using!
     echo.
 )
 
