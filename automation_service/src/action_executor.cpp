@@ -274,6 +274,31 @@ WORD ActionExecutor::ParseVirtualKey(const std::string& keyStr) {
     if (keyStr == "delete") return VK_DELETE;
     if (keyStr == "backspace") return VK_BACK;
     
+    // Windows keys
+    if (keyStr == "LWin" || keyStr == "lwin") return VK_LWIN;
+    if (keyStr == "RWin" || keyStr == "rwin") return VK_RWIN;
+    if (keyStr == "win") return VK_LWIN;  // Default to left Win key
+    
+    // Function keys
+    if (keyStr == "F1") return VK_F1;
+    if (keyStr == "F2") return VK_F2;
+    if (keyStr == "F3") return VK_F3;
+    if (keyStr == "F4") return VK_F4;
+    if (keyStr == "F5") return VK_F5;
+    if (keyStr == "F6") return VK_F6;
+    if (keyStr == "F7") return VK_F7;
+    if (keyStr == "F8") return VK_F8;
+    if (keyStr == "F9") return VK_F9;
+    if (keyStr == "F10") return VK_F10;
+    if (keyStr == "F11") return VK_F11;
+    if (keyStr == "F12") return VK_F12;
+    
+    // Arrow keys
+    if (keyStr == "left") return VK_LEFT;
+    if (keyStr == "right") return VK_RIGHT;
+    if (keyStr == "up") return VK_UP;
+    if (keyStr == "down") return VK_DOWN;
+    
     // Single character
     if (keyStr.length() == 1) {
         return VkKeyScan(keyStr[0]) & 0xFF;
