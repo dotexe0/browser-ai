@@ -1,0 +1,4549 @@
+{
+  "bounds": {
+    "height": 1440,
+    "width": 5120,
+    "x": 0,
+    "y": 0
+  },
+  "children": [
+    {
+      "bounds": {
+        "height": 1440,
+        "width": 5120,
+        "x": 0,
+        "y": 0
+      },
+      "className": "CEF-OSC-WIDGET",
+      "enabled": false,
+      "name": "NVIDIA GeForce Overlay DT",
+      "type": "Pane"
+    },
+    {
+      "bounds": {
+        "height": 1211,
+        "width": 1594,
+        "x": 810,
+        "y": 145
+      },
+      "children": [
+        {
+          "bounds": {
+            "height": 1203,
+            "width": 1578,
+            "x": 818,
+            "y": 145
+          },
+          "className": "Intermediate D3D Window",
+          "enabled": false,
+          "name": "",
+          "type": "Pane"
+        },
+        {
+          "bounds": {
+            "height": 1203,
+            "width": 1578,
+            "x": 818,
+            "y": 145
+          },
+          "children": [
+            {
+              "bounds": {
+                "height": 1203,
+                "width": 1578,
+                "x": 818,
+                "y": 145
+              },
+              "children": [
+                {
+                  "bounds": {
+                    "height": 1203,
+                    "width": 1578,
+                    "x": 818,
+                    "y": 145
+                  },
+                  "children": [
+                    {},
+                    {}
+                  ],
+                  "className": "BrowserFrameViewWin",
+                  "enabled": true,
+                  "name": "",
+                  "type": "Pane"
+                }
+              ],
+              "className": "NonClientView",
+              "enabled": true,
+              "name": "",
+              "type": "Pane"
+            }
+          ],
+          "className": "BrowserRootView",
+          "enabled": true,
+          "name": "I need this confidence in my life \ud83d\ude2d - YouTube - Google Chrome",
+          "type": "Pane"
+        }
+      ],
+      "className": "Chrome_WidgetWin_1",
+      "enabled": true,
+      "name": "I need this confidence in my life \ud83d\ude2d - YouTube - Google Chrome",
+      "type": "Window"
+    },
+    {
+      "bounds": {
+        "height": 1382,
+        "width": 2030,
+        "x": 2964,
+        "y": 5
+      },
+      "children": [
+        {
+          "bounds": {
+            "height": 1382,
+            "width": 2030,
+            "x": 2964,
+            "y": 5
+          },
+          "children": [
+            {
+              "bounds": {
+                "height": 1382,
+                "width": 2030,
+                "x": 2964,
+                "y": 5
+              },
+              "children": [
+                {
+                  "bounds": {
+                    "height": 34,
+                    "width": 402,
+                    "x": 3007,
+                    "y": 5
+                  },
+                  "children": [
+                    {},
+                    {},
+                    {},
+                    {},
+                    {},
+                    {},
+                    {},
+                    {}
+                  ],
+                  "className": "",
+                  "enabled": true,
+                  "name": "",
+                  "type": "MenuBar"
+                },
+                {
+                  "bounds": {
+                    "height": 0,
+                    "width": 0,
+                    "x": 0,
+                    "y": 0
+                  },
+                  "className": "",
+                  "enabled": true,
+                  "name": "Left title actions",
+                  "type": "ToolBar"
+                },
+                {
+                  "bounds": {
+                    "height": 34,
+                    "width": 151,
+                    "x": 4693,
+                    "y": 5
+                  },
+                  "children": [
+                    {},
+                    {},
+                    {},
+                    {},
+                    {},
+                    {},
+                    {}
+                  ],
+                  "className": "",
+                  "enabled": true,
+                  "name": "Title actions",
+                  "type": "ToolBar"
+                },
+                {
+                  "bounds": {
+                    "height": 17,
+                    "width": 16,
+                    "x": 3052,
+                    "y": 49
+                  },
+                  "className": "",
+                  "enabled": true,
+                  "name": "\ueaf0",
+                  "type": "Text"
+                },
+                {
+                  "bounds": {
+                    "height": 17,
+                    "width": 16,
+                    "x": 3084,
+                    "y": 49
+                  },
+                  "className": "",
+                  "enabled": true,
+                  "name": "\uea6d",
+                  "type": "Text"
+                },
+                {
+                  "bounds": {
+                    "height": 17,
+                    "width": 16,
+                    "x": 3116,
+                    "y": 49
+                  },
+                  "className": "",
+                  "enabled": true,
+                  "name": "\uea68",
+                  "type": "Text"
+                },
+                {
+                  "bounds": {
+                    "height": 17,
+                    "width": 16,
+                    "x": 3148,
+                    "y": 49
+                  },
+                  "className": "",
+                  "enabled": true,
+                  "name": "\ueae6",
+                  "type": "Text"
+                },
+                {
+                  "bounds": {
+                    "height": 17,
+                    "width": 16,
+                    "x": 3180,
+                    "y": 49
+                  },
+                  "className": "",
+                  "enabled": true,
+                  "name": "\ueab4",
+                  "type": "Text"
+                },
+                {
+                  "bounds": {
+                    "height": 22,
+                    "width": 322,
+                    "x": 2964,
+                    "y": 75
+                  },
+                  "children": [
+                    {},
+                    {}
+                  ],
+                  "className": "",
+                  "enabled": true,
+                  "name": "Explorer Section: browser-ai",
+                  "type": "Button"
+                },
+                {
+                  "bounds": {
+                    "height": 1180,
+                    "width": 322,
+                    "x": 2964,
+                    "y": 97
+                  },
+                  "children": [
+                    {},
+                    {},
+                    {},
+                    {},
+                    {},
+                    {},
+                    {},
+                    {},
+                    {},
+                    {},
+                    {},
+                    {},
+                    {},
+                    {},
+                    {},
+                    {},
+                    {},
+                    {},
+                    {},
+                    {}
+                  ],
+                  "className": "",
+                  "enabled": true,
+                  "name": "Files Explorer",
+                  "type": "Tree"
+                },
+                {
+                  "bounds": {
+                    "height": 22,
+                    "width": 322,
+                    "x": 2964,
+                    "y": 1277
+                  },
+                  "children": [
+                    {}
+                  ],
+                  "className": "",
+                  "enabled": true,
+                  "name": "Outline Section",
+                  "type": "Button"
+                },
+                {
+                  "bounds": {
+                    "height": 22,
+                    "width": 322,
+                    "x": 2964,
+                    "y": 1299
+                  },
+                  "children": [
+                    {}
+                  ],
+                  "className": "",
+                  "enabled": true,
+                  "name": "Timeline Section",
+                  "type": "Button"
+                },
+                {
+                  "bounds": {
+                    "height": 22,
+                    "width": 322,
+                    "x": 2964,
+                    "y": 1321
+                  },
+                  "children": [
+                    {}
+                  ],
+                  "className": "",
+                  "enabled": true,
+                  "name": "File Insights Section",
+                  "type": "Button"
+                },
+                {
+                  "bounds": {
+                    "height": 22,
+                    "width": 322,
+                    "x": 2964,
+                    "y": 1343
+                  },
+                  "children": [
+                    {}
+                  ],
+                  "className": "",
+                  "enabled": true,
+                  "name": "Local history Section",
+                  "type": "Button"
+                },
+                {
+                  "bounds": {
+                    "height": 976,
+                    "width": 1114,
+                    "x": 3286,
+                    "y": 40
+                  },
+                  "children": [
+                    {},
+                    {},
+                    {},
+                    {},
+                    {},
+                    {},
+                    {},
+                    {},
+                    {},
+                    {},
+                    {}
+                  ],
+                  "className": "",
+                  "enabled": true,
+                  "name": "",
+                  "type": "Group"
+                },
+                {
+                  "bounds": {
+                    "height": 34,
+                    "width": 413,
+                    "x": 3294,
+                    "y": 1017
+                  },
+                  "children": [
+                    {},
+                    {},
+                    {},
+                    {},
+                    {},
+                    {}
+                  ],
+                  "className": "",
+                  "enabled": true,
+                  "name": "Active View Switcher",
+                  "type": "Tab"
+                },
+                {
+                  "bounds": {
+                    "height": 35,
+                    "width": 639,
+                    "x": 3709,
+                    "y": 1017
+                  },
+                  "children": [
+                    {},
+                    {},
+                    {}
+                  ],
+                  "className": "",
+                  "enabled": true,
+                  "name": "Terminal actions",
+                  "type": "ToolBar"
+                },
+                {
+                  "bounds": {
+                    "height": 34,
+                    "width": 44,
+                    "x": 4348,
+                    "y": 1017
+                  },
+                  "children": [
+                    {},
+                    {}
+                  ],
+                  "className": "",
+                  "enabled": true,
+                  "name": "",
+                  "type": "ToolBar"
+                },
+                {
+                  "bounds": {
+                    "height": 18,
+                    "width": 8,
+                    "x": 3322,
+                    "y": 1321
+                  },
+                  "className": "",
+                  "enabled": true,
+                  "name": "Terminal 1, bash Run the command: Toggle Screen Reader Accessibility Mode for an optimized screen reader experience Use Alt+F1 for terminal accessibility help",
+                  "type": "Edit"
+                },
+                {
+                  "bounds": {
+                    "height": 16,
+                    "width": 16,
+                    "x": 3289,
+                    "y": 1322
+                  },
+                  "className": "",
+                  "enabled": true,
+                  "name": "\ueabc",
+                  "type": "Text"
+                }
+              ],
+              "className": "",
+              "enabled": true,
+              "name": "",
+              "type": "Window"
+            }
+          ],
+          "className": "Chrome_RenderWidgetHostHWND",
+          "enabled": true,
+          "name": "README.md - browser-ai - Cursor",
+          "type": "Document"
+        },
+        {
+          "bounds": {
+            "height": 1382,
+            "width": 2030,
+            "x": 2964,
+            "y": 5
+          },
+          "className": "Intermediate D3D Window",
+          "enabled": false,
+          "name": "",
+          "type": "Pane"
+        },
+        {
+          "bounds": {
+            "height": 1382,
+            "width": 2030,
+            "x": 2964,
+            "y": 5
+          },
+          "children": [
+            {
+              "bounds": {
+                "height": 1382,
+                "width": 2030,
+                "x": 2964,
+                "y": 5
+              },
+              "children": [
+                {
+                  "bounds": {
+                    "height": 33,
+                    "width": 136,
+                    "x": 4857,
+                    "y": 6
+                  },
+                  "children": [
+                    {},
+                    {},
+                    {}
+                  ],
+                  "className": "",
+                  "enabled": true,
+                  "name": "",
+                  "type": "Pane"
+                },
+                {
+                  "bounds": {
+                    "height": 1382,
+                    "width": 2030,
+                    "x": 2964,
+                    "y": 5
+                  },
+                  "children": [
+                    {}
+                  ],
+                  "className": "",
+                  "enabled": true,
+                  "name": "",
+                  "type": "Pane"
+                }
+              ],
+              "className": "",
+              "enabled": true,
+              "name": "",
+              "type": "Pane"
+            }
+          ],
+          "className": "",
+          "enabled": true,
+          "name": "",
+          "type": "Pane"
+        }
+      ],
+      "className": "Chrome_WidgetWin_1",
+      "enabled": true,
+      "name": "README.md - browser-ai - Cursor",
+      "type": "Pane"
+    },
+    {
+      "bounds": {
+        "height": 1374,
+        "width": 1335,
+        "x": 2541,
+        "y": 17
+      },
+      "children": [
+        {
+          "bounds": {
+            "height": 32,
+            "width": 1319,
+            "x": 2549,
+            "y": 17
+          },
+          "className": "InputNonClientPointerSource",
+          "enabled": true,
+          "name": "Non Client Input Sink Window",
+          "type": "Pane"
+        },
+        {
+          "bounds": {
+            "height": 32,
+            "width": 138,
+            "x": 3730,
+            "y": 17
+          },
+          "children": [
+            {
+              "bounds": {
+                "height": 32,
+                "width": 46,
+                "x": 3730,
+                "y": 17
+              },
+              "className": "",
+              "enabled": true,
+              "name": "Minimize",
+              "type": "Button"
+            },
+            {
+              "bounds": {
+                "height": 32,
+                "width": 46,
+                "x": 3776,
+                "y": 17
+              },
+              "className": "",
+              "enabled": true,
+              "name": "Maximize",
+              "type": "Button"
+            },
+            {
+              "bounds": {
+                "height": 32,
+                "width": 46,
+                "x": 3822,
+                "y": 17
+              },
+              "className": "",
+              "enabled": true,
+              "name": "Close",
+              "type": "Button"
+            }
+          ],
+          "className": "ReunionWindowingCaptionControls",
+          "enabled": true,
+          "name": "AppWindow Custom Title Bar",
+          "type": "Pane"
+        },
+        {
+          "bounds": {
+            "height": 1365,
+            "width": 1319,
+            "x": 2549,
+            "y": 18
+          },
+          "children": [
+            {
+              "bounds": {
+                "height": 0,
+                "width": 0,
+                "x": 0,
+                "y": 0
+              },
+              "children": [
+                {
+                  "bounds": {
+                    "height": 1365,
+                    "width": 1319,
+                    "x": 2549,
+                    "y": 18
+                  },
+                  "children": [
+                    {},
+                    {}
+                  ],
+                  "className": "Chrome_WidgetWin_1",
+                  "enabled": true,
+                  "name": "WhatsApp",
+                  "type": "Pane"
+                }
+              ],
+              "className": "Chrome_WidgetWin_0",
+              "enabled": true,
+              "name": "",
+              "type": "Pane"
+            },
+            {
+              "bounds": {
+                "height": 1365,
+                "width": 1319,
+                "x": 2549,
+                "y": 18
+              },
+              "children": [
+                {
+                  "bounds": {
+                    "height": 1365,
+                    "width": 1319,
+                    "x": 2549,
+                    "y": 18
+                  },
+                  "children": [
+                    {}
+                  ],
+                  "className": "Microsoft.UI.Xaml.Controls.WebView2",
+                  "enabled": true,
+                  "name": "",
+                  "type": "Pane"
+                }
+              ],
+              "className": "InputSiteWindowClass",
+              "enabled": true,
+              "name": "",
+              "type": "Pane"
+            }
+          ],
+          "className": "Microsoft.UI.Content.DesktopChildSiteBridge",
+          "enabled": true,
+          "name": "",
+          "type": "Pane"
+        },
+        {
+          "bounds": {
+            "height": 0,
+            "width": 0,
+            "x": 0,
+            "y": 0
+          },
+          "children": [
+            {
+              "bounds": {
+                "height": 22,
+                "width": 22,
+                "x": 2549,
+                "y": 25
+              },
+              "children": [
+                {
+                  "bounds": {
+                    "height": 22,
+                    "width": 22,
+                    "x": 2549,
+                    "y": 25
+                  },
+                  "className": "",
+                  "enabled": true,
+                  "name": "System",
+                  "type": "MenuItem"
+                }
+              ],
+              "className": "",
+              "enabled": true,
+              "name": "System",
+              "type": "MenuBar"
+            },
+            {
+              "bounds": {
+                "height": 0,
+                "width": 0,
+                "x": 0,
+                "y": 0
+              },
+              "className": "",
+              "enabled": true,
+              "name": "Minimize",
+              "type": "Button"
+            },
+            {
+              "bounds": {
+                "height": 0,
+                "width": 0,
+                "x": 0,
+                "y": 0
+              },
+              "className": "",
+              "enabled": true,
+              "name": "Maximize",
+              "type": "Button"
+            },
+            {
+              "bounds": {
+                "height": 0,
+                "width": 0,
+                "x": 0,
+                "y": 0
+              },
+              "className": "",
+              "enabled": true,
+              "name": "Close",
+              "type": "Button"
+            }
+          ],
+          "className": "",
+          "enabled": true,
+          "name": "",
+          "type": "TitleBar"
+        }
+      ],
+      "className": "WinUIDesktopWin32WindowClass",
+      "enabled": true,
+      "name": "WhatsApp",
+      "type": "Window"
+    },
+    {
+      "bounds": {
+        "height": 600,
+        "width": 600,
+        "x": 2260,
+        "y": 396
+      },
+      "children": [
+        {
+          "bounds": {
+            "height": 200,
+            "width": 200,
+            "x": 2460,
+            "y": 596
+          },
+          "className": "ProgressBar",
+          "enabled": true,
+          "name": "",
+          "type": "ProgressBar"
+        },
+        {
+          "bounds": {
+            "height": 130,
+            "width": 130,
+            "x": 2495,
+            "y": 631
+          },
+          "className": "Image",
+          "enabled": true,
+          "name": "",
+          "type": "Image"
+        },
+        {
+          "bounds": {
+            "height": 130,
+            "width": 130,
+            "x": 2495,
+            "y": 631
+          },
+          "className": "Image",
+          "enabled": true,
+          "name": "",
+          "type": "Image"
+        },
+        {
+          "bounds": {
+            "height": 130,
+            "width": 130,
+            "x": 2495,
+            "y": 631
+          },
+          "className": "Button",
+          "enabled": true,
+          "name": "Toggle start stop",
+          "type": "Button"
+        },
+        {
+          "bounds": {
+            "height": 0,
+            "width": 0,
+            "x": 0,
+            "y": 0
+          },
+          "className": "TextBlock",
+          "enabled": true,
+          "name": "Idle",
+          "type": "Text"
+        },
+        {
+          "bounds": {
+            "height": 63,
+            "width": 63,
+            "x": 2671,
+            "y": 711
+          },
+          "children": [
+            {
+              "bounds": {
+                "height": 48,
+                "width": 48,
+                "x": 2677,
+                "y": 716
+              },
+              "className": "Image",
+              "enabled": true,
+              "name": "",
+              "type": "Image"
+            }
+          ],
+          "className": "Button",
+          "enabled": true,
+          "name": "Twitter",
+          "type": "Button"
+        },
+        {
+          "bounds": {
+            "height": 70,
+            "width": 70,
+            "x": 2437,
+            "y": 540
+          },
+          "children": [
+            {
+              "bounds": {
+                "height": 48,
+                "width": 48,
+                "x": 2447,
+                "y": 551
+              },
+              "className": "Image",
+              "enabled": true,
+              "name": "",
+              "type": "Image"
+            }
+          ],
+          "className": "Button",
+          "enabled": true,
+          "name": "Settings",
+          "type": "Button"
+        },
+        {
+          "bounds": {
+            "height": 70,
+            "width": 70,
+            "x": 2613,
+            "y": 540
+          },
+          "children": [
+            {
+              "bounds": {
+                "height": 48,
+                "width": 48,
+                "x": 2622,
+                "y": 550
+              },
+              "className": "Image",
+              "enabled": true,
+              "name": "",
+              "type": "Image"
+            }
+          ],
+          "className": "Button",
+          "enabled": true,
+          "name": "Close",
+          "type": "Button"
+        },
+        {
+          "bounds": {
+            "height": 63,
+            "width": 63,
+            "x": 2386,
+            "y": 711
+          },
+          "children": [
+            {
+              "bounds": {
+                "height": 48,
+                "width": 48,
+                "x": 2394,
+                "y": 718
+              },
+              "className": "Image",
+              "enabled": true,
+              "name": "",
+              "type": "Image"
+            }
+          ],
+          "className": "Button",
+          "enabled": true,
+          "name": "Pay Pal",
+          "type": "Button"
+        },
+        {
+          "bounds": {
+            "height": 50,
+            "width": 50,
+            "x": 2535,
+            "y": 821
+          },
+          "children": [
+            {
+              "bounds": {
+                "height": 48,
+                "width": 48,
+                "x": 2536,
+                "y": 820
+              },
+              "className": "Image",
+              "enabled": true,
+              "name": "",
+              "type": "Image"
+            }
+          ],
+          "className": "Button",
+          "enabled": true,
+          "name": "Help",
+          "type": "Button"
+        }
+      ],
+      "className": "Window",
+      "enabled": true,
+      "name": "Move Mouse",
+      "type": "Window"
+    },
+    {
+      "bounds": {
+        "height": 639,
+        "width": 816,
+        "x": 771,
+        "y": 564
+      },
+      "children": [
+        {
+          "bounds": {
+            "height": 600,
+            "width": 800,
+            "x": 779,
+            "y": 595
+          },
+          "children": [
+            {
+              "bounds": {
+                "height": 600,
+                "width": 800,
+                "x": 779,
+                "y": 595
+              },
+              "children": [
+                {
+                  "bounds": {
+                    "height": 600,
+                    "width": 800,
+                    "x": 779,
+                    "y": 595
+                  },
+                  "children": [
+                    {},
+                    {}
+                  ],
+                  "className": "Chrome_WidgetWin_1",
+                  "enabled": true,
+                  "name": "Ollama",
+                  "type": "Pane"
+                }
+              ],
+              "className": "Chrome_WidgetWin_0",
+              "enabled": true,
+              "name": "",
+              "type": "Pane"
+            }
+          ],
+          "className": "webview_widget",
+          "enabled": true,
+          "name": "",
+          "type": "Pane"
+        },
+        {
+          "bounds": {
+            "height": 28,
+            "width": 784,
+            "x": 795,
+            "y": 567
+          },
+          "children": [
+            {
+              "bounds": {
+                "height": 22,
+                "width": 22,
+                "x": 779,
+                "y": 572
+              },
+              "children": [
+                {
+                  "bounds": {
+                    "height": 22,
+                    "width": 22,
+                    "x": 779,
+                    "y": 572
+                  },
+                  "className": "",
+                  "enabled": true,
+                  "name": "System",
+                  "type": "MenuItem"
+                }
+              ],
+              "className": "",
+              "enabled": true,
+              "name": "System",
+              "type": "MenuBar"
+            },
+            {
+              "bounds": {
+                "height": 30,
+                "width": 47,
+                "x": 1440,
+                "y": 565
+              },
+              "className": "",
+              "enabled": true,
+              "name": "Minimize",
+              "type": "Button"
+            },
+            {
+              "bounds": {
+                "height": 30,
+                "width": 46,
+                "x": 1487,
+                "y": 565
+              },
+              "className": "",
+              "enabled": true,
+              "name": "Maximize",
+              "type": "Button"
+            },
+            {
+              "bounds": {
+                "height": 30,
+                "width": 47,
+                "x": 1533,
+                "y": 565
+              },
+              "className": "",
+              "enabled": true,
+              "name": "Close",
+              "type": "Button"
+            }
+          ],
+          "className": "",
+          "enabled": true,
+          "name": "",
+          "type": "TitleBar"
+        }
+      ],
+      "className": "webview",
+      "enabled": true,
+      "name": "Ollama",
+      "type": "Window"
+    },
+    {
+      "bounds": {
+        "height": 1392,
+        "width": 1200,
+        "x": 259,
+        "y": 9
+      },
+      "children": [
+        {
+          "bounds": {
+            "height": 1392,
+            "width": 1200,
+            "x": 259,
+            "y": 9
+          },
+          "className": "Chrome_RenderWidgetHostHWND",
+          "enabled": true,
+          "name": "Notebook",
+          "type": "Document"
+        },
+        {
+          "bounds": {
+            "height": 1392,
+            "width": 1200,
+            "x": 259,
+            "y": 9
+          },
+          "className": "Intermediate D3D Window",
+          "enabled": false,
+          "name": "",
+          "type": "Pane"
+        },
+        {
+          "bounds": {
+            "height": 1392,
+            "width": 1200,
+            "x": 259,
+            "y": 9
+          },
+          "children": [
+            {
+              "bounds": {
+                "height": 1392,
+                "width": 1200,
+                "x": 259,
+                "y": 9
+              },
+              "children": [
+                {
+                  "bounds": {
+                    "height": 43,
+                    "width": 136,
+                    "x": 1322,
+                    "y": 10
+                  },
+                  "children": [
+                    {},
+                    {},
+                    {}
+                  ],
+                  "className": "",
+                  "enabled": true,
+                  "name": "",
+                  "type": "Pane"
+                },
+                {
+                  "bounds": {
+                    "height": 1392,
+                    "width": 1200,
+                    "x": 259,
+                    "y": 9
+                  },
+                  "children": [
+                    {}
+                  ],
+                  "className": "",
+                  "enabled": true,
+                  "name": "",
+                  "type": "Pane"
+                }
+              ],
+              "className": "",
+              "enabled": true,
+              "name": "",
+              "type": "Pane"
+            }
+          ],
+          "className": "",
+          "enabled": true,
+          "name": "",
+          "type": "Pane"
+        }
+      ],
+      "className": "Chrome_WidgetWin_1",
+      "enabled": true,
+      "name": "Notebook",
+      "type": "Pane"
+    },
+    {
+      "bounds": {
+        "height": 973,
+        "width": 1491,
+        "x": 1454,
+        "y": 9
+      },
+      "children": [
+        {
+          "bounds": {
+            "height": 48,
+            "width": 1475,
+            "x": 1462,
+            "y": 9
+          },
+          "className": "InputNonClientPointerSource",
+          "enabled": true,
+          "name": "Non Client Input Sink Window",
+          "type": "Pane"
+        },
+        {
+          "bounds": {
+            "height": 48,
+            "width": 144,
+            "x": 2793,
+            "y": 9
+          },
+          "children": [
+            {
+              "bounds": {
+                "height": 48,
+                "width": 48,
+                "x": 2793,
+                "y": 9
+              },
+              "className": "",
+              "enabled": true,
+              "name": "Minimize",
+              "type": "Button"
+            },
+            {
+              "bounds": {
+                "height": 48,
+                "width": 48,
+                "x": 2841,
+                "y": 9
+              },
+              "className": "",
+              "enabled": true,
+              "name": "Maximize",
+              "type": "Button"
+            },
+            {
+              "bounds": {
+                "height": 48,
+                "width": 48,
+                "x": 2889,
+                "y": 9
+              },
+              "className": "",
+              "enabled": true,
+              "name": "Close",
+              "type": "Button"
+            }
+          ],
+          "className": "ReunionWindowingCaptionControls",
+          "enabled": true,
+          "name": "AppWindow Custom Title Bar",
+          "type": "Pane"
+        },
+        {
+          "bounds": {
+            "height": 964,
+            "width": 1475,
+            "x": 1462,
+            "y": 10
+          },
+          "children": [
+            {
+              "bounds": {
+                "height": 964,
+                "width": 1475,
+                "x": 1462,
+                "y": 10
+              },
+              "children": [
+                {
+                  "bounds": {
+                    "height": 754,
+                    "width": 1465,
+                    "x": 1467,
+                    "y": 55
+                  },
+                  "children": [
+                    {},
+                    {},
+                    {},
+                    {},
+                    {},
+                    {},
+                    {},
+                    {},
+                    {},
+                    {},
+                    {},
+                    {},
+                    {},
+                    {},
+                    {},
+                    {},
+                    {},
+                    {},
+                    {},
+                    {}
+                  ],
+                  "className": "ListView",
+                  "enabled": true,
+                  "name": "",
+                  "type": "List"
+                },
+                {
+                  "bounds": {
+                    "height": 13,
+                    "width": 125,
+                    "x": 2137,
+                    "y": 951
+                  },
+                  "className": "TextBlock",
+                  "enabled": true,
+                  "name": "Copilot may make mistakes.",
+                  "type": "Text"
+                },
+                {
+                  "bounds": {
+                    "height": 45,
+                    "width": 707,
+                    "x": 1846,
+                    "y": 819
+                  },
+                  "className": "TextBox",
+                  "enabled": true,
+                  "name": "Ask anything",
+                  "type": "Edit"
+                },
+                {
+                  "bounds": {
+                    "height": 38,
+                    "width": 38,
+                    "x": 1852,
+                    "y": 870
+                  },
+                  "className": "Button",
+                  "enabled": false,
+                  "name": "Copilot",
+                  "type": "Button"
+                },
+                {
+                  "bounds": {
+                    "height": 31,
+                    "width": 142,
+                    "x": 1893,
+                    "y": 874
+                  },
+                  "className": "Microsoft.UI.Xaml.Controls.DropDownButton",
+                  "enabled": true,
+                  "name": "Open chat mode menu",
+                  "type": "ComboBox"
+                },
+                {
+                  "bounds": {
+                    "height": 38,
+                    "width": 38,
+                    "x": 2427,
+                    "y": 870
+                  },
+                  "className": "Button",
+                  "enabled": true,
+                  "name": "More options",
+                  "type": "Button"
+                },
+                {
+                  "bounds": {
+                    "height": 38,
+                    "width": 38,
+                    "x": 2468,
+                    "y": 870
+                  },
+                  "className": "Button",
+                  "enabled": true,
+                  "name": "Share screen with Copilot",
+                  "type": "Button"
+                },
+                {
+                  "bounds": {
+                    "height": 38,
+                    "width": 38,
+                    "x": 2509,
+                    "y": 870
+                  },
+                  "className": "Button",
+                  "enabled": true,
+                  "name": "Talk to Copilot",
+                  "type": "Button"
+                },
+                {
+                  "bounds": {
+                    "height": 17,
+                    "width": 82,
+                    "x": 1478,
+                    "y": 25
+                  },
+                  "className": "Image",
+                  "enabled": true,
+                  "name": "Copilot",
+                  "type": "Image"
+                },
+                {
+                  "bounds": {
+                    "height": 32,
+                    "width": 32,
+                    "x": 1568,
+                    "y": 18
+                  },
+                  "className": "Button",
+                  "enabled": true,
+                  "name": "Open sidebar",
+                  "type": "Button"
+                },
+                {
+                  "bounds": {
+                    "height": 32,
+                    "width": 32,
+                    "x": 1600,
+                    "y": 18
+                  },
+                  "className": "Button",
+                  "enabled": true,
+                  "name": "Home",
+                  "type": "Button"
+                },
+                {
+                  "bounds": {
+                    "height": 32,
+                    "width": 32,
+                    "x": 1632,
+                    "y": 18
+                  },
+                  "className": "Button",
+                  "enabled": true,
+                  "name": "More actions",
+                  "type": "Button"
+                },
+                {
+                  "bounds": {
+                    "height": 18,
+                    "width": 500,
+                    "x": 1927,
+                    "y": 25
+                  },
+                  "className": "TextBlock",
+                  "enabled": true,
+                  "name": "Fixing Chromium MIDL Build Failure on Windows",
+                  "type": "Text"
+                },
+                {
+                  "bounds": {
+                    "height": 29,
+                    "width": 74,
+                    "x": 2684,
+                    "y": 20
+                  },
+                  "children": [
+                    {}
+                  ],
+                  "className": "Button",
+                  "enabled": true,
+                  "name": "Invite",
+                  "type": "Button"
+                },
+                {
+                  "bounds": {
+                    "height": 32,
+                    "width": 32,
+                    "x": 2761,
+                    "y": 18
+                  },
+                  "className": "Button",
+                  "enabled": true,
+                  "name": "Open quick view",
+                  "type": "Button"
+                }
+              ],
+              "className": "InputSiteWindowClass",
+              "enabled": true,
+              "name": "",
+              "type": "Pane"
+            }
+          ],
+          "className": "Microsoft.UI.Content.DesktopChildSiteBridge",
+          "enabled": true,
+          "name": "",
+          "type": "Pane"
+        },
+        {
+          "bounds": {
+            "height": 0,
+            "width": 0,
+            "x": 0,
+            "y": 0
+          },
+          "children": [
+            {
+              "bounds": {
+                "height": 22,
+                "width": 22,
+                "x": 1462,
+                "y": 17
+              },
+              "children": [
+                {
+                  "bounds": {
+                    "height": 22,
+                    "width": 22,
+                    "x": 1462,
+                    "y": 17
+                  },
+                  "className": "",
+                  "enabled": true,
+                  "name": "System",
+                  "type": "MenuItem"
+                }
+              ],
+              "className": "",
+              "enabled": true,
+              "name": "System",
+              "type": "MenuBar"
+            },
+            {
+              "bounds": {
+                "height": 0,
+                "width": 0,
+                "x": 0,
+                "y": 0
+              },
+              "className": "",
+              "enabled": true,
+              "name": "Minimize",
+              "type": "Button"
+            },
+            {
+              "bounds": {
+                "height": 0,
+                "width": 0,
+                "x": 0,
+                "y": 0
+              },
+              "className": "",
+              "enabled": true,
+              "name": "Maximize",
+              "type": "Button"
+            },
+            {
+              "bounds": {
+                "height": 0,
+                "width": 0,
+                "x": 0,
+                "y": 0
+              },
+              "className": "",
+              "enabled": true,
+              "name": "Close",
+              "type": "Button"
+            }
+          ],
+          "className": "",
+          "enabled": true,
+          "name": "",
+          "type": "TitleBar"
+        }
+      ],
+      "className": "WinUIDesktopWin32WindowClass",
+      "enabled": true,
+      "name": "Fixing Chromium MIDL Build Failure on Windows",
+      "type": "Window"
+    },
+    {
+      "bounds": {
+        "height": 644,
+        "width": 740,
+        "x": 1490,
+        "y": 82
+      },
+      "children": [
+        {
+          "bounds": {
+            "height": 644,
+            "width": 740,
+            "x": 1490,
+            "y": 82
+          },
+          "children": [
+            {
+              "bounds": {
+                "height": 644,
+                "width": 740,
+                "x": 1490,
+                "y": 82
+              },
+              "children": [
+                {
+                  "bounds": {
+                    "height": 644,
+                    "width": 740,
+                    "x": 1490,
+                    "y": 82
+                  },
+                  "children": [
+                    {},
+                    {},
+                    {},
+                    {},
+                    {},
+                    {},
+                    {},
+                    {},
+                    {},
+                    {},
+                    {},
+                    {},
+                    {},
+                    {},
+                    {},
+                    {},
+                    {},
+                    {},
+                    {},
+                    {}
+                  ],
+                  "className": "Chrome_RenderWidgetHostHWND",
+                  "enabled": true,
+                  "name": "newone + 1 Chat",
+                  "type": "Document"
+                },
+                {
+                  "bounds": {
+                    "height": 644,
+                    "width": 740,
+                    "x": 1490,
+                    "y": 82
+                  },
+                  "className": "Intermediate D3D Window",
+                  "enabled": false,
+                  "name": "",
+                  "type": "Pane"
+                },
+                {
+                  "bounds": {
+                    "height": 644,
+                    "width": 740,
+                    "x": 1490,
+                    "y": 82
+                  },
+                  "className": "",
+                  "enabled": true,
+                  "name": "",
+                  "type": "Pane"
+                }
+              ],
+              "className": "Chrome_WidgetWin_1",
+              "enabled": true,
+              "name": "",
+              "type": "Pane"
+            }
+          ],
+          "className": "CefBrowserWindow",
+          "enabled": true,
+          "name": "",
+          "type": "Pane"
+        }
+      ],
+      "className": "SDL_app",
+      "enabled": true,
+      "name": "newone + 1 Chat",
+      "type": "Window"
+    },
+    {
+      "bounds": {
+        "height": 635,
+        "width": 1129,
+        "x": 2622,
+        "y": 762
+      },
+      "children": [
+        {
+          "bounds": {
+            "height": 40,
+            "width": 556,
+            "x": 3187,
+            "y": 763
+          },
+          "className": "DRAG_BAR_WINDOW_CLASS",
+          "enabled": true,
+          "name": "",
+          "type": "Pane"
+        },
+        {
+          "bounds": {
+            "height": 626,
+            "width": 1113,
+            "x": 2630,
+            "y": 763
+          },
+          "children": [
+            {
+              "bounds": {
+                "height": 32,
+                "width": 557,
+                "x": 2630,
+                "y": 771
+              },
+              "children": [
+                {
+                  "bounds": {
+                    "height": 32,
+                    "width": 492,
+                    "x": 2632,
+                    "y": 771
+                  },
+                  "children": [
+                    {},
+                    {}
+                  ],
+                  "className": "ListView",
+                  "enabled": true,
+                  "name": "",
+                  "type": "List"
+                },
+                {
+                  "bounds": {
+                    "height": 24,
+                    "width": 63,
+                    "x": 3124,
+                    "y": 775
+                  },
+                  "className": "Microsoft.UI.Xaml.Controls.SplitButton",
+                  "enabled": true,
+                  "name": "New Tab",
+                  "type": "SplitButton"
+                }
+              ],
+              "className": "Microsoft.UI.Xaml.Controls.TabView",
+              "enabled": true,
+              "name": "",
+              "type": "Tab"
+            },
+            {
+              "bounds": {
+                "height": 586,
+                "width": 1113,
+                "x": 2630,
+                "y": 803
+              },
+              "children": [
+                {
+                  "bounds": {
+                    "height": 586,
+                    "width": 1113,
+                    "x": 2630,
+                    "y": 803
+                  },
+                  "children": [
+                    {}
+                  ],
+                  "className": "TermControl",
+                  "enabled": true,
+                  "name": "Git Bash",
+                  "type": "Text"
+                }
+              ],
+              "className": "",
+              "enabled": true,
+              "name": "",
+              "type": "Custom"
+            }
+          ],
+          "className": "Windows.UI.Input.InputSite.WindowClass",
+          "enabled": true,
+          "name": "",
+          "type": "Pane"
+        },
+        {
+          "bounds": {
+            "height": 0,
+            "width": 0,
+            "x": 0,
+            "y": 0
+          },
+          "children": [
+            {
+              "bounds": {
+                "height": 22,
+                "width": 22,
+                "x": 2630,
+                "y": 770
+              },
+              "children": [
+                {
+                  "bounds": {
+                    "height": 22,
+                    "width": 22,
+                    "x": 2630,
+                    "y": 770
+                  },
+                  "className": "",
+                  "enabled": true,
+                  "name": "System",
+                  "type": "MenuItem"
+                }
+              ],
+              "className": "",
+              "enabled": true,
+              "name": "System",
+              "type": "MenuBar"
+            },
+            {
+              "bounds": {
+                "height": 30,
+                "width": 47,
+                "x": 3604,
+                "y": 763
+              },
+              "className": "",
+              "enabled": true,
+              "name": "Minimize",
+              "type": "Button"
+            },
+            {
+              "bounds": {
+                "height": 30,
+                "width": 46,
+                "x": 3651,
+                "y": 763
+              },
+              "className": "",
+              "enabled": true,
+              "name": "Maximize",
+              "type": "Button"
+            },
+            {
+              "bounds": {
+                "height": 30,
+                "width": 47,
+                "x": 3697,
+                "y": 763
+              },
+              "className": "",
+              "enabled": true,
+              "name": "Close",
+              "type": "Button"
+            }
+          ],
+          "className": "",
+          "enabled": true,
+          "name": "",
+          "type": "TitleBar"
+        }
+      ],
+      "className": "CASCADIA_HOSTING_WINDOW_CLASS",
+      "enabled": true,
+      "name": "MINGW64:/a/browser-ai/chromium/src",
+      "type": "Window"
+    },
+    {
+      "bounds": {
+        "height": 1440,
+        "width": 5120,
+        "x": 0,
+        "y": 0
+      },
+      "className": "CEF-OSC-WIDGET",
+      "enabled": true,
+      "name": "NVIDIA GeForce Overlay",
+      "type": "Pane"
+    },
+    {
+      "bounds": {
+        "height": 28,
+        "width": 160,
+        "x": -32000,
+        "y": -32000
+      },
+      "children": [
+        {
+          "bounds": {
+            "height": 0,
+            "width": 0,
+            "x": 0,
+            "y": 0
+          },
+          "children": [
+            {
+              "bounds": {
+                "height": 22,
+                "width": 22,
+                "x": -31992,
+                "y": -31992
+              },
+              "children": [
+                {
+                  "bounds": {
+                    "height": 22,
+                    "width": 22,
+                    "x": -31992,
+                    "y": -31992
+                  },
+                  "className": "",
+                  "enabled": true,
+                  "name": "System",
+                  "type": "MenuItem"
+                }
+              ],
+              "className": "",
+              "enabled": true,
+              "name": "System",
+              "type": "MenuBar"
+            },
+            {
+              "bounds": {
+                "height": 0,
+                "width": 0,
+                "x": 0,
+                "y": 0
+              },
+              "className": "",
+              "enabled": true,
+              "name": "Restore",
+              "type": "Button"
+            },
+            {
+              "bounds": {
+                "height": 0,
+                "width": 0,
+                "x": 0,
+                "y": 0
+              },
+              "className": "",
+              "enabled": true,
+              "name": "Maximize",
+              "type": "Button"
+            },
+            {
+              "bounds": {
+                "height": 0,
+                "width": 0,
+                "x": 0,
+                "y": 0
+              },
+              "className": "",
+              "enabled": true,
+              "name": "Close",
+              "type": "Button"
+            }
+          ],
+          "className": "",
+          "enabled": true,
+          "name": "",
+          "type": "TitleBar"
+        },
+        {
+          "bounds": {
+            "height": 32,
+            "width": 1782,
+            "x": -31994,
+            "y": -31999
+          },
+          "children": [
+            {
+              "bounds": {
+                "height": 20,
+                "width": 604,
+                "x": -31960,
+                "y": -31993
+              },
+              "children": [
+                {
+                  "bounds": {
+                    "height": 20,
+                    "width": 38,
+                    "x": -31960,
+                    "y": -31993
+                  },
+                  "className": "MenuItem",
+                  "enabled": true,
+                  "name": "File",
+                  "type": "MenuItem"
+                },
+                {
+                  "bounds": {
+                    "height": 20,
+                    "width": 40,
+                    "x": -31922,
+                    "y": -31993
+                  },
+                  "className": "MenuItem",
+                  "enabled": true,
+                  "name": "Edit",
+                  "type": "MenuItem"
+                },
+                {
+                  "bounds": {
+                    "height": 20,
+                    "width": 45,
+                    "x": -31882,
+                    "y": -31993
+                  },
+                  "className": "MenuItem",
+                  "enabled": true,
+                  "name": "View",
+                  "type": "MenuItem"
+                },
+                {
+                  "bounds": {
+                    "height": 20,
+                    "width": 35,
+                    "x": -31837,
+                    "y": -31993
+                  },
+                  "className": "MenuItem",
+                  "enabled": true,
+                  "name": "Git",
+                  "type": "MenuItem"
+                },
+                {
+                  "bounds": {
+                    "height": 20,
+                    "width": 57,
+                    "x": -31802,
+                    "y": -31993
+                  },
+                  "className": "MenuItem",
+                  "enabled": true,
+                  "name": "Project",
+                  "type": "MenuItem"
+                },
+                {
+                  "bounds": {
+                    "height": 20,
+                    "width": 55,
+                    "x": -31745,
+                    "y": -31993
+                  },
+                  "className": "MenuItem",
+                  "enabled": true,
+                  "name": "Debug",
+                  "type": "MenuItem"
+                },
+                {
+                  "bounds": {
+                    "height": 20,
+                    "width": 41,
+                    "x": -31690,
+                    "y": -31993
+                  },
+                  "className": "MenuItem",
+                  "enabled": true,
+                  "name": "Test",
+                  "type": "MenuItem"
+                },
+                {
+                  "bounds": {
+                    "height": 20,
+                    "width": 61,
+                    "x": -31649,
+                    "y": -31993
+                  },
+                  "className": "MenuItem",
+                  "enabled": true,
+                  "name": "Analyze",
+                  "type": "MenuItem"
+                },
+                {
+                  "bounds": {
+                    "height": 20,
+                    "width": 48,
+                    "x": -31588,
+                    "y": -31993
+                  },
+                  "className": "MenuItem",
+                  "enabled": true,
+                  "name": "Tools",
+                  "type": "MenuItem"
+                },
+                {
+                  "bounds": {
+                    "height": 20,
+                    "width": 75,
+                    "x": -31540,
+                    "y": -31993
+                  },
+                  "className": "MenuItem",
+                  "enabled": true,
+                  "name": "Extensions",
+                  "type": "MenuItem"
+                },
+                {
+                  "bounds": {
+                    "height": 20,
+                    "width": 64,
+                    "x": -31465,
+                    "y": -31993
+                  },
+                  "className": "MenuItem",
+                  "enabled": true,
+                  "name": "Window",
+                  "type": "MenuItem"
+                },
+                {
+                  "bounds": {
+                    "height": 20,
+                    "width": 45,
+                    "x": -31401,
+                    "y": -31993
+                  },
+                  "className": "MenuItem",
+                  "enabled": true,
+                  "name": "Help",
+                  "type": "MenuItem"
+                }
+              ],
+              "className": "Menu",
+              "enabled": true,
+              "name": "MenuBar",
+              "type": "MenuBar"
+            },
+            {
+              "bounds": {
+                "height": 24,
+                "width": 90,
+                "x": -31356,
+                "y": -31996
+              },
+              "children": [
+                {
+                  "bounds": {
+                    "height": 23,
+                    "width": 76,
+                    "x": -31342,
+                    "y": -31995
+                  },
+                  "children": [
+                    {}
+                  ],
+                  "className": "Button",
+                  "enabled": true,
+                  "name": "Search everywhere",
+                  "type": "Button"
+                }
+              ],
+              "className": "PackageAllInOneSearchButtonPresenter",
+              "enabled": true,
+              "name": "",
+              "type": "Custom"
+            },
+            {
+              "bounds": {
+                "height": 15,
+                "width": 56,
+                "x": -31240,
+                "y": -31991
+              },
+              "className": "TextBlock",
+              "enabled": true,
+              "name": "chromium",
+              "type": "Text"
+            },
+            {
+              "bounds": {
+                "height": 32,
+                "width": 54,
+                "x": -30406,
+                "y": -31999
+              },
+              "children": [
+                {
+                  "bounds": {
+                    "height": 22,
+                    "width": 22,
+                    "x": -30390,
+                    "y": -31994
+                  },
+                  "className": "Image",
+                  "enabled": true,
+                  "name": "",
+                  "type": "Image"
+                }
+              ],
+              "className": "Button",
+              "enabled": true,
+              "name": "Connected User Information",
+              "type": "Button"
+            },
+            {
+              "bounds": {
+                "height": 32,
+                "width": 46,
+                "x": -30350,
+                "y": -31999
+              },
+              "className": "Button",
+              "enabled": true,
+              "name": "Minimize",
+              "type": "Button"
+            },
+            {
+              "bounds": {
+                "height": 32,
+                "width": 46,
+                "x": -30304,
+                "y": -31999
+              },
+              "className": "Button",
+              "enabled": true,
+              "name": "Maximize",
+              "type": "Button"
+            },
+            {
+              "bounds": {
+                "height": 32,
+                "width": 46,
+                "x": -30258,
+                "y": -31999
+              },
+              "className": "Button",
+              "enabled": true,
+              "name": "Close",
+              "type": "Button"
+            }
+          ],
+          "className": "",
+          "enabled": true,
+          "name": "chromium - Microsoft Visual Studio",
+          "type": "TitleBar"
+        },
+        {
+          "bounds": {
+            "height": 24,
+            "width": 109,
+            "x": -30351,
+            "y": -31965
+          },
+          "children": [
+            {
+              "bounds": {
+                "height": 24,
+                "width": 109,
+                "x": -30351,
+                "y": -31965
+              },
+              "children": [
+                {
+                  "bounds": {
+                    "height": 16,
+                    "width": 16,
+                    "x": -30347,
+                    "y": -31961
+                  },
+                  "className": "Image",
+                  "enabled": true,
+                  "name": "",
+                  "type": "Image"
+                }
+              ],
+              "className": "Button",
+              "enabled": true,
+              "name": "GitHub Copilot",
+              "type": "Button"
+            }
+          ],
+          "className": "CopilotBadgeControl",
+          "enabled": true,
+          "name": "",
+          "type": "Custom"
+        },
+        {
+          "bounds": {
+            "height": 24,
+            "width": 24,
+            "x": -30242,
+            "y": -31965
+          },
+          "children": [
+            {
+              "bounds": {
+                "height": 24,
+                "width": 24,
+                "x": -30242,
+                "y": -31965
+              },
+              "children": [
+                {
+                  "bounds": {
+                    "height": 16,
+                    "width": 16,
+                    "x": -30238,
+                    "y": -31961
+                  },
+                  "className": "Image",
+                  "enabled": true,
+                  "name": "",
+                  "type": "Image"
+                }
+              ],
+              "className": "Button",
+              "enabled": true,
+              "name": "Feedback",
+              "type": "Button"
+            }
+          ],
+          "className": "SendASmileControl",
+          "enabled": true,
+          "name": "",
+          "type": "Custom"
+        },
+        {
+          "bounds": {
+            "height": 26,
+            "width": 1628,
+            "x": -31985,
+            "y": -31966
+          },
+          "children": [
+            {
+              "bounds": {
+                "height": 26,
+                "width": 726,
+                "x": -31985,
+                "y": -31966
+              },
+              "children": [
+                {
+                  "bounds": {
+                    "height": 24,
+                    "width": 35,
+                    "x": -31974,
+                    "y": -31965
+                  },
+                  "className": "MenuItem",
+                  "enabled": false,
+                  "name": "Navigate Backward",
+                  "type": "SplitButton"
+                },
+                {
+                  "bounds": {
+                    "height": 24,
+                    "width": 22,
+                    "x": -31939,
+                    "y": -31965
+                  },
+                  "children": [
+                    {}
+                  ],
+                  "className": "Button",
+                  "enabled": false,
+                  "name": "Navigate Forward",
+                  "type": "Button"
+                },
+                {
+                  "bounds": {
+                    "height": 24,
+                    "width": 35,
+                    "x": -31909,
+                    "y": -31965
+                  },
+                  "className": "MenuItem",
+                  "enabled": true,
+                  "name": "New Project",
+                  "type": "SplitButton"
+                },
+                {
+                  "bounds": {
+                    "height": 24,
+                    "width": 22,
+                    "x": -31874,
+                    "y": -31965
+                  },
+                  "children": [
+                    {}
+                  ],
+                  "className": "Button",
+                  "enabled": true,
+                  "name": "Open File...",
+                  "type": "Button"
+                },
+                {
+                  "bounds": {
+                    "height": 24,
+                    "width": 22,
+                    "x": -31852,
+                    "y": -31965
+                  },
+                  "children": [
+                    {}
+                  ],
+                  "className": "Button",
+                  "enabled": false,
+                  "name": "Save Selected Items",
+                  "type": "Button"
+                },
+                {
+                  "bounds": {
+                    "height": 24,
+                    "width": 22,
+                    "x": -31830,
+                    "y": -31965
+                  },
+                  "children": [
+                    {}
+                  ],
+                  "className": "Button",
+                  "enabled": true,
+                  "name": "Save All",
+                  "type": "Button"
+                },
+                {
+                  "bounds": {
+                    "height": 22,
+                    "width": 35,
+                    "x": -31800,
+                    "y": -31964
+                  },
+                  "children": [
+                    {}
+                  ],
+                  "className": "VsSplitButton",
+                  "enabled": false,
+                  "name": "Undo",
+                  "type": "SplitButton"
+                },
+                {
+                  "bounds": {
+                    "height": 22,
+                    "width": 35,
+                    "x": -31765,
+                    "y": -31964
+                  },
+                  "children": [
+                    {}
+                  ],
+                  "className": "VsSplitButton",
+                  "enabled": false,
+                  "name": "Redo",
+                  "type": "SplitButton"
+                },
+                {
+                  "bounds": {
+                    "height": 22,
+                    "width": 200,
+                    "x": -31719,
+                    "y": -31964
+                  },
+                  "children": [
+                    {}
+                  ],
+                  "className": "ComboBox",
+                  "enabled": true,
+                  "name": "Configuration",
+                  "type": "ComboBox"
+                },
+                {
+                  "bounds": {
+                    "height": 24,
+                    "width": 147,
+                    "x": -31508,
+                    "y": -31965
+                  },
+                  "className": "MenuItem",
+                  "enabled": true,
+                  "name": "Select Startup Item...",
+                  "type": "SplitButton"
+                },
+                {
+                  "bounds": {
+                    "height": 24,
+                    "width": 22,
+                    "x": -31353,
+                    "y": -31965
+                  },
+                  "children": [
+                    {}
+                  ],
+                  "className": "Button",
+                  "enabled": false,
+                  "name": "Start Without Debugging",
+                  "type": "Button"
+                },
+                {
+                  "bounds": {
+                    "height": 24,
+                    "width": 22,
+                    "x": -31323,
+                    "y": -31965
+                  },
+                  "children": [
+                    {}
+                  ],
+                  "className": "Button",
+                  "enabled": true,
+                  "name": "Find in Files",
+                  "type": "Button"
+                },
+                {
+                  "bounds": {
+                    "height": 24,
+                    "width": 22,
+                    "x": -31293,
+                    "y": -31965
+                  },
+                  "children": [
+                    {}
+                  ],
+                  "className": "Button",
+                  "enabled": true,
+                  "name": "Start Window",
+                  "type": "Button"
+                },
+                {
+                  "bounds": {
+                    "height": 26,
+                    "width": 15,
+                    "x": -31274,
+                    "y": -31966
+                  },
+                  "className": "Button",
+                  "enabled": true,
+                  "name": "Additional Toolbar Items",
+                  "type": "Button"
+                }
+              ],
+              "className": "ToolBar",
+              "enabled": true,
+              "name": "Standard",
+              "type": "ToolBar"
+            }
+          ],
+          "className": "",
+          "enabled": true,
+          "name": "ToolBarDockTop",
+          "type": "Pane"
+        },
+        {
+          "bounds": {
+            "height": 0,
+            "width": 0,
+            "x": 0,
+            "y": 0
+          },
+          "className": "",
+          "enabled": true,
+          "name": "ToolBarDockLeft",
+          "type": "Pane"
+        },
+        {
+          "bounds": {
+            "height": 1155,
+            "width": 1782,
+            "x": -31994,
+            "y": -31934
+          },
+          "children": [
+            {
+              "bounds": {
+                "height": 192,
+                "width": 1416,
+                "x": -31988,
+                "y": -30977
+              },
+              "children": [
+                {
+                  "bounds": {
+                    "height": 22,
+                    "width": 1416,
+                    "x": -31988,
+                    "y": -30977
+                  },
+                  "children": [
+                    {}
+                  ],
+                  "className": "ToolWindowTitleBar",
+                  "enabled": true,
+                  "name": "Output",
+                  "type": "TitleBar"
+                },
+                {
+                  "bounds": {
+                    "height": 170,
+                    "width": 1416,
+                    "x": -31988,
+                    "y": -30955
+                  },
+                  "children": [
+                    {},
+                    {}
+                  ],
+                  "className": "ToolWindowTabGroup",
+                  "enabled": true,
+                  "name": "",
+                  "type": "Tab"
+                }
+              ],
+              "className": "ToolWindowTabGroupContainer",
+              "enabled": true,
+              "name": "Output",
+              "type": "Pane"
+            },
+            {
+              "bounds": {
+                "height": 1143,
+                "width": 348,
+                "x": -30566,
+                "y": -31928
+              },
+              "children": [
+                {
+                  "bounds": {
+                    "height": 22,
+                    "width": 348,
+                    "x": -30566,
+                    "y": -31928
+                  },
+                  "children": [
+                    {}
+                  ],
+                  "className": "ToolWindowTitleBar",
+                  "enabled": true,
+                  "name": "GitHub Copilot Chat",
+                  "type": "TitleBar"
+                },
+                {
+                  "bounds": {
+                    "height": 1121,
+                    "width": 348,
+                    "x": -30566,
+                    "y": -31906
+                  },
+                  "children": [
+                    {},
+                    {},
+                    {}
+                  ],
+                  "className": "ToolWindowTabGroup",
+                  "enabled": true,
+                  "name": "",
+                  "type": "Tab"
+                }
+              ],
+              "className": "ToolWindowTabGroupContainer",
+              "enabled": true,
+              "name": "GitHub Copilot Chat",
+              "type": "Pane"
+            }
+          ],
+          "className": "DockRoot",
+          "enabled": true,
+          "name": "",
+          "type": "Pane"
+        },
+        {
+          "bounds": {
+            "height": 0,
+            "width": 0,
+            "x": 0,
+            "y": 0
+          },
+          "className": "",
+          "enabled": true,
+          "name": "ToolBarDockRight",
+          "type": "Pane"
+        },
+        {
+          "bounds": {
+            "height": 0,
+            "width": 0,
+            "x": 0,
+            "y": 0
+          },
+          "className": "",
+          "enabled": true,
+          "name": "ToolBarDockBottom",
+          "type": "Pane"
+        },
+        {
+          "bounds": {
+            "height": 24,
+            "width": 407,
+            "x": -30673,
+            "y": -30779
+          },
+          "children": [
+            {
+              "bounds": {
+                "height": 16,
+                "width": 58,
+                "x": -30670,
+                "y": -30775
+              },
+              "children": [
+                {
+                  "bounds": {
+                    "height": 16,
+                    "width": 16,
+                    "x": -30666,
+                    "y": -30775
+                  },
+                  "className": "Image",
+                  "enabled": true,
+                  "name": "",
+                  "type": "Image"
+                },
+                {
+                  "bounds": {
+                    "height": 16,
+                    "width": 6,
+                    "x": -30644,
+                    "y": -30775
+                  },
+                  "className": "TextBlock",
+                  "enabled": true,
+                  "name": "0",
+                  "type": "Text"
+                }
+              ],
+              "className": "Button",
+              "enabled": true,
+              "name": "0",
+              "type": "Button"
+            },
+            {
+              "bounds": {
+                "height": 16,
+                "width": 44,
+                "x": -30606,
+                "y": -30775
+              },
+              "children": [
+                {
+                  "bounds": {
+                    "height": 16,
+                    "width": 16,
+                    "x": -30602,
+                    "y": -30775
+                  },
+                  "className": "Image",
+                  "enabled": true,
+                  "name": "",
+                  "type": "Image"
+                },
+                {
+                  "bounds": {
+                    "height": 16,
+                    "width": 6,
+                    "x": -30580,
+                    "y": -30775
+                  },
+                  "className": "TextBlock",
+                  "enabled": true,
+                  "name": "0",
+                  "type": "Text"
+                }
+              ],
+              "className": "Button",
+              "enabled": true,
+              "name": "0",
+              "type": "Button"
+            },
+            {
+              "bounds": {
+                "height": 16,
+                "width": 167,
+                "x": -30556,
+                "y": -30775
+              },
+              "children": [
+                {
+                  "bounds": {
+                    "height": 16,
+                    "width": 16,
+                    "x": -30552,
+                    "y": -30775
+                  },
+                  "className": "Image",
+                  "enabled": true,
+                  "name": "",
+                  "type": "Image"
+                },
+                {
+                  "bounds": {
+                    "height": 16,
+                    "width": 115,
+                    "x": -30530,
+                    "y": -30775
+                  },
+                  "className": "TextBlock",
+                  "enabled": true,
+                  "name": "Detached at 82b29e41",
+                  "type": "Text"
+                }
+              ],
+              "className": "Button",
+              "enabled": true,
+              "name": "Detached at 82b29e41",
+              "type": "Button"
+            },
+            {
+              "bounds": {
+                "height": 16,
+                "width": 108,
+                "x": -30377,
+                "y": -30775
+              },
+              "children": [
+                {
+                  "bounds": {
+                    "height": 16,
+                    "width": 16,
+                    "x": -30373,
+                    "y": -30775
+                  },
+                  "className": "Image",
+                  "enabled": true,
+                  "name": "",
+                  "type": "Image"
+                },
+                {
+                  "bounds": {
+                    "height": 16,
+                    "width": 56,
+                    "x": -30351,
+                    "y": -30775
+                  },
+                  "className": "TextBlock",
+                  "enabled": true,
+                  "name": "chromium",
+                  "type": "Text"
+                }
+              ],
+              "className": "Button",
+              "enabled": true,
+              "name": "chromium",
+              "type": "Button"
+            }
+          ],
+          "className": "StatusBar",
+          "enabled": true,
+          "name": "",
+          "type": "StatusBar"
+        },
+        {
+          "bounds": {
+            "height": 24,
+            "width": 33,
+            "x": -30266,
+            "y": -30779
+          },
+          "children": [
+            {
+              "bounds": {
+                "height": 16,
+                "width": 16,
+                "x": -30259,
+                "y": -30775
+              },
+              "className": "Image",
+              "enabled": true,
+              "name": "",
+              "type": "Image"
+            }
+          ],
+          "className": "Button",
+          "enabled": true,
+          "name": "Notifications",
+          "type": "Button"
+        },
+        {
+          "bounds": {
+            "height": 24,
+            "width": 24,
+            "x": -31994,
+            "y": -30779
+          },
+          "children": [
+            {
+              "bounds": {
+                "height": 16,
+                "width": 16,
+                "x": -31990,
+                "y": -30775
+              },
+              "className": "Image",
+              "enabled": true,
+              "name": "",
+              "type": "Image"
+            }
+          ],
+          "className": "Button",
+          "enabled": true,
+          "name": "Background tasks (Ctrl+E, Ctrl+T)",
+          "type": "Button"
+        },
+        {
+          "bounds": {
+            "height": 0,
+            "width": 0,
+            "x": 0,
+            "y": 0
+          },
+          "className": "LiveTextBlock",
+          "enabled": true,
+          "name": "Ready",
+          "type": "Text"
+        },
+        {
+          "bounds": {
+            "height": 24,
+            "width": 1297,
+            "x": -31970,
+            "y": -30779
+          },
+          "children": [
+            {
+              "bounds": {
+                "height": 24,
+                "width": 10,
+                "x": -31730,
+                "y": -30779
+              },
+              "className": "CompartmentAutomationPeer",
+              "enabled": true,
+              "name": "Ready",
+              "type": "Text"
+            },
+            {
+              "bounds": {
+                "height": 24,
+                "width": 10,
+                "x": -31720,
+                "y": -30779
+              },
+              "className": "CompartmentAutomationPeer",
+              "enabled": true,
+              "name": "",
+              "type": "Text"
+            },
+            {
+              "bounds": {
+                "height": 24,
+                "width": 10,
+                "x": -31710,
+                "y": -30779
+              },
+              "className": "CompartmentAutomationPeer",
+              "enabled": true,
+              "name": "",
+              "type": "Text"
+            },
+            {
+              "bounds": {
+                "height": 24,
+                "width": 10,
+                "x": -31700,
+                "y": -30779
+              },
+              "className": "CompartmentAutomationPeer",
+              "enabled": true,
+              "name": "",
+              "type": "Text"
+            }
+          ],
+          "className": "StatusBar",
+          "enabled": true,
+          "name": "",
+          "type": "StatusBar"
+        }
+      ],
+      "className": "Window",
+      "enabled": true,
+      "name": "chromium - Microsoft Visual Studio",
+      "type": "Window"
+    },
+    {
+      "bounds": {
+        "height": 0,
+        "width": 0,
+        "x": 0,
+        "y": 0
+      },
+      "children": [
+        {
+          "bounds": {
+            "height": 910,
+            "width": 1919,
+            "x": -31994,
+            "y": -31925
+          },
+          "children": [
+            {
+              "bounds": {
+                "height": 910,
+                "width": 1919,
+                "x": -31994,
+                "y": -31925
+              },
+              "className": "RichEditD2DPT",
+              "enabled": true,
+              "name": "Text editor",
+              "type": "Document"
+            }
+          ],
+          "className": "NotepadTextBox",
+          "enabled": true,
+          "name": "",
+          "type": "Pane"
+        },
+        {
+          "bounds": {
+            "height": 32,
+            "width": 287,
+            "x": -31954,
+            "y": -31990
+          },
+          "children": [
+            {
+              "bounds": {
+                "height": 32,
+                "width": 287,
+                "x": -31954,
+                "y": -31990
+              },
+              "children": [
+                {
+                  "bounds": {
+                    "height": 32,
+                    "width": 287,
+                    "x": -31954,
+                    "y": -31990
+                  },
+                  "children": [
+                    {},
+                    {}
+                  ],
+                  "className": "Microsoft.UI.Xaml.Controls.TabView",
+                  "enabled": true,
+                  "name": "",
+                  "type": "Tab"
+                }
+              ],
+              "className": "InputSiteWindowClass",
+              "enabled": true,
+              "name": "",
+              "type": "Pane"
+            }
+          ],
+          "className": "Microsoft.UI.Content.DesktopChildSiteBridge",
+          "enabled": true,
+          "name": "",
+          "type": "Pane"
+        },
+        {
+          "bounds": {
+            "height": 33,
+            "width": 1919,
+            "x": -31994,
+            "y": -31958
+          },
+          "children": [
+            {
+              "bounds": {
+                "height": 33,
+                "width": 1919,
+                "x": -31994,
+                "y": -31958
+              },
+              "children": [
+                {
+                  "bounds": {
+                    "height": 32,
+                    "width": 159,
+                    "x": -31994,
+                    "y": -31958
+                  },
+                  "children": [
+                    {},
+                    {},
+                    {}
+                  ],
+                  "className": "",
+                  "enabled": true,
+                  "name": "",
+                  "type": "MenuBar"
+                },
+                {
+                  "bounds": {
+                    "height": 32,
+                    "width": 56,
+                    "x": -31154,
+                    "y": -31958
+                  },
+                  "className": "Microsoft.UI.Xaml.Controls.DropDownButton",
+                  "enabled": true,
+                  "name": "Headings",
+                  "type": "Button"
+                },
+                {
+                  "bounds": {
+                    "height": 32,
+                    "width": 56,
+                    "x": -31098,
+                    "y": -31958
+                  },
+                  "className": "Microsoft.UI.Xaml.Controls.DropDownButton",
+                  "enabled": true,
+                  "name": "Lists",
+                  "type": "Button"
+                },
+                {
+                  "bounds": {
+                    "height": 32,
+                    "width": 32,
+                    "x": -31042,
+                    "y": -31958
+                  },
+                  "className": "ToggleButton",
+                  "enabled": true,
+                  "name": "Bold (Ctrl+B)",
+                  "type": "Button"
+                },
+                {
+                  "bounds": {
+                    "height": 32,
+                    "width": 32,
+                    "x": -31010,
+                    "y": -31958
+                  },
+                  "className": "ToggleButton",
+                  "enabled": true,
+                  "name": "Italic (Ctrl+I)",
+                  "type": "Button"
+                },
+                {
+                  "bounds": {
+                    "height": 32,
+                    "width": 32,
+                    "x": -30978,
+                    "y": -31958
+                  },
+                  "className": "ToggleButton",
+                  "enabled": true,
+                  "name": "Link (Ctrl+K)",
+                  "type": "Button"
+                },
+                {
+                  "bounds": {
+                    "height": 32,
+                    "width": 32,
+                    "x": -30946,
+                    "y": -31958
+                  },
+                  "className": "ToggleButton",
+                  "enabled": true,
+                  "name": "Clear formatting (Ctrl+Space)",
+                  "type": "Button"
+                },
+                {
+                  "bounds": {
+                    "height": 32,
+                    "width": 58,
+                    "x": -30209,
+                    "y": -31958
+                  },
+                  "children": [
+                    {}
+                  ],
+                  "className": "Microsoft.UI.Xaml.Controls.DropDownButton",
+                  "enabled": true,
+                  "name": "Copilot (Preview)",
+                  "type": "Button"
+                },
+                {
+                  "bounds": {
+                    "height": 32,
+                    "width": 30,
+                    "x": -30147,
+                    "y": -31958
+                  },
+                  "className": "Button",
+                  "enabled": true,
+                  "name": "User avatar",
+                  "type": "Button"
+                },
+                {
+                  "bounds": {
+                    "height": 32,
+                    "width": 30,
+                    "x": -30113,
+                    "y": -31958
+                  },
+                  "className": "Button",
+                  "enabled": true,
+                  "name": "Settings",
+                  "type": "Button"
+                },
+                {
+                  "bounds": {
+                    "height": 0,
+                    "width": 0,
+                    "x": 0,
+                    "y": 0
+                  },
+                  "className": "Microsoft.UI.Xaml.Controls.TeachingTip",
+                  "enabled": true,
+                  "name": "",
+                  "type": "Window"
+                },
+                {
+                  "bounds": {
+                    "height": 0,
+                    "width": 0,
+                    "x": 0,
+                    "y": 0
+                  },
+                  "className": "Microsoft.UI.Xaml.Controls.TeachingTip",
+                  "enabled": true,
+                  "name": "",
+                  "type": "Window"
+                },
+                {
+                  "bounds": {
+                    "height": 0,
+                    "width": 0,
+                    "x": 0,
+                    "y": 0
+                  },
+                  "className": "Microsoft.UI.Xaml.Controls.TeachingTip",
+                  "enabled": true,
+                  "name": "",
+                  "type": "Pane"
+                },
+                {
+                  "bounds": {
+                    "height": 0,
+                    "width": 0,
+                    "x": 0,
+                    "y": 0
+                  },
+                  "className": "Microsoft.UI.Xaml.Controls.TeachingTip",
+                  "enabled": true,
+                  "name": "Local model must complete download to use AI features while signed out.",
+                  "type": "Pane"
+                }
+              ],
+              "className": "InputSiteWindowClass",
+              "enabled": true,
+              "name": "",
+              "type": "Pane"
+            }
+          ],
+          "className": "Microsoft.UI.Content.DesktopChildSiteBridge",
+          "enabled": true,
+          "name": "",
+          "type": "Pane"
+        },
+        {
+          "bounds": {
+            "height": 32,
+            "width": 1919,
+            "x": -31994,
+            "y": -31015
+          },
+          "children": [
+            {
+              "bounds": {
+                "height": 32,
+                "width": 1919,
+                "x": -31994,
+                "y": -31015
+              },
+              "children": [
+                {
+                  "bounds": {
+                    "height": 16,
+                    "width": 59,
+                    "x": -31978,
+                    "y": -31007
+                  },
+                  "className": "TextBlock",
+                  "enabled": true,
+                  "name": "Line 1,\nColumn 1",
+                  "type": "Text"
+                },
+                {
+                  "bounds": {
+                    "height": 16,
+                    "width": 66,
+                    "x": -31889,
+                    "y": -31007
+                  },
+                  "className": "TextBlock",
+                  "enabled": true,
+                  "name": "0 characters",
+                  "type": "Text"
+                },
+                {
+                  "bounds": {
+                    "height": 32,
+                    "width": 62,
+                    "x": -31687,
+                    "y": -31015
+                  },
+                  "className": "TextBlock",
+                  "enabled": true,
+                  "name": "Plain text",
+                  "type": "Text"
+                },
+                {
+                  "bounds": {
+                    "height": 16,
+                    "width": 32,
+                    "x": -30446,
+                    "y": -31007
+                  },
+                  "className": "TextBlock",
+                  "enabled": true,
+                  "name": "Zoom",
+                  "type": "Text"
+                },
+                {
+                  "bounds": {
+                    "height": 16,
+                    "width": 91,
+                    "x": -30378,
+                    "y": -31007
+                  },
+                  "className": "TextBlock",
+                  "enabled": true,
+                  "name": " Windows (CRLF)",
+                  "type": "Text"
+                },
+                {
+                  "bounds": {
+                    "height": 16,
+                    "width": 36,
+                    "x": -30210,
+                    "y": -31007
+                  },
+                  "className": "TextBlock",
+                  "enabled": true,
+                  "name": " UTF-8",
+                  "type": "Text"
+                }
+              ],
+              "className": "InputSiteWindowClass",
+              "enabled": false,
+              "name": "",
+              "type": "Pane"
+            }
+          ],
+          "className": "Microsoft.UI.Content.DesktopChildSiteBridge",
+          "enabled": false,
+          "name": "",
+          "type": "Pane"
+        },
+        {
+          "bounds": {
+            "height": 0,
+            "width": 0,
+            "x": 0,
+            "y": 0
+          },
+          "children": [
+            {
+              "bounds": {
+                "height": 22,
+                "width": 22,
+                "x": -31992,
+                "y": -31992
+              },
+              "children": [
+                {
+                  "bounds": {
+                    "height": 22,
+                    "width": 22,
+                    "x": -31992,
+                    "y": -31992
+                  },
+                  "className": "",
+                  "enabled": true,
+                  "name": "System",
+                  "type": "MenuItem"
+                }
+              ],
+              "className": "",
+              "enabled": true,
+              "name": "System",
+              "type": "MenuBar"
+            },
+            {
+              "bounds": {
+                "height": 22,
+                "width": 47,
+                "x": -31985,
+                "y": -31999
+              },
+              "className": "",
+              "enabled": true,
+              "name": "Restore",
+              "type": "Button"
+            },
+            {
+              "bounds": {
+                "height": 22,
+                "width": 46,
+                "x": -31938,
+                "y": -31999
+              },
+              "className": "",
+              "enabled": true,
+              "name": "Maximize",
+              "type": "Button"
+            },
+            {
+              "bounds": {
+                "height": 22,
+                "width": 47,
+                "x": -31892,
+                "y": -31999
+              },
+              "className": "",
+              "enabled": true,
+              "name": "Close",
+              "type": "Button"
+            }
+          ],
+          "className": "",
+          "enabled": true,
+          "name": "",
+          "type": "TitleBar"
+        }
+      ],
+      "className": "Notepad",
+      "enabled": true,
+      "name": "Untitled - Notepad",
+      "type": "Window"
+    },
+    {
+      "bounds": {
+        "height": 0,
+        "width": 0,
+        "x": 0,
+        "y": 0
+      },
+      "children": [
+        {
+          "bounds": {
+            "height": 910,
+            "width": 1919,
+            "x": -31994,
+            "y": -31925
+          },
+          "children": [
+            {
+              "bounds": {
+                "height": 910,
+                "width": 1919,
+                "x": -31994,
+                "y": -31925
+              },
+              "className": "RichEditD2DPT",
+              "enabled": true,
+              "name": "Text editor",
+              "type": "Document"
+            }
+          ],
+          "className": "NotepadTextBox",
+          "enabled": true,
+          "name": "",
+          "type": "Pane"
+        },
+        {
+          "bounds": {
+            "height": 32,
+            "width": 527,
+            "x": -31954,
+            "y": -31990
+          },
+          "children": [
+            {
+              "bounds": {
+                "height": 32,
+                "width": 527,
+                "x": -31954,
+                "y": -31990
+              },
+              "children": [
+                {
+                  "bounds": {
+                    "height": 32,
+                    "width": 527,
+                    "x": -31954,
+                    "y": -31990
+                  },
+                  "children": [
+                    {},
+                    {}
+                  ],
+                  "className": "Microsoft.UI.Xaml.Controls.TabView",
+                  "enabled": true,
+                  "name": "",
+                  "type": "Tab"
+                }
+              ],
+              "className": "InputSiteWindowClass",
+              "enabled": true,
+              "name": "",
+              "type": "Pane"
+            }
+          ],
+          "className": "Microsoft.UI.Content.DesktopChildSiteBridge",
+          "enabled": true,
+          "name": "",
+          "type": "Pane"
+        },
+        {
+          "bounds": {
+            "height": 33,
+            "width": 1919,
+            "x": -31994,
+            "y": -31958
+          },
+          "children": [
+            {
+              "bounds": {
+                "height": 33,
+                "width": 1919,
+                "x": -31994,
+                "y": -31958
+              },
+              "children": [
+                {
+                  "bounds": {
+                    "height": 32,
+                    "width": 159,
+                    "x": -31994,
+                    "y": -31958
+                  },
+                  "children": [
+                    {},
+                    {},
+                    {}
+                  ],
+                  "className": "",
+                  "enabled": true,
+                  "name": "",
+                  "type": "MenuBar"
+                },
+                {
+                  "bounds": {
+                    "height": 32,
+                    "width": 56,
+                    "x": -31154,
+                    "y": -31958
+                  },
+                  "className": "Microsoft.UI.Xaml.Controls.DropDownButton",
+                  "enabled": true,
+                  "name": "Headings",
+                  "type": "Button"
+                },
+                {
+                  "bounds": {
+                    "height": 32,
+                    "width": 56,
+                    "x": -31098,
+                    "y": -31958
+                  },
+                  "className": "Microsoft.UI.Xaml.Controls.DropDownButton",
+                  "enabled": true,
+                  "name": "Lists",
+                  "type": "Button"
+                },
+                {
+                  "bounds": {
+                    "height": 32,
+                    "width": 32,
+                    "x": -31042,
+                    "y": -31958
+                  },
+                  "className": "ToggleButton",
+                  "enabled": true,
+                  "name": "Bold (Ctrl+B)",
+                  "type": "Button"
+                },
+                {
+                  "bounds": {
+                    "height": 32,
+                    "width": 32,
+                    "x": -31010,
+                    "y": -31958
+                  },
+                  "className": "ToggleButton",
+                  "enabled": true,
+                  "name": "Italic (Ctrl+I)",
+                  "type": "Button"
+                },
+                {
+                  "bounds": {
+                    "height": 32,
+                    "width": 32,
+                    "x": -30978,
+                    "y": -31958
+                  },
+                  "className": "ToggleButton",
+                  "enabled": true,
+                  "name": "Link (Ctrl+K)",
+                  "type": "Button"
+                },
+                {
+                  "bounds": {
+                    "height": 32,
+                    "width": 32,
+                    "x": -30946,
+                    "y": -31958
+                  },
+                  "className": "ToggleButton",
+                  "enabled": true,
+                  "name": "Clear formatting (Ctrl+Space)",
+                  "type": "Button"
+                },
+                {
+                  "bounds": {
+                    "height": 32,
+                    "width": 58,
+                    "x": -30209,
+                    "y": -31958
+                  },
+                  "children": [
+                    {}
+                  ],
+                  "className": "Microsoft.UI.Xaml.Controls.DropDownButton",
+                  "enabled": true,
+                  "name": "Copilot (Preview)",
+                  "type": "Button"
+                },
+                {
+                  "bounds": {
+                    "height": 32,
+                    "width": 30,
+                    "x": -30147,
+                    "y": -31958
+                  },
+                  "className": "Button",
+                  "enabled": true,
+                  "name": "User avatar",
+                  "type": "Button"
+                },
+                {
+                  "bounds": {
+                    "height": 32,
+                    "width": 30,
+                    "x": -30113,
+                    "y": -31958
+                  },
+                  "className": "Button",
+                  "enabled": true,
+                  "name": "Settings",
+                  "type": "Button"
+                },
+                {
+                  "bounds": {
+                    "height": 0,
+                    "width": 0,
+                    "x": 0,
+                    "y": 0
+                  },
+                  "className": "Microsoft.UI.Xaml.Controls.TeachingTip",
+                  "enabled": true,
+                  "name": "",
+                  "type": "Window"
+                },
+                {
+                  "bounds": {
+                    "height": 0,
+                    "width": 0,
+                    "x": 0,
+                    "y": 0
+                  },
+                  "className": "Microsoft.UI.Xaml.Controls.TeachingTip",
+                  "enabled": true,
+                  "name": "",
+                  "type": "Window"
+                },
+                {
+                  "bounds": {
+                    "height": 0,
+                    "width": 0,
+                    "x": 0,
+                    "y": 0
+                  },
+                  "className": "Microsoft.UI.Xaml.Controls.TeachingTip",
+                  "enabled": true,
+                  "name": "",
+                  "type": "Pane"
+                },
+                {
+                  "bounds": {
+                    "height": 0,
+                    "width": 0,
+                    "x": 0,
+                    "y": 0
+                  },
+                  "className": "Microsoft.UI.Xaml.Controls.TeachingTip",
+                  "enabled": true,
+                  "name": "Local model must complete download to use AI features while signed out.",
+                  "type": "Pane"
+                }
+              ],
+              "className": "InputSiteWindowClass",
+              "enabled": true,
+              "name": "",
+              "type": "Pane"
+            }
+          ],
+          "className": "Microsoft.UI.Content.DesktopChildSiteBridge",
+          "enabled": true,
+          "name": "",
+          "type": "Pane"
+        },
+        {
+          "bounds": {
+            "height": 32,
+            "width": 1919,
+            "x": -31994,
+            "y": -31015
+          },
+          "children": [
+            {
+              "bounds": {
+                "height": 32,
+                "width": 1919,
+                "x": -31994,
+                "y": -31015
+              },
+              "children": [
+                {
+                  "bounds": {
+                    "height": 16,
+                    "width": 59,
+                    "x": -31978,
+                    "y": -31007
+                  },
+                  "className": "TextBlock",
+                  "enabled": true,
+                  "name": "Line 1,\nColumn 1",
+                  "type": "Text"
+                },
+                {
+                  "bounds": {
+                    "height": 16,
+                    "width": 66,
+                    "x": -31889,
+                    "y": -31007
+                  },
+                  "className": "TextBlock",
+                  "enabled": true,
+                  "name": "0 characters",
+                  "type": "Text"
+                },
+                {
+                  "bounds": {
+                    "height": 32,
+                    "width": 62,
+                    "x": -31687,
+                    "y": -31015
+                  },
+                  "className": "TextBlock",
+                  "enabled": true,
+                  "name": "Plain text",
+                  "type": "Text"
+                },
+                {
+                  "bounds": {
+                    "height": 16,
+                    "width": 32,
+                    "x": -30446,
+                    "y": -31007
+                  },
+                  "className": "TextBlock",
+                  "enabled": true,
+                  "name": "Zoom",
+                  "type": "Text"
+                },
+                {
+                  "bounds": {
+                    "height": 16,
+                    "width": 91,
+                    "x": -30378,
+                    "y": -31007
+                  },
+                  "className": "TextBlock",
+                  "enabled": true,
+                  "name": " Windows (CRLF)",
+                  "type": "Text"
+                },
+                {
+                  "bounds": {
+                    "height": 16,
+                    "width": 36,
+                    "x": -30210,
+                    "y": -31007
+                  },
+                  "className": "TextBlock",
+                  "enabled": true,
+                  "name": " UTF-8",
+                  "type": "Text"
+                }
+              ],
+              "className": "InputSiteWindowClass",
+              "enabled": false,
+              "name": "",
+              "type": "Pane"
+            }
+          ],
+          "className": "Microsoft.UI.Content.DesktopChildSiteBridge",
+          "enabled": false,
+          "name": "",
+          "type": "Pane"
+        },
+        {
+          "bounds": {
+            "height": 0,
+            "width": 0,
+            "x": 0,
+            "y": 0
+          },
+          "children": [
+            {
+              "bounds": {
+                "height": 22,
+                "width": 22,
+                "x": -31992,
+                "y": -31992
+              },
+              "children": [
+                {
+                  "bounds": {
+                    "height": 22,
+                    "width": 22,
+                    "x": -31992,
+                    "y": -31992
+                  },
+                  "className": "",
+                  "enabled": true,
+                  "name": "System",
+                  "type": "MenuItem"
+                }
+              ],
+              "className": "",
+              "enabled": true,
+              "name": "System",
+              "type": "MenuBar"
+            },
+            {
+              "bounds": {
+                "height": 22,
+                "width": 47,
+                "x": -31985,
+                "y": -31999
+              },
+              "className": "",
+              "enabled": true,
+              "name": "Restore",
+              "type": "Button"
+            },
+            {
+              "bounds": {
+                "height": 22,
+                "width": 46,
+                "x": -31938,
+                "y": -31999
+              },
+              "className": "",
+              "enabled": true,
+              "name": "Maximize",
+              "type": "Button"
+            },
+            {
+              "bounds": {
+                "height": 22,
+                "width": 47,
+                "x": -31892,
+                "y": -31999
+              },
+              "className": "",
+              "enabled": true,
+              "name": "Close",
+              "type": "Button"
+            }
+          ],
+          "className": "",
+          "enabled": true,
+          "name": "",
+          "type": "TitleBar"
+        }
+      ],
+      "className": "Notepad",
+      "enabled": true,
+      "name": "Untitled - Notepad",
+      "type": "Window"
+    },
+    {
+      "bounds": {
+        "height": 48,
+        "width": 5120,
+        "x": 0,
+        "y": 1392
+      },
+      "children": [
+        {
+          "bounds": {
+            "height": 48,
+            "width": 188,
+            "x": 4932,
+            "y": 1392
+          },
+          "className": "TrayNotifyWnd",
+          "enabled": true,
+          "name": "",
+          "type": "Pane"
+        },
+        {
+          "bounds": {
+            "height": 48,
+            "width": 621,
+            "x": 2095,
+            "y": 1392
+          },
+          "className": "MSTaskSwWClass",
+          "enabled": true,
+          "name": "Running applications",
+          "type": "Pane"
+        },
+        {
+          "bounds": {
+            "height": 48,
+            "width": 5120,
+            "x": 0,
+            "y": 1392
+          },
+          "children": [
+            {
+              "bounds": {
+                "height": 48,
+                "width": 5120,
+                "x": 0,
+                "y": 1392
+              },
+              "children": [
+                {
+                  "bounds": {
+                    "height": 48,
+                    "width": 152,
+                    "x": 6,
+                    "y": 1392
+                  },
+                  "children": [
+                    {},
+                    {},
+                    {},
+                    {},
+                    {},
+                    {}
+                  ],
+                  "className": "ToggleButton",
+                  "enabled": true,
+                  "name": "Widgets 54\u00b0F Mostly clear",
+                  "type": "Button"
+                },
+                {
+                  "bounds": {
+                    "height": 48,
+                    "width": 45,
+                    "x": 2096,
+                    "y": 1392
+                  },
+                  "className": "ToggleButton",
+                  "enabled": true,
+                  "name": "Start",
+                  "type": "Button"
+                },
+                {
+                  "bounds": {
+                    "height": 32,
+                    "width": 220,
+                    "x": 2143,
+                    "y": 1400
+                  },
+                  "children": [
+                    {},
+                    {},
+                    {}
+                  ],
+                  "className": "ToggleButton",
+                  "enabled": true,
+                  "name": "Search",
+                  "type": "Button"
+                },
+                {
+                  "bounds": {
+                    "height": 48,
+                    "width": 44,
+                    "x": 2365,
+                    "y": 1392
+                  },
+                  "className": "ToggleButton",
+                  "enabled": true,
+                  "name": "Task View",
+                  "type": "Button"
+                },
+                {
+                  "bounds": {
+                    "height": 48,
+                    "width": 44,
+                    "x": 2409,
+                    "y": 1392
+                  },
+                  "className": "Taskbar.TaskListButtonAutomationPeer",
+                  "enabled": true,
+                  "name": "File Explorer pinned",
+                  "type": "Button"
+                },
+                {
+                  "bounds": {
+                    "height": 48,
+                    "width": 44,
+                    "x": 2453,
+                    "y": 1392
+                  },
+                  "className": "Taskbar.TaskListButtonAutomationPeer",
+                  "enabled": true,
+                  "name": "Google Chrome - 1 running window pinned",
+                  "type": "Button"
+                },
+                {
+                  "bounds": {
+                    "height": 48,
+                    "width": 44,
+                    "x": 2497,
+                    "y": 1392
+                  },
+                  "className": "Taskbar.TaskListButtonAutomationPeer",
+                  "enabled": true,
+                  "name": "Copilot - 1 running window pinned",
+                  "type": "Button"
+                },
+                {
+                  "bounds": {
+                    "height": 48,
+                    "width": 44,
+                    "x": 2541,
+                    "y": 1392
+                  },
+                  "className": "Taskbar.TaskListButtonAutomationPeer",
+                  "enabled": true,
+                  "name": "Microsoft Teams pinned",
+                  "type": "Button"
+                },
+                {
+                  "bounds": {
+                    "height": 48,
+                    "width": 44,
+                    "x": 2585,
+                    "y": 1392
+                  },
+                  "className": "Taskbar.TaskListButtonAutomationPeer",
+                  "enabled": true,
+                  "name": "Terminal - 1 running window pinned",
+                  "type": "Button"
+                },
+                {
+                  "bounds": {
+                    "height": 48,
+                    "width": 44,
+                    "x": 2629,
+                    "y": 1392
+                  },
+                  "className": "Taskbar.TaskListButtonAutomationPeer",
+                  "enabled": true,
+                  "name": "Steam - 1 running window pinned",
+                  "type": "Button"
+                },
+                {
+                  "bounds": {
+                    "height": 48,
+                    "width": 44,
+                    "x": 2673,
+                    "y": 1392
+                  },
+                  "className": "Taskbar.TaskListButtonAutomationPeer",
+                  "enabled": true,
+                  "name": "Visual Studio Code pinned",
+                  "type": "Button"
+                },
+                {
+                  "bounds": {
+                    "height": 48,
+                    "width": 44,
+                    "x": 2717,
+                    "y": 1392
+                  },
+                  "className": "Taskbar.TaskListButtonAutomationPeer",
+                  "enabled": true,
+                  "name": "Notebook - Take Notes, Sync - 1 running window pinned",
+                  "type": "Button"
+                },
+                {
+                  "bounds": {
+                    "height": 48,
+                    "width": 44,
+                    "x": 2761,
+                    "y": 1392
+                  },
+                  "className": "Taskbar.TaskListButtonAutomationPeer",
+                  "enabled": true,
+                  "name": "WhatsApp - 1 running window pinned",
+                  "type": "Button"
+                },
+                {
+                  "bounds": {
+                    "height": 48,
+                    "width": 44,
+                    "x": 2805,
+                    "y": 1392
+                  },
+                  "className": "Taskbar.TaskListButtonAutomationPeer",
+                  "enabled": true,
+                  "name": "Visual Studio 2022 - 1 running window",
+                  "type": "Button"
+                },
+                {
+                  "bounds": {
+                    "height": 48,
+                    "width": 44,
+                    "x": 2849,
+                    "y": 1392
+                  },
+                  "className": "Taskbar.TaskListButtonAutomationPeer",
+                  "enabled": true,
+                  "name": "Cursor - 1 running window",
+                  "type": "Button"
+                },
+                {
+                  "bounds": {
+                    "height": 48,
+                    "width": 44,
+                    "x": 2893,
+                    "y": 1392
+                  },
+                  "className": "Taskbar.TaskListButtonAutomationPeer",
+                  "enabled": true,
+                  "name": "Move Mouse - 1 running window",
+                  "type": "Button"
+                },
+                {
+                  "bounds": {
+                    "height": 48,
+                    "width": 44,
+                    "x": 2937,
+                    "y": 1392
+                  },
+                  "className": "Taskbar.TaskListButtonAutomationPeer",
+                  "enabled": true,
+                  "name": "Ollama - 1 running window",
+                  "type": "Button"
+                },
+                {
+                  "bounds": {
+                    "height": 48,
+                    "width": 44,
+                    "x": 2981,
+                    "y": 1392
+                  },
+                  "className": "Taskbar.TaskListButtonAutomationPeer",
+                  "enabled": true,
+                  "name": "Notepad - 2 running windows",
+                  "type": "Button"
+                }
+              ],
+              "className": "Taskbar.TaskbarFrameAutomationPeer",
+              "enabled": true,
+              "name": "",
+              "type": "Pane"
+            },
+            {
+              "bounds": {
+                "height": 48,
+                "width": 32,
+                "x": 4932,
+                "y": 1392
+              },
+              "className": "SystemTray.NormalButton",
+              "enabled": true,
+              "name": "Show Hidden Icons",
+              "type": "Button"
+            },
+            {
+              "bounds": {
+                "height": 48,
+                "width": 28,
+                "x": 4964,
+                "y": 1392
+              },
+              "className": "SystemTray.AccentButton",
+              "enabled": true,
+              "name": "Network xORBI\nInternet access",
+              "type": "Button"
+            },
+            {
+              "bounds": {
+                "height": 48,
+                "width": 28,
+                "x": 4992,
+                "y": 1392
+              },
+              "className": "SystemTray.OmniButtonRight",
+              "enabled": true,
+              "name": "Volume Headphones (Arctis Nova Pro Wireless): 100%",
+              "type": "Button"
+            },
+            {
+              "bounds": {
+                "height": 48,
+                "width": 60,
+                "x": 5020,
+                "y": 1392
+              },
+              "className": "SystemTray.OmniButtonLeft",
+              "enabled": true,
+              "name": "Clock 6:01 PM\n\u200e1/\u200e7/\u200e2026",
+              "type": "Button"
+            },
+            {
+              "bounds": {
+                "height": 48,
+                "width": 28,
+                "x": 5080,
+                "y": 1392
+              },
+              "className": "SystemTray.OmniButtonRight",
+              "enabled": true,
+              "name": "Notifications 20 new notifications (Do not disturb on)",
+              "type": "Button"
+            },
+            {
+              "bounds": {
+                "height": 48,
+                "width": 12,
+                "x": 5108,
+                "y": 1392
+              },
+              "className": "SystemTray.ShowDesktopButton",
+              "enabled": true,
+              "name": "Show Desktop",
+              "type": "Button"
+            }
+          ],
+          "className": "Windows.UI.Input.InputSite.WindowClass",
+          "enabled": true,
+          "name": "",
+          "type": "Pane"
+        }
+      ],
+      "className": "Shell_TrayWnd",
+      "enabled": true,
+      "name": "Taskbar",
+      "type": "Pane"
+    },
+    {
+      "bounds": {
+        "height": 1440,
+        "width": 5120,
+        "x": 0,
+        "y": 0
+      },
+      "children": [
+        {
+          "bounds": {
+            "height": 1440,
+            "width": 5120,
+            "x": 0,
+            "y": 0
+          },
+          "children": [
+            {
+              "bounds": {
+                "height": 61,
+                "width": 75,
+                "x": 0,
+                "y": 5
+              },
+              "className": "",
+              "enabled": true,
+              "name": "Recycle Bin",
+              "type": "ListItem"
+            },
+            {
+              "bounds": {
+                "height": 76,
+                "width": 75,
+                "x": 0,
+                "y": 96
+              },
+              "className": "",
+              "enabled": true,
+              "name": "Logi Options+",
+              "type": "ListItem"
+            },
+            {
+              "bounds": {
+                "height": 76,
+                "width": 75,
+                "x": 0,
+                "y": 187
+              },
+              "className": "",
+              "enabled": true,
+              "name": "Microsoft Edge",
+              "type": "ListItem"
+            },
+            {
+              "bounds": {
+                "height": 76,
+                "width": 75,
+                "x": 0,
+                "y": 278
+              },
+              "className": "",
+              "enabled": true,
+              "name": "ihgfdrrt nyncvdfgbh56yu78tj hgjgjfgyhmfgurgzjrjjmgfvjvjnfjjfnvbfhnj fhgvhjfghjfghfhujrujhueiufrjfujdfjedhdubd",
+              "type": "ListItem"
+            },
+            {
+              "bounds": {
+                "height": 61,
+                "width": 75,
+                "x": 0,
+                "y": 369
+              },
+              "className": "",
+              "enabled": true,
+              "name": "Steam",
+              "type": "ListItem"
+            },
+            {
+              "bounds": {
+                "height": 76,
+                "width": 75,
+                "x": 0,
+                "y": 460
+              },
+              "className": "",
+              "enabled": true,
+              "name": "VLC media player",
+              "type": "ListItem"
+            },
+            {
+              "bounds": {
+                "height": 61,
+                "width": 75,
+                "x": 0,
+                "y": 551
+              },
+              "className": "",
+              "enabled": true,
+              "name": "Discord",
+              "type": "ListItem"
+            },
+            {
+              "bounds": {
+                "height": 61,
+                "width": 75,
+                "x": 0,
+                "y": 642
+              },
+              "className": "",
+              "enabled": true,
+              "name": "JLL",
+              "type": "ListItem"
+            },
+            {
+              "bounds": {
+                "height": 76,
+                "width": 75,
+                "x": 0,
+                "y": 733
+              },
+              "className": "",
+              "enabled": true,
+              "name": "Insta360 Link Controller",
+              "type": "ListItem"
+            },
+            {
+              "bounds": {
+                "height": 76,
+                "width": 75,
+                "x": 0,
+                "y": 824
+              },
+              "className": "",
+              "enabled": true,
+              "name": "CPUID ASUS CPU-Z",
+              "type": "ListItem"
+            },
+            {
+              "bounds": {
+                "height": 61,
+                "width": 75,
+                "x": 0,
+                "y": 915
+              },
+              "className": "",
+              "enabled": true,
+              "name": "Lens",
+              "type": "ListItem"
+            },
+            {
+              "bounds": {
+                "height": 61,
+                "width": 75,
+                "x": 0,
+                "y": 1006
+              },
+              "className": "",
+              "enabled": true,
+              "name": "WinMTR.exe",
+              "type": "ListItem"
+            },
+            {
+              "bounds": {
+                "height": 76,
+                "width": 75,
+                "x": 0,
+                "y": 1097
+              },
+              "className": "",
+              "enabled": true,
+              "name": "ASUS DriverHub",
+              "type": "ListItem"
+            },
+            {
+              "bounds": {
+                "height": 61,
+                "width": 75,
+                "x": 0,
+                "y": 1188
+              },
+              "className": "",
+              "enabled": true,
+              "name": "Cursor",
+              "type": "ListItem"
+            },
+            {
+              "bounds": {
+                "height": 76,
+                "width": 75,
+                "x": 0,
+                "y": 1279
+              },
+              "className": "",
+              "enabled": true,
+              "name": "Docker Desktop",
+              "type": "ListItem"
+            },
+            {
+              "bounds": {
+                "height": 61,
+                "width": 75,
+                "x": 75,
+                "y": 5
+              },
+              "className": "",
+              "enabled": true,
+              "name": "Exodus",
+              "type": "ListItem"
+            },
+            {
+              "bounds": {
+                "height": 76,
+                "width": 75,
+                "x": 75,
+                "y": 96
+              },
+              "className": "",
+              "enabled": true,
+              "name": "GitHub Desktop",
+              "type": "ListItem"
+            },
+            {
+              "bounds": {
+                "height": 76,
+                "width": 75,
+                "x": 75,
+                "y": 187
+              },
+              "className": "",
+              "enabled": true,
+              "name": "CPUID HWMonitor",
+              "type": "ListItem"
+            },
+            {
+              "bounds": {
+                "height": 61,
+                "width": 75,
+                "x": 75,
+                "y": 278
+              },
+              "className": "",
+              "enabled": true,
+              "name": "Claude",
+              "type": "ListItem"
+            },
+            {
+              "bounds": {
+                "height": 61,
+                "width": 75,
+                "x": 75,
+                "y": 369
+              },
+              "className": "",
+              "enabled": true,
+              "name": "Insomnia",
+              "type": "ListItem"
+            }
+          ],
+          "className": "SysListView32",
+          "enabled": true,
+          "name": "Desktop",
+          "type": "List"
+        }
+      ],
+      "className": "Progman",
+      "enabled": true,
+      "name": "Program Manager",
+      "type": "Pane"
+    }
+  ],
+  "className": "#32769",
+  "enabled": true,
+  "name": "Desktop 1",
+  "type": "Pane"
+}

@@ -1,6 +1,8 @@
 #include "screen_capture.h"
 #include <wincodec.h>
 #include <wincodecsdk.h>
+#include "../third_party/base64.h"
+#include <sstream>
 
 #pragma comment(lib, "windowscodecs.lib")
 
@@ -223,10 +225,176 @@ std::string ScreenCapture::EncodeToPNG(const ImageData& pixels, int width, int h
         return "";
     }
     
-    // This is a simplified version
-    // For base64 encoding, we'd use a library or implement it
-    // For now, return placeholder
-    return "base64_encoded_png_data";
+    // Use Windows Imaging Component to encode PNG
+    IWICImagingFactory* factory = nullptr;
+    HRESULT hr = CoCreateInstance(
+        CLSID_WICImagingFactory,
+        nullptr,
+        CLSCTX_INPROC_SERVER,
+        IID_IWICImagingFactory,
+        reinterpret_cast<void**>(&factory)
+    );
+    
+    if (FAILED(hr) || !factory) {
+        LOG_ERROR(L"Failed to create WIC factory");
+        return "";
+    }
+    
+    // Create stream
+    IWICStream* stream = nullptr;
+    hr = factory->CreateStream(&stream);
+    if (FAILED(hr)) {
+        factory->Release();
+        return "";
+    }
+    
+    // Initialize stream from memory
+    hr = stream->InitializeFromMemory(nullptr, 0);
+    if (FAILED(hr)) {
+        stream->Release();
+        factory->Release();
+        return "";
+    }
+    
+    // Create PNG encoder
+    IWICBitmapEncoder* encoder = nullptr;
+    hr = factory->CreateEncoder(GUID_ContainerFormatPng, nullptr, &encoder);
+    if (FAILED(hr)) {
+        stream->Release();
+        factory->Release();
+        return "";
+    }
+    
+    hr = encoder->Initialize(stream, WICBitmapEncoderNoCache);
+    if (FAILED(hr)) {
+        encoder->Release();
+        stream->Release();
+        factory->Release();
+        return "";
+    }
+    
+    // Create frame
+    IWICBitmapFrameEncode* frame = nullptr;
+    hr = encoder->CreateNewFrame(&frame, nullptr);
+    if (FAILED(hr)) {
+        encoder->Release();
+        stream->Release();
+        factory->Release();
+        return "";
+    }
+    
+    hr = frame->Initialize(nullptr);
+    if (FAILED(hr)) {
+        frame->Release();
+        encoder->Release();
+        stream->Release();
+        factory->Release();
+        return "";
+    }
+    
+    // Set size
+    hr = frame->SetSize(width, height);
+    if (FAILED(hr)) {
+        frame->Release();
+        encoder->Release();
+        stream->Release();
+        factory->Release();
+        return "";
+    }
+    
+    // Set pixel format (BGRA)
+    WICPixelFormatGUID pixelFormat = GUID_WICPixelFormat32bppBGRA;
+    hr = frame->SetPixelFormat(&pixelFormat);
+    if (FAILED(hr)) {
+        frame->Release();
+        encoder->Release();
+        stream->Release();
+        factory->Release();
+        return "";
+    }
+    
+    // Write pixels
+    hr = frame->WritePixels(height, width * 4, pixels.size(), const_cast<BYTE*>(pixels.data()));
+    if (FAILED(hr)) {
+        frame->Release();
+        encoder->Release();
+        stream->Release();
+        factory->Release();
+        return "";
+    }
+    
+    // Commit
+    hr = frame->Commit();
+    if (FAILED(hr)) {
+        frame->Release();
+        encoder->Release();
+        stream->Release();
+        factory->Release();
+        return "";
+    }
+    
+    hr = encoder->Commit();
+    if (FAILED(hr)) {
+        frame->Release();
+        encoder->Release();
+        stream->Release();
+        factory->Release();
+        return "";
+    }
+    
+    // Get stream data
+    ULARGE_INTEGER streamSize;
+    IStream* rawStream = nullptr;
+    hr = stream->QueryInterface(IID_IStream, reinterpret_cast<void**>(&rawStream));
+    if (FAILED(hr)) {
+        frame->Release();
+        encoder->Release();
+        stream->Release();
+        factory->Release();
+        return "";
+    }
+    
+    LARGE_INTEGER zero = {};
+    hr = rawStream->Seek(zero, STREAM_SEEK_END, &streamSize);
+    if (FAILED(hr)) {
+        rawStream->Release();
+        frame->Release();
+        encoder->Release();
+        stream->Release();
+        factory->Release();
+        return "";
+    }
+    
+    hr = rawStream->Seek(zero, STREAM_SEEK_SET, nullptr);
+    if (FAILED(hr)) {
+        rawStream->Release();
+        frame->Release();
+        encoder->Release();
+        stream->Release();
+        factory->Release();
+        return "";
+    }
+    
+    // Read stream data
+    std::vector<unsigned char> pngData(static_cast<size_t>(streamSize.QuadPart));
+    ULONG bytesRead = 0;
+    hr = rawStream->Read(pngData.data(), static_cast<ULONG>(pngData.size()), &bytesRead);
+    
+    // Clean up
+    rawStream->Release();
+    frame->Release();
+    encoder->Release();
+    stream->Release();
+    factory->Release();
+    
+    if (FAILED(hr) || bytesRead == 0) {
+        LOG_ERROR(L"Failed to read PNG data");
+        return "";
+    }
+    
+    // Encode to base64
+    std::string base64Encoded = base64::encode(pngData);
+    return base64Encoded;
 }
 
 void ScreenCapture::GetScreenDimensions(int& width, int& height) {
