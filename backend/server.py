@@ -191,12 +191,29 @@ def call_ollama(screenshot_base64, ui_tree, user_request):
     endpoint = PROVIDERS['ollama']['endpoint']
     model = PROVIDERS['ollama']['model']
     
-    prompt = f"""Analyze this desktop screenshot and return a JSON array of actions to: {user_request}
+    # Enhanced prompt that leverages UI tree
+    prompt = f"""You are a desktop automation assistant. Your task: {user_request}
 
-UI Tree: {json.dumps(ui_tree)}
+UI TREE (use this to find elements):
+{json.dumps(ui_tree, indent=2)}
 
-Available actions: click, type, press_keys, scroll, wait
-Return ONLY JSON array, no other text."""
+INSTRUCTIONS:
+1. Search the UI tree for elements by name/type
+2. Use element 'bounds' {{x, y, width, height}} to calculate click coordinates
+3. Click center of element: x + width/2, y + height/2
+4. Verify element exists in tree before clicking
+
+AVAILABLE ACTIONS:
+- click: {{"action": "click", "params": {{"x": 100, "y": 200, "button": "left"}}}}
+- type: {{"action": "type", "params": {{"text": "hello"}}}}
+- press_keys: {{"action": "press_keys", "params": {{"keys": ["ctrl", "s"]}}}}
+- wait: {{"action": "wait", "params": {{"ms": 1000}}}}
+
+EXAMPLE:
+If UI tree has: {{"name": "Save", "type": "Button", "bounds": {{"x": 100, "y": 200, "width": 80, "height": 30}}}}
+Click it: {{"action": "click", "params": {{"x": 140, "y": 215}}}} (center of button)
+
+Return ONLY a JSON array of actions. No explanations."""
     
     payload = {
         'model': model,
