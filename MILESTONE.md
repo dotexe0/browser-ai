@@ -64,19 +64,23 @@ A complete AI-powered desktop automation system integrated into a custom Chromiu
 
 ### Test: AI-Assisted Notepad Typing
 
-**Command**: `python test_ai_simple.py`
+**Command**: `python test_ai_raw.py`
 
-**Result**: ✅ **SUCCESS**
+**Result**: ✅ **SUCCESS - REAL AI CONFIRMED**
 
 **What Happened**:
 1. Automation service started
 2. Win+R pressed automatically → Run dialog opened
 3. "notepad" typed automatically
 4. Enter pressed → Notepad opened
-5. AI generated typing action
-6. Text typed in Notepad: "Hello! This message was written by AI. The automation system is working!"
+5. **Ollama AI** analyzed request and generated typing action
+6. Backend parsed AI response: `{"action": "type", "params": {"text": "This is from Ollama AI!"}}`
+7. Automation service executed AI command
+8. **Text typed in Notepad: "This is from Ollama AI!"**
 
-**Evidence**: User confirmed text appeared in Notepad on their screen.
+**Evidence**: User confirmed seeing **"This is from Ollama AI!"** appear in Notepad.
+
+**Significance**: This proves the **complete AI → Automation pipeline** works with a **real local LLM** (not fallback text)!
 
 ---
 
