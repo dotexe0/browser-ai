@@ -20,76 +20,6 @@
     },
     {
       "bounds": {
-        "height": 1211,
-        "width": 1594,
-        "x": 810,
-        "y": 145
-      },
-      "children": [
-        {
-          "bounds": {
-            "height": 1203,
-            "width": 1578,
-            "x": 818,
-            "y": 145
-          },
-          "className": "Intermediate D3D Window",
-          "enabled": false,
-          "name": "",
-          "type": "Pane"
-        },
-        {
-          "bounds": {
-            "height": 1203,
-            "width": 1578,
-            "x": 818,
-            "y": 145
-          },
-          "children": [
-            {
-              "bounds": {
-                "height": 1203,
-                "width": 1578,
-                "x": 818,
-                "y": 145
-              },
-              "children": [
-                {
-                  "bounds": {
-                    "height": 1203,
-                    "width": 1578,
-                    "x": 818,
-                    "y": 145
-                  },
-                  "children": [
-                    {},
-                    {}
-                  ],
-                  "className": "BrowserFrameViewWin",
-                  "enabled": true,
-                  "name": "",
-                  "type": "Pane"
-                }
-              ],
-              "className": "NonClientView",
-              "enabled": true,
-              "name": "",
-              "type": "Pane"
-            }
-          ],
-          "className": "BrowserRootView",
-          "enabled": true,
-          "name": "I need this confidence in my life \ud83d\ude2d - YouTube - Google Chrome",
-          "type": "Pane"
-        }
-      ],
-      "className": "Chrome_WidgetWin_1",
-      "enabled": true,
-      "name": "I need this confidence in my life \ud83d\ude2d - YouTube - Google Chrome",
-      "type": "Window"
-    },
-    {
-      "bounds": {
         "height": 1382,
         "width": 2030,
         "x": 2964,
@@ -419,7 +349,7 @@
                   "bounds": {
                     "height": 18,
                     "width": 8,
-                    "x": 3322,
+                    "x": 3306,
                     "y": 1321
                   },
                   "className": "",
@@ -429,15 +359,15 @@
                 },
                 {
                   "bounds": {
-                    "height": 16,
-                    "width": 16,
-                    "x": 3289,
-                    "y": 1322
+                    "height": 288,
+                    "width": 960,
+                    "x": 3306,
+                    "y": 1051
                   },
                   "className": "",
                   "enabled": true,
-                  "name": "\ueabc",
-                  "type": "Text"
+                  "name": "",
+                  "type": "Image"
                 }
               ],
               "className": "",
@@ -528,6 +458,76 @@
       "enabled": true,
       "name": "README.md - browser-ai - Cursor",
       "type": "Pane"
+    },
+    {
+      "bounds": {
+        "height": 1211,
+        "width": 1594,
+        "x": 810,
+        "y": 145
+      },
+      "children": [
+        {
+          "bounds": {
+            "height": 1203,
+            "width": 1578,
+            "x": 818,
+            "y": 145
+          },
+          "className": "Intermediate D3D Window",
+          "enabled": false,
+          "name": "",
+          "type": "Pane"
+        },
+        {
+          "bounds": {
+            "height": 1203,
+            "width": 1578,
+            "x": 818,
+            "y": 145
+          },
+          "children": [
+            {
+              "bounds": {
+                "height": 1203,
+                "width": 1578,
+                "x": 818,
+                "y": 145
+              },
+              "children": [
+                {
+                  "bounds": {
+                    "height": 1203,
+                    "width": 1578,
+                    "x": 818,
+                    "y": 145
+                  },
+                  "children": [
+                    {},
+                    {}
+                  ],
+                  "className": "BrowserFrameViewWin",
+                  "enabled": true,
+                  "name": "",
+                  "type": "Pane"
+                }
+              ],
+              "className": "NonClientView",
+              "enabled": true,
+              "name": "",
+              "type": "Pane"
+            }
+          ],
+          "className": "BrowserRootView",
+          "enabled": true,
+          "name": "whats ollama - Google Search - Google Chrome",
+          "type": "Pane"
+        }
+      ],
+      "className": "Chrome_WidgetWin_1",
+      "enabled": true,
+      "name": "whats ollama - Google Search - Google Chrome",
+      "type": "Window"
     },
     {
       "bounds": {
@@ -3971,7 +3971,7 @@
                   ],
                   "className": "ToggleButton",
                   "enabled": true,
-                  "name": "Widgets 54\u00b0F Mostly clear",
+                  "name": "Widgets 53\u00b0F Mostly clear",
                   "type": "Button"
                 },
                 {
@@ -4234,7 +4234,7 @@
               },
               "className": "SystemTray.OmniButtonLeft",
               "enabled": true,
-              "name": "Clock 6:01 PM\n\u200e1/\u200e7/\u200e2026",
+              "name": "Clock 6:28 PM\n\u200e1/\u200e7/\u200e2026",
               "type": "Button"
             },
             {

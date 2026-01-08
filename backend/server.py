@@ -215,12 +215,26 @@ Click it: {{"action": "click", "params": {{"x": 140, "y": 215}}}} (center of but
 
 Return ONLY a JSON array of actions. No explanations."""
     
+    # Build payload - handle with or without screenshot
+    has_screenshot = screenshot_base64 and len(screenshot_base64) > 0
+    
+    # For now, use the configured model (llava) even for text-only
+    # LLaVA can work in text-only mode if we don't provide images
+    model_to_use = model
+    
     payload = {
-        'model': model,
+        'model': model_to_use,
         'prompt': prompt,
-        'images': [screenshot_base64],
         'stream': False
     }
+    
+    # Only add images field if we have a screenshot
+    # This allows LLaVA to work in text-only mode for UI tree-only requests
+    if has_screenshot:
+        payload['images'] = [screenshot_base64]
+        print(f"[DEBUG] Using vision model '{model_to_use}' with screenshot")
+    else:
+        print(f"[DEBUG] Using '{model_to_use}' in text-only mode with UI tree")
     
     try:
         response = requests.post(
