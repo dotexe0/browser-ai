@@ -228,10 +228,14 @@ Return ONLY JSON array, no other text."""
                 lines = lines[:-1]
             actions_text = '\n'.join(lines).strip()
         
+        print(f"[DEBUG] Ollama actions_text after stripping: {repr(actions_text)}", flush=True)
+        
         try:
             actions = json.loads(actions_text)
+            print(f"[DEBUG] Successfully parsed {len(actions)} actions", flush=True)
             return {'success': True, 'actions': actions}
-        except json.JSONDecodeError:
+        except json.JSONDecodeError as e:
+            print(f"[DEBUG] JSON parse error: {e}", flush=True)
             return {'error': 'Failed to parse Ollama response', 'raw_response': actions_text}
             
     except requests.exceptions.RequestException as e:
