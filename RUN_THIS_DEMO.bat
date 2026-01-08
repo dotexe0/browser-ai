@@ -25,7 +25,7 @@ echo.
 
 pause
 
-python demo_simple.py
+python test\demo_automation.py
 
 pause
 
