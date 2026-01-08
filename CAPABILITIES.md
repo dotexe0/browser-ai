@@ -234,17 +234,19 @@ When we integrate screen capture + UI inspection:
 
 ## 🎮 **Try It Yourself!**
 
-### **Steam + Dota Demo:**
+### **Simple Automation Demo:**
 ```bash
 cd test
-python demo_steam_dota.py
+python demo_automation.py
 ```
+Demonstrates basic automation with Notepad (safe, quick test).
 
-### **Chrome Navigation Demo:**
+### **Full AI Automation:**
 ```bash
 cd test
-python demo_chrome_navigation.py
+python test_ai_automation.py
 ```
+Demonstrates AI generating and executing actions (requires backend + Ollama).
 
 ### **Custom Task:**
 Modify any demo script with your own application and steps!
