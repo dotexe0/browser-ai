@@ -22,6 +22,8 @@ import os
 from dotenv import load_dotenv
 import base64
 import json
+import subprocess
+import sys
 
 # Load environment variables
 load_dotenv()
@@ -273,6 +275,61 @@ Return ONLY a JSON array of actions. No explanations."""
         return {'error': f'Ollama error: {str(e)}. Is Ollama running?'}
 
 
+def execute_action_via_service(action):
+    """
+    Execute a single action via the automation service
+    
+    Args:
+        action: Dict with 'action' and 'params' keys
+        
+    Returns:
+        Dict with 'success' and optional 'error' keys
+    """
+    automation_service_path = os.path.join(
+        os.path.dirname(__file__),
+        '../automation_service/build/bin/Release/automation_service.exe'
+    )
+    
+    if not os.path.exists(automation_service_path):
+        return {
+            'success': False,
+            'error': f'Automation service not found at {automation_service_path}'
+        }
+    
+    try:
+        # Send action via stdin as JSON
+        message = json.dumps(action)
+        message_with_length = f"{len(message)}\n{message}"
+        
+        process = subprocess.Popen(
+            [automation_service_path],
+            stdin=subprocess.PIPE,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE
+        )
+        
+        stdout, stderr = process.communicate(input=message_with_length.encode('utf-8'), timeout=5)
+        
+        # Parse response
+        if stdout:
+            # Native Messaging format: length + newline + JSON
+            lines = stdout.decode('utf-8').strip().split('\n', 1)
+            if len(lines) > 1:
+                response_json = lines[1]
+                response = json.loads(response_json)
+                return response
+            else:
+                return {'success': False, 'error': 'Invalid response format'}
+        else:
+            return {'success': False, 'error': stderr.decode('utf-8') if stderr else 'No output'}
+            
+    except subprocess.TimeoutExpired:
+        process.kill()
+        return {'success': False, 'error': 'Automation service timeout'}
+    except Exception as e:
+        return {'success': False, 'error': str(e)}
+
+
 @app.route('/api/health', methods=['GET'])
 def health():
     """Health check endpoint"""
@@ -347,6 +404,7 @@ def get_actions():
     screenshot = data.get('screenshot', '')
     ui_tree = data.get('ui_tree', {})
     user_request = data.get('user_request', '')
+    execute = data.get('execute', False)  # Whether to execute actions immediately
     
     if not user_request:
         return jsonify({'error': 'user_request is required'}), 400
@@ -364,6 +422,21 @@ def get_actions():
         result = call_ollama(screenshot, ui_tree, user_request)
     else:
         return jsonify({'error': f'Unknown provider: {provider}'}), 400
+    
+    # If execute=True and we got actions, execute them
+    if execute and result.get('success') and result.get('actions'):
+        execution_results = []
+        for action in result['actions']:
+            exec_result = execute_action_via_service(action)
+            execution_results.append(exec_result)
+            # Stop on first failure
+            if not exec_result.get('success'):
+                result['execution_results'] = execution_results
+                result['execution_failed_at'] = len(execution_results) - 1
+                break
+        else:
+            result['execution_results'] = execution_results
+            result['all_executed'] = True
     
     return jsonify(result)
 
