@@ -50,3 +50,4 @@ node_modules/
 # Python virtual environments
 venv/
 env/
+test-profile/
