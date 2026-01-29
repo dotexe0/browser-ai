@@ -240,19 +240,12 @@ std::string ScreenCapture::EncodeToPNG(const ImageData& pixels, int width, int h
         return "";
     }
     
-    // Create stream
-    IWICStream* stream = nullptr;
-    hr = factory->CreateStream(&stream);
-    if (FAILED(hr)) {
+    // Create growable memory stream
+    IStream* memStream = nullptr;
+    hr = CreateStreamOnHGlobal(nullptr, TRUE, &memStream);
+    if (FAILED(hr) || !memStream) {
         factory->Release();
-        return "";
-    }
-    
-    // Initialize stream from memory
-    hr = stream->InitializeFromMemory(nullptr, 0);
-    if (FAILED(hr)) {
-        stream->Release();
-        factory->Release();
+        LOG_ERROR(L"Failed to create memory stream");
         return "";
     }
     
@@ -260,15 +253,15 @@ std::string ScreenCapture::EncodeToPNG(const ImageData& pixels, int width, int h
     IWICBitmapEncoder* encoder = nullptr;
     hr = factory->CreateEncoder(GUID_ContainerFormatPng, nullptr, &encoder);
     if (FAILED(hr)) {
-        stream->Release();
+        memStream->Release();
         factory->Release();
         return "";
     }
-    
-    hr = encoder->Initialize(stream, WICBitmapEncoderNoCache);
+
+    hr = encoder->Initialize(memStream, WICBitmapEncoderNoCache);
     if (FAILED(hr)) {
         encoder->Release();
-        stream->Release();
+        memStream->Release();
         factory->Release();
         return "";
     }
@@ -278,113 +271,100 @@ std::string ScreenCapture::EncodeToPNG(const ImageData& pixels, int width, int h
     hr = encoder->CreateNewFrame(&frame, nullptr);
     if (FAILED(hr)) {
         encoder->Release();
-        stream->Release();
+        memStream->Release();
         factory->Release();
         return "";
     }
-    
+
     hr = frame->Initialize(nullptr);
     if (FAILED(hr)) {
         frame->Release();
         encoder->Release();
-        stream->Release();
+        memStream->Release();
         factory->Release();
         return "";
     }
-    
+
     // Set size
     hr = frame->SetSize(width, height);
     if (FAILED(hr)) {
         frame->Release();
         encoder->Release();
-        stream->Release();
+        memStream->Release();
         factory->Release();
         return "";
     }
-    
+
     // Set pixel format (BGRA)
     WICPixelFormatGUID pixelFormat = GUID_WICPixelFormat32bppBGRA;
     hr = frame->SetPixelFormat(&pixelFormat);
     if (FAILED(hr)) {
         frame->Release();
         encoder->Release();
-        stream->Release();
+        memStream->Release();
         factory->Release();
         return "";
     }
-    
+
     // Write pixels
     hr = frame->WritePixels(height, width * 4, pixels.size(), const_cast<BYTE*>(pixels.data()));
     if (FAILED(hr)) {
         frame->Release();
         encoder->Release();
-        stream->Release();
+        memStream->Release();
         factory->Release();
         return "";
     }
-    
+
     // Commit
     hr = frame->Commit();
     if (FAILED(hr)) {
         frame->Release();
         encoder->Release();
-        stream->Release();
+        memStream->Release();
         factory->Release();
         return "";
     }
-    
+
     hr = encoder->Commit();
     if (FAILED(hr)) {
         frame->Release();
         encoder->Release();
-        stream->Release();
+        memStream->Release();
         factory->Release();
         return "";
     }
     
-    // Get stream data
-    ULARGE_INTEGER streamSize;
-    IStream* rawStream = nullptr;
-    hr = stream->QueryInterface(IID_IStream, reinterpret_cast<void**>(&rawStream));
-    if (FAILED(hr)) {
-        frame->Release();
-        encoder->Release();
-        stream->Release();
-        factory->Release();
-        return "";
-    }
-    
+    // Get stream size
     LARGE_INTEGER zero = {};
-    hr = rawStream->Seek(zero, STREAM_SEEK_END, &streamSize);
+    ULARGE_INTEGER streamSize;
+    hr = memStream->Seek(zero, STREAM_SEEK_END, &streamSize);
     if (FAILED(hr)) {
-        rawStream->Release();
         frame->Release();
         encoder->Release();
-        stream->Release();
+        memStream->Release();
         factory->Release();
         return "";
     }
-    
-    hr = rawStream->Seek(zero, STREAM_SEEK_SET, nullptr);
+
+    hr = memStream->Seek(zero, STREAM_SEEK_SET, nullptr);
     if (FAILED(hr)) {
-        rawStream->Release();
         frame->Release();
         encoder->Release();
-        stream->Release();
+        memStream->Release();
         factory->Release();
         return "";
     }
-    
+
     // Read stream data
     std::vector<unsigned char> pngData(static_cast<size_t>(streamSize.QuadPart));
     ULONG bytesRead = 0;
-    hr = rawStream->Read(pngData.data(), static_cast<ULONG>(pngData.size()), &bytesRead);
-    
+    hr = memStream->Read(pngData.data(), static_cast<ULONG>(pngData.size()), &bytesRead);
+
     // Clean up
-    rawStream->Release();
     frame->Release();
     encoder->Release();
-    stream->Release();
+    memStream->Release();
     factory->Release();
     
     if (FAILED(hr) || bytesRead == 0) {
