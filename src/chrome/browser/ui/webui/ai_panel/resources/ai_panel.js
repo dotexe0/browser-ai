@@ -223,23 +223,32 @@ class AutomationPanel {
   }
 
   /**
-   * Capture screen (stub - will connect to automation service)
+   * Capture screen via backend automation service
    */
   async captureScreen() {
     this.log('Capturing screen...', 'info');
     this.setAutomationStatus('working');
-    
+
     try {
-      // TODO: This will call the automation service via Native Messaging
-      // For now, simulate with a stub
-      const response = await this.simulateCaptureScreen();
-      
-      this.currentScreenshot = response.screenshot;
-      this.currentUITree = response.uiTree;
-      
-      this.displayScreenPreview(response.screenshot);
-      this.displayUITree(response.uiTree);
-      
+      const response = await fetch('http://localhost:5000/api/capture', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'capture' })
+      });
+
+      if (!response.ok) {
+        throw new Error(`Capture failed: ${response.status}`);
+      }
+
+      const data = await response.json();
+      this.currentScreenshot = data.screenshot || '';
+      this.currentUITree = data.ui_tree || {};
+
+      if (this.currentScreenshot) {
+        this.displayScreenPreview(this.currentScreenshot);
+      }
+      this.displayUITree(this.currentUITree);
+
       this.log('Screen captured successfully', 'success');
       this.setAutomationStatus('ready');
     } catch (error) {
@@ -293,29 +302,39 @@ class AutomationPanel {
   }
 
   /**
-   * Confirm and execute actions
+   * Confirm and execute actions via backend
    */
   async confirmAndExecuteActions() {
     if (!this.plannedActions || this.plannedActions.length === 0) {
       return;
     }
-    
+
     this.log('Executing actions...', 'info');
     this.setAutomationStatus('working');
-    
-    // Hide actions panel
     document.getElementById('actions-section').classList.add('hidden');
-    
+
     try {
-      // TODO: Send actions to automation service for execution
-      // For now, simulate execution
-      for (let i = 0; i < this.plannedActions.length; i++) {
-        const action = this.plannedActions[i];
-        this.log(`Executing: ${action.action} ${JSON.stringify(action.params)}`, 'info');
-        await this.simulateActionExecution(action);
+      const response = await fetch('http://localhost:5000/api/get-actions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          provider: this.providerManager.getActiveProvider()?.providerId || 'ollama',
+          screenshot: this.currentScreenshot || '',
+          ui_tree: this.currentUITree || {},
+          user_request: document.getElementById('user-request').value.trim(),
+          execute: true,
+          actions: this.plannedActions
+        })
+      });
+
+      const data = await response.json();
+
+      if (data.all_executed) {
+        this.log('All actions executed successfully', 'success');
+      } else if (data.execution_failed_at !== undefined) {
+        this.log(`Execution failed at action ${data.execution_failed_at + 1}`, 'error');
       }
-      
-      this.log('All actions executed successfully', 'success');
+
       this.setAutomationStatus('ready');
       this.plannedActions = null;
     } catch (error) {
@@ -463,50 +482,6 @@ class AutomationPanel {
     }, 5000);
   }
 
-  /**
-   * Simulate screen capture (stub for development)
-   * @private
-   */
-  async simulateCaptureScreen() {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve({
-          screenshot: 'iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==', // 1x1 placeholder
-          uiTree: {
-            type: 'desktop',
-            elements: [
-              {
-                id: 'elem_1',
-                name: 'File Explorer',
-                type: 'Window',
-                bounds: { x: 100, y: 100, width: 800, height: 600 },
-                enabled: true
-              },
-              {
-                id: 'elem_2',
-                name: 'Search',
-                type: 'TextBox',
-                bounds: { x: 200, y: 150, width: 400, height: 30 },
-                enabled: true
-              }
-            ]
-          }
-        });
-      }, 500);
-    });
-  }
-
-  /**
-   * Simulate action execution (stub for development)
-   * @private
-   */
-  async simulateActionExecution(action) {
-    return new Promise((resolve) => {
-      setTimeout(() => {
-        resolve({ success: true });
-      }, 300);
-    });
-  }
 }
 
 // Initialize the panel when DOM is ready
