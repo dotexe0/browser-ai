@@ -4,7 +4,9 @@
 #include "content/public/browser/web_ui_data_source.h"
 
 AiPanelUI::AiPanelUI(content::WebUI* web_ui) : WebUIController(web_ui) {
-    auto* source = content::WebUIDataSource::Create("ai-panel");
+    auto* source = content::WebUIDataSource::CreateAndAdd(
+        web_ui->GetWebContents()->GetBrowserContext(),
+        "ai-panel-side-panel.top-chrome");
 
     source->AddResourcePath("ai_panel.js", IDR_AI_PANEL_JS);
     source->AddResourcePath("ai_panel.css", IDR_AI_PANEL_CSS);
@@ -17,6 +19,5 @@ AiPanelUI::AiPanelUI(content::WebUI* web_ui) : WebUIController(web_ui) {
     source->AddResourcePath("native_messaging_helper.js", IDR_AI_PANEL_NATIVE_MESSAGING_JS);
     source->SetDefaultResource(IDR_AI_PANEL_HTML);
 
-    content::WebUIDataSource::Add(web_ui->GetWebContents()->GetBrowserContext(), source);
     web_ui->AddMessageHandler(std::make_unique<AiPanelHandler>());
 }
