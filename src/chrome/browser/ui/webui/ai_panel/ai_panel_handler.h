@@ -16,8 +16,8 @@ class AiPanelHandler : public content::WebUIMessageHandler {
   void HandleCallBackend(const base::Value::List& args);
   void HandleExecuteActions(const base::Value::List& args);
 
-  // HTTP helper: POST JSON to url, return response body
-  std::string HttpPost(const std::string& url, const std::string& json_body);
+  // HTTP helper: POST JSON to localhost:5000 at the given path, return response
+  std::string HttpPost(const std::string& path, const std::string& json_body);
 };
 
 #endif  // CHROME_BROWSER_UI_WEBUI_AI_PANEL_AI_PANEL_HANDLER_H_

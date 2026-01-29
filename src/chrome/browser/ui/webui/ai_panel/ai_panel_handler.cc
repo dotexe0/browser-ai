@@ -37,8 +37,7 @@ void AiPanelHandler::HandleCallBackend(const base::Value::List& args) {
   }
 
   const std::string& request_json = args[0].GetString();
-  std::string response = HttpPost(
-      "http://localhost:5000/api/get-actions", request_json);
+  std::string response = HttpPost("/api/get-actions", request_json);
 
   FireWebUIListener("backendResponse", base::Value(response));
 }
@@ -53,13 +52,12 @@ void AiPanelHandler::HandleExecuteActions(const base::Value::List& args) {
   }
 
   const std::string& request_json = args[0].GetString();
-  std::string response = HttpPost(
-      "http://localhost:5000/api/get-actions", request_json);
+  std::string response = HttpPost("/api/get-actions", request_json);
 
   FireWebUIListener("executeResponse", base::Value(response));
 }
 
-std::string AiPanelHandler::HttpPost(const std::string& url,
+std::string AiPanelHandler::HttpPost(const std::string& path,
                                       const std::string& json_body) {
   HINTERNET session = WinHttpOpen(L"BrowserAI/1.0",
                                    WINHTTP_ACCESS_TYPE_DEFAULT_PROXY,
@@ -75,8 +73,9 @@ std::string AiPanelHandler::HttpPost(const std::string& url,
     return "{\"error\":\"Failed to connect to backend\"}";
   }
 
+  std::wstring wide_path(path.begin(), path.end());
   HINTERNET request = WinHttpOpenRequest(connection, L"POST",
-                                          L"/api/get-actions",
+                                          wide_path.c_str(),
                                           nullptr, WINHTTP_NO_REFERER,
                                           WINHTTP_DEFAULT_ACCEPT_TYPES, 0);
   if (!request) {

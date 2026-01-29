@@ -22,6 +22,7 @@ source_set("ai_panel") {
     "//chrome/common",
     "//content/public/browser",
     "//content/public/common",
+    "//services/network/public/mojom",
   ]
 
   if (is_win) {
