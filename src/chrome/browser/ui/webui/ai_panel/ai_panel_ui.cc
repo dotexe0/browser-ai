@@ -8,6 +8,13 @@ AiPanelUI::AiPanelUI(content::WebUI* web_ui) : WebUIController(web_ui) {
 
     source->AddResourcePath("ai_panel.js", IDR_AI_PANEL_JS);
     source->AddResourcePath("ai_panel.css", IDR_AI_PANEL_CSS);
+    source->AddResourcePath("ai_provider_interface.js", IDR_AI_PANEL_PROVIDER_INTERFACE_JS);
+    source->AddResourcePath("openai_provider.js", IDR_AI_PANEL_OPENAI_PROVIDER_JS);
+    source->AddResourcePath("ollama_provider.js", IDR_AI_PANEL_OLLAMA_PROVIDER_JS);
+    source->AddResourcePath("anthropic_provider.js", IDR_AI_PANEL_ANTHROPIC_PROVIDER_JS);
+    source->AddResourcePath("local_llm_provider.js", IDR_AI_PANEL_LOCAL_LLM_PROVIDER_JS);
+    source->AddResourcePath("ai_provider_manager.js", IDR_AI_PANEL_PROVIDER_MANAGER_JS);
+    source->AddResourcePath("native_messaging_helper.js", IDR_AI_PANEL_NATIVE_MESSAGING_JS);
     source->SetDefaultResource(IDR_AI_PANEL_HTML);
 
     content::WebUIDataSource::Add(web_ui->GetWebContents()->GetBrowserContext(), source);

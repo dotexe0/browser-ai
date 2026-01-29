@@ -31,13 +31,13 @@ class AIProviderManager {
     const ollamaProvider = new OllamaProvider();
     this.registerProvider(ollamaProvider);
     
+    // Register Anthropic provider (cloud, via backend proxy)
+    const anthropicProvider = new AnthropicProvider();
+    this.registerProvider(anthropicProvider);
+
     // Register Local LLM provider (via C++ Native Messaging service)
     const localProvider = new LocalLLMProvider();
     this.registerProvider(localProvider);
-    
-    // TODO: Register Anthropic MCP provider when implemented
-    // const mcpProvider = new AnthropicMCPProvider();
-    // this.registerProvider(mcpProvider);
     
     // Load user's preferred provider from settings
     this.loadUserPreference();
