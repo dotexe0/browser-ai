@@ -275,56 +275,51 @@ Return ONLY a JSON array of actions. No explanations."""
         return {'error': f'Ollama error: {str(e)}. Is Ollama running?'}
 
 
+def _call_automation_service(service_path, message):
+    """Call automation service with Native Messaging protocol"""
+    import struct
+
+    message_json = json.dumps(message)
+    message_bytes = message_json.encode('utf-8')
+    # Native Messaging uses 4-byte length prefix
+    length_prefix = struct.pack('I', len(message_bytes))
+
+    process = subprocess.Popen(
+        [service_path],
+        stdin=subprocess.PIPE,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE
+    )
+
+    stdout, stderr = process.communicate(
+        input=length_prefix + message_bytes, timeout=10)
+
+    if not stdout or len(stdout) < 4:
+        raise RuntimeError(f'No response from service: {stderr.decode("utf-8", errors="replace")}')
+
+    # Read 4-byte length prefix
+    response_length = struct.unpack('I', stdout[:4])[0]
+    response_json = stdout[4:4 + response_length].decode('utf-8')
+    return json.loads(response_json)
+
+
 def execute_action_via_service(action):
-    """
-    Execute a single action via the automation service
-    
-    Args:
-        action: Dict with 'action' and 'params' keys
-        
-    Returns:
-        Dict with 'success' and optional 'error' keys
-    """
+    """Execute a single action via the automation service"""
     automation_service_path = os.path.join(
         os.path.dirname(__file__),
         '../automation_service/build/bin/Release/automation_service.exe'
     )
-    
+
     if not os.path.exists(automation_service_path):
-        return {
-            'success': False,
-            'error': f'Automation service not found at {automation_service_path}'
-        }
-    
+        return {'success': False, 'error': 'Automation service not found'}
+
     try:
-        # Send action via stdin as JSON
-        message = json.dumps(action)
-        message_with_length = f"{len(message)}\n{message}"
-        
-        process = subprocess.Popen(
-            [automation_service_path],
-            stdin=subprocess.PIPE,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE
-        )
-        
-        stdout, stderr = process.communicate(input=message_with_length.encode('utf-8'), timeout=5)
-        
-        # Parse response
-        if stdout:
-            # Native Messaging format: length + newline + JSON
-            lines = stdout.decode('utf-8').strip().split('\n', 1)
-            if len(lines) > 1:
-                response_json = lines[1]
-                response = json.loads(response_json)
-                return response
-            else:
-                return {'success': False, 'error': 'Invalid response format'}
-        else:
-            return {'success': False, 'error': stderr.decode('utf-8') if stderr else 'No output'}
-            
+        message = {
+            'action': 'execute_action',
+            'params': action
+        }
+        return _call_automation_service(automation_service_path, message)
     except subprocess.TimeoutExpired:
-        process.kill()
         return {'success': False, 'error': 'Automation service timeout'}
     except Exception as e:
         return {'success': False, 'error': str(e)}
@@ -460,6 +455,48 @@ def add_provider():
     return jsonify({'success': True, 'message': f'Provider {provider_id} added'})
 
 
+@app.route('/api/capture', methods=['POST'])
+def capture_screen():
+    """
+    Capture screen and UI tree via automation service
+    """
+    automation_service_path = os.path.join(
+        os.path.dirname(__file__),
+        '../automation_service/build/bin/Release/automation_service.exe'
+    )
+
+    if not os.path.exists(automation_service_path):
+        return jsonify({
+            'success': False,
+            'error': f'Automation service not found at {automation_service_path}'
+        }), 500
+
+    result = {}
+
+    # Capture screen
+    try:
+        screen_result = _call_automation_service(
+            automation_service_path, {'action': 'capture_screen'})
+        result['screenshot'] = screen_result.get('screenshot', '')
+        result['width'] = screen_result.get('width', 0)
+        result['height'] = screen_result.get('height', 0)
+    except Exception as e:
+        result['screenshot'] = ''
+        result['capture_error'] = str(e)
+
+    # Inspect UI
+    try:
+        ui_result = _call_automation_service(
+            automation_service_path, {'action': 'inspect_ui'})
+        result['ui_tree'] = ui_result.get('uiTree', {})
+    except Exception as e:
+        result['ui_tree'] = {}
+        result['ui_error'] = str(e)
+
+    result['success'] = True
+    return jsonify(result)
+
+
 if __name__ == '__main__':
     print("=" * 70, flush=True)
     print("Provider-Agnostic AI Proxy Server", flush=True)
@@ -483,6 +520,7 @@ if __name__ == '__main__':
     print("  GET  /api/health - Health check", flush=True)
     print("  GET  /api/providers - List available providers", flush=True)
     print("  POST /api/get-actions - Get AI actions", flush=True)
+    print("  POST /api/capture - Capture screen & UI tree", flush=True)
     print("  POST /api/add-provider - Add custom provider", flush=True)
     print(flush=True)
     print("Starting server on http://localhost:5000", flush=True)
