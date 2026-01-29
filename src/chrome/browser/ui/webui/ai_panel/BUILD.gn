@@ -24,6 +24,29 @@ source_set("ai_panel") {
     "//content/public/common",
   ]
 
+  if (is_win) {
+    libs = [ "winhttp.lib" ]
+  }
+
   # Resources are defined in chrome/browser/browser_resources.grd
+  # JS files served: ai_panel.js, ai_panel.css, ai_provider_interface.js,
+  #   openai_provider.js, ollama_provider.js, anthropic_provider.js,
+  #   local_llm_provider.js, ai_provider_manager.js, native_messaging_helper.js
 }
 
+# Side Panel coordinator
+source_set("ai_panel_side_panel") {
+  sources = [
+    "//chrome/browser/ui/views/side_panel/ai_panel/ai_panel_side_panel_coordinator.cc",
+    "//chrome/browser/ui/views/side_panel/ai_panel/ai_panel_side_panel_coordinator.h",
+  ]
+
+  deps = [
+    ":ai_panel",
+    "//base",
+    "//chrome/browser/ui",
+    "//chrome/browser/ui/views/side_panel",
+    "//chrome/common",
+    "//content/public/browser",
+  ]
+}
