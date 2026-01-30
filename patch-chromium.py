@@ -77,21 +77,27 @@ def patch_side_panel_entry_id(content):
 
 
 def patch_chrome_action_id(content):
-    """Add kActionSidePanelShowAIPanel to action ID enum."""
+    """Add kActionSidePanelShowAIPanel to SIDE_PANEL_ACTION_IDS macro."""
     lines = content.split('\n')
     insert_idx = None
 
-    # Find the last kActionSidePanelShow* entry
+    # The side panel actions use the E() macro format inside a #define, e.g.:
+    #   E(kActionSidePanelShowMerchantTrust)
+    # Find the last E(kActionSidePanelShow...) entry
     for i, line in enumerate(lines):
         stripped = line.strip()
-        if stripped.startswith('kActionSidePanelShow') and stripped.endswith(','):
+        if re.match(r'E\(kActionSidePanelShow\w+', stripped):
             insert_idx = i
 
     if insert_idx is None:
         return None
 
     indent = re.match(r'(\s*)', lines[insert_idx]).group(1)
-    new_line = f'{indent}kActionSidePanelShowAIPanel,'
+    # The last entry in the macro has no trailing backslash.
+    # We need to add a backslash to the current last line and append our entry.
+    if not lines[insert_idx].rstrip().endswith('\\'):
+        lines[insert_idx] = lines[insert_idx].rstrip() + ' \\'
+    new_line = f'{indent}E(kActionSidePanelShowAIPanel)'
     lines.insert(insert_idx + 1, new_line)
     return '\n'.join(lines)
 
@@ -376,7 +382,7 @@ def main():
          "AIPanelUIConfig", "WebUI Config Registration",
          patch_chrome_web_ui_configs),
 
-        ("4a/7", "chrome/browser/ui/browser_window/internal/browser_window_features.h",
+        ("4a/7", "chrome/browser/ui/browser_window/public/browser_window_features.h",
          "ai_panel_side_panel_coordinator_", "BrowserWindowFeatures Header",
          patch_browser_window_features_header),
 

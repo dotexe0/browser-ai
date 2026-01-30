@@ -30,6 +30,8 @@ public:
     void Wait(int milliseconds);
     
 private:
+    bool ValidateCoordinates(int x, int y) const;
+
     // Convert screen coordinates to absolute coordinates for SendInput
     void ScreenToAbsolute(int& x, int& y);
     

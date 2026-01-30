@@ -1,36 +1,94 @@
 /**
  * AI Provider Manager
- * 
+ *
  * Manages multiple AI providers and routes requests to the active provider.
  * Handles provider registration, selection, and configuration.
  */
+
+const _keyEncrypt = {
+  _cachedKey: null,
+
+  async _getKey() {
+    if (this._cachedKey) return this._cachedKey;
+    const salt = new TextEncoder().encode('browser-ai-salt-v1');
+    const baseKey = await crypto.subtle.importKey(
+      'raw',
+      new TextEncoder().encode(
+        (navigator.userAgent || '') + (location.origin || '')
+      ),
+      'PBKDF2',
+      false,
+      ['deriveKey']
+    );
+    this._cachedKey = await crypto.subtle.deriveKey(
+      { name: 'PBKDF2', salt, iterations: 100000, hash: 'SHA-256' },
+      baseKey,
+      { name: 'AES-GCM', length: 256 },
+      false,
+      ['encrypt', 'decrypt']
+    );
+    return this._cachedKey;
+  },
+
+  async encrypt(plaintext) {
+    const key = await this._getKey();
+    const iv = crypto.getRandomValues(new Uint8Array(12));
+    const encoded = new TextEncoder().encode(plaintext);
+    const ciphertext = await crypto.subtle.encrypt(
+      { name: 'AES-GCM', iv },
+      key,
+      encoded
+    );
+    const buf = new Uint8Array(iv.length + ciphertext.byteLength);
+    buf.set(iv, 0);
+    buf.set(new Uint8Array(ciphertext), iv.length);
+    return btoa(String.fromCharCode(...buf));
+  },
+
+  async decrypt(stored) {
+    try {
+      const key = await this._getKey();
+      const raw = Uint8Array.from(atob(stored), c => c.charCodeAt(0));
+      const iv = raw.slice(0, 12);
+      const ciphertext = raw.slice(12);
+      const decrypted = await crypto.subtle.decrypt(
+        { name: 'AES-GCM', iv },
+        key,
+        ciphertext
+      );
+      return new TextDecoder().decode(decrypted);
+    } catch {
+      return stored;
+    }
+  }
+};
 
 class AIProviderManager {
   constructor() {
     /** @type {Map<string, AIProvider>} */
     this.providers = new Map();
-    
+
     /** @type {AIProvider|null} */
     this.activeProvider = null;
-    
+
     /** @type {Array<{role: string, content: any}>} */
     this.conversationHistory = [];
-    
-    this.initialize();
+
+    this.ready = this.initialize();
   }
 
   /**
    * Initialize the manager and register available providers
    */
-  initialize() {
+  async initialize() {
     // Register OpenAI provider (cloud, via backend proxy)
     const openaiProvider = new OpenAIProvider();
     this.registerProvider(openaiProvider);
-    
+
     // Register Ollama provider (local, private, FREE!)
     const ollamaProvider = new OllamaProvider();
     this.registerProvider(ollamaProvider);
-    
+
     // Register Anthropic provider (cloud, via backend proxy)
     const anthropicProvider = new AnthropicProvider();
     this.registerProvider(anthropicProvider);
@@ -38,9 +96,9 @@ class AIProviderManager {
     // Register Local LLM provider (via C++ Native Messaging service)
     const localProvider = new LocalLLMProvider();
     this.registerProvider(localProvider);
-    
+
     // Load user's preferred provider from settings
-    this.loadUserPreference();
+    await this.loadUserPreference();
   }
 
   /**
@@ -108,19 +166,19 @@ class AIProviderManager {
 
   /**
    * Configure a provider's API key
-   * @param {string} providerName 
-   * @param {string} apiKey 
+   * @param {string} providerName
+   * @param {string} apiKey
    */
-  configureProvider(providerName, apiKey) {
+  async configureProvider(providerName, apiKey) {
     const provider = this.providers.get(providerName);
-    
+
     if (!provider) {
       throw new Error(`Provider not found: ${providerName}`);
     }
-    
+
     if (provider.requiresApiKey) {
       provider.setApiKey(apiKey);
-      this.saveApiKey(providerName, apiKey);
+      await this.saveApiKey(providerName, apiKey);
       console.log(`Configured API key for: ${providerName}`);
     }
   }
@@ -193,21 +251,21 @@ class AIProviderManager {
    * Load user's preferred provider from localStorage
    * @private
    */
-  loadUserPreference() {
+  async loadUserPreference() {
     try {
       const savedProvider = localStorage.getItem('ai_provider_preference');
-      
+
       if (savedProvider && this.providers.has(savedProvider)) {
         this.activeProvider = this.providers.get(savedProvider);
-        
+
         // Load API key if needed
         if (this.activeProvider.requiresApiKey) {
-          const savedKey = this.loadApiKey(savedProvider);
+          const savedKey = await this.loadApiKey(savedProvider);
           if (savedKey) {
             this.activeProvider.setApiKey(savedKey);
           }
         }
-        
+
         console.log(`Loaded preferred provider: ${savedProvider}`);
       } else {
         // Default to first available provider
@@ -238,10 +296,11 @@ class AIProviderManager {
    * Load API key from localStorage (encrypted in production)
    * @private
    */
-  loadApiKey(providerName) {
+  async loadApiKey(providerName) {
     try {
-      // In production, this should be encrypted
-      return localStorage.getItem(`ai_provider_key_${providerName}`);
+      const stored = localStorage.getItem(`ai_provider_key_${providerName}`);
+      if (!stored) return null;
+      return await _keyEncrypt.decrypt(stored);
     } catch (error) {
       console.error('Error loading API key:', error);
       return null;
@@ -249,14 +308,13 @@ class AIProviderManager {
   }
 
   /**
-   * Save API key to localStorage (should be encrypted in production)
+   * Save API key to localStorage (encrypted with AES-GCM)
    * @private
    */
-  saveApiKey(providerName, apiKey) {
+  async saveApiKey(providerName, apiKey) {
     try {
-      // WARNING: In production, encrypt this!
-      // For now, storing in localStorage for development
-      localStorage.setItem(`ai_provider_key_${providerName}`, apiKey);
+      const encrypted = await _keyEncrypt.encrypt(apiKey);
+      localStorage.setItem(`ai_provider_key_${providerName}`, encrypted);
     } catch (error) {
       console.error('Error saving API key:', error);
     }

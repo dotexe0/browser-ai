@@ -10,6 +10,10 @@ InputController::InputController() {
 InputController::~InputController() {
 }
 
+bool InputController::ValidateCoordinates(int x, int y) const {
+    return x >= 0 && y >= 0 && x < screenWidth_ && y < screenHeight_;
+}
+
 void InputController::ScreenToAbsolute(int& x, int& y) {
     // Convert screen coordinates to absolute (0-65535 range)
     x = (x * 65535) / screenWidth_;
@@ -28,6 +32,9 @@ void InputController::SendMouseEvent(DWORD flags, int x, int y, DWORD data) {
 }
 
 void InputController::MoveMouse(int x, int y) {
+    if (!ValidateCoordinates(x, y)) {
+        return;
+    }
     int absX = x, absY = y;
     ScreenToAbsolute(absX, absY);
     
@@ -38,6 +45,9 @@ void InputController::MoveMouse(int x, int y) {
 }
 
 void InputController::Click(int x, int y, MouseButton button) {
+    if (!ValidateCoordinates(x, y)) {
+        return;
+    }
     // Move to position
     MoveMouse(x, y);
     
@@ -84,6 +94,9 @@ void InputController::RightClick(int x, int y) {
 }
 
 void InputController::Drag(int startX, int startY, int endX, int endY) {
+    if (!ValidateCoordinates(startX, startY) || !ValidateCoordinates(endX, endY)) {
+        return;
+    }
     // Move to start position
     MoveMouse(startX, startY);
     std::this_thread::sleep_for(std::chrono::milliseconds(100));

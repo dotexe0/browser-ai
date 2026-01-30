@@ -70,7 +70,7 @@ def test_providers():
         print(f"   Available providers:")
         
         for provider in data['providers']:
-            privacy_badge = f" 🔒 [{provider.get('privacy', 'cloud')}]" if 'privacy' in provider else ""
+            privacy_badge = f" [private: {provider.get('privacy', 'cloud')}]" if 'privacy' in provider else ""
             config_badge = "[OK]" if provider['configured'] else "[X]"
             print(f"      {config_badge} {provider['name']} ({provider['type']}){privacy_badge}")
         

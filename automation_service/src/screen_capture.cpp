@@ -205,18 +205,36 @@ ImageData ScreenCapture::ReadPixels(IDXGIResource* resource) {
 }
 
 ImageData ScreenCapture::CaptureRegion(const Rect& region) {
-    // For now, capture full screen and crop
-    // TODO: Optimize to capture only region
     ImageData fullScreen = CaptureScreen();
-    
+
     if (fullScreen.empty()) {
         return ImageData();
     }
-    
-    // Simple cropping
-    ImageData cropped;
-    // TODO: Implement cropping logic
-    
+
+    int screenW, screenH;
+    GetScreenDimensions(screenW, screenH);
+
+    // Clamp region to screen bounds
+    int rx = std::max(0, region.x);
+    int ry = std::max(0, region.y);
+    int rw = std::min(region.width, screenW - rx);
+    int rh = std::min(region.height, screenH - ry);
+
+    if (rw <= 0 || rh <= 0) {
+        return ImageData();
+    }
+
+    // fullScreen is BGRA, 4 bytes per pixel, rows are screenW * 4 bytes
+    int srcStride = screenW * 4;
+    int dstStride = rw * 4;
+    ImageData cropped(dstStride * rh);
+
+    for (int row = 0; row < rh; ++row) {
+        const uint8_t* srcRow = fullScreen.data() + (ry + row) * srcStride + rx * 4;
+        uint8_t* dstRow = cropped.data() + row * dstStride;
+        memcpy(dstRow, srcRow, dstStride);
+    }
+
     return cropped;
 }
 

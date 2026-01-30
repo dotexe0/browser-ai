@@ -186,7 +186,13 @@ json ActionExecutor::ExecuteClick(const json& params) {
     
     int x = params["x"];
     int y = params["y"];
-    
+
+    int screenW, screenH;
+    screenCapture_->GetScreenDimensions(screenW, screenH);
+    if (x < 0 || y < 0 || x >= screenW || y >= screenH) {
+        return {{"success", false}, {"error", "Coordinates out of screen bounds"}};
+    }
+
     MouseButton button = MouseButton::Left;
     if (params.contains("button")) {
         button = ParseMouseButton(params["button"]);
@@ -209,6 +215,9 @@ json ActionExecutor::ExecuteType(const json& params) {
     }
     
     std::string text = params["text"];
+    if (text.length() > 10000) {
+        return {{"success", false}, {"error", "Text too long (max 10000 chars)"}};
+    }
     std::wstring wtext = StringToWString(text);
     
     inputController_->TypeText(wtext);
@@ -251,6 +260,9 @@ json ActionExecutor::ExecuteWait(const json& params) {
     }
     
     int ms = params["ms"];
+    if (ms < 0 || ms > 30000) {
+        return {{"success", false}, {"error", "Wait duration must be 0-30000ms"}};
+    }
     inputController_->Wait(ms);
     
     return {{"success", true}, {"action", "wait"}};

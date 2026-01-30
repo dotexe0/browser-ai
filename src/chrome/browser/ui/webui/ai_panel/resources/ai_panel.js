@@ -10,10 +10,8 @@ class AutomationPanel {
     this.currentScreenshot = null;
     this.currentUITree = null;
     this.plannedActions = null;
-    
-    this.initializeUI();
+
     this.attachEventListeners();
-    this.updateProviderStatus();
   }
 
   /**
@@ -193,18 +191,18 @@ class AutomationPanel {
   /**
    * Save API key
    */
-  saveApiKey() {
+  async saveApiKey() {
     const providerName = this.providerManager.getActiveProvider().name;
     const apiKey = document.getElementById('api-key-input').value.trim();
     const statusDiv = document.getElementById('api-key-status');
-    
+
     if (!apiKey) {
       this.showStatus(statusDiv, 'Please enter an API key', 'error');
       return;
     }
-    
+
     try {
-      this.providerManager.configureProvider(providerName, apiKey);
+      await this.providerManager.configureProvider(providerName, apiKey);
       this.showStatus(statusDiv, 'API key saved successfully', 'success');
       this.enableAutomation();
       this.updateProviderStatus();
@@ -258,10 +256,22 @@ class AutomationPanel {
   }
 
   /**
+   * Sanitize user request input
+   * @param {string} input
+   * @returns {string}
+   */
+  sanitizeRequest(input) {
+    let sanitized = (input || '').trim();
+    sanitized = sanitized.slice(0, 2000);
+    sanitized = sanitized.replace(/[^\P{Cc}\n]/gu, '');
+    return sanitized;
+  }
+
+  /**
    * Execute automation
    */
   async executeAutomation() {
-    const userRequest = document.getElementById('user-request').value.trim();
+    const userRequest = this.sanitizeRequest(document.getElementById('user-request').value);
     
     if (!userRequest) {
       this.log('Please enter an automation request', 'warning');
@@ -307,6 +317,14 @@ class AutomationPanel {
   async confirmAndExecuteActions() {
     if (!this.plannedActions || this.plannedActions.length === 0) {
       return;
+    }
+
+    for (let i = 0; i < this.plannedActions.length; i++) {
+      const validation = this.validateAction(this.plannedActions[i]);
+      if (!validation.valid) {
+        this.log(`Action ${i + 1} is invalid: ${validation.error}`, 'error');
+        return;
+      }
     }
 
     this.log('Executing actions...', 'info');
@@ -372,6 +390,67 @@ class AutomationPanel {
   }
 
   /**
+   * Validate a single automation action
+   * @param {Object} action
+   * @returns {{valid: boolean, error?: string}}
+   */
+  validateAction(action) {
+    const allowedTypes = ['click', 'type', 'scroll', 'press_keys', 'wait'];
+    if (!action || !action.action || !allowedTypes.includes(action.action)) {
+      return { valid: false, error: `Invalid action type: ${action?.action}` };
+    }
+    const params = action.params || {};
+    switch (action.action) {
+      case 'click': {
+        const x = params.x;
+        const y = params.y;
+        if (typeof x !== 'number' || typeof y !== 'number') {
+          return { valid: false, error: 'Click requires numeric x and y coordinates' };
+        }
+        if (x < 0 || x > 10000 || y < 0 || y > 10000) {
+          return { valid: false, error: 'Click coordinates out of range (0-10000)' };
+        }
+        break;
+      }
+      case 'type': {
+        const text = params.text;
+        if (typeof text !== 'string' || text.length === 0) {
+          return { valid: false, error: 'Type requires non-empty string text' };
+        }
+        if (text.length > 10000) {
+          return { valid: false, error: 'Type text exceeds maximum length of 10000' };
+        }
+        break;
+      }
+      case 'wait': {
+        const ms = params.ms;
+        if (typeof ms !== 'number') {
+          return { valid: false, error: 'Wait requires numeric ms value' };
+        }
+        if (ms < 0 || ms > 30000) {
+          return { valid: false, error: 'Wait ms out of range (0-30000)' };
+        }
+        break;
+      }
+      case 'scroll': {
+        const delta = params.delta;
+        if (typeof delta !== 'number') {
+          return { valid: false, error: 'Scroll requires numeric delta value' };
+        }
+        break;
+      }
+      case 'press_keys': {
+        const keys = params.keys;
+        if (!Array.isArray(keys) || keys.length === 0) {
+          return { valid: false, error: 'press_keys requires non-empty keys array' };
+        }
+        break;
+      }
+    }
+    return { valid: true };
+  }
+
+  /**
    * Display planned actions
    */
   displayActions(actions) {
@@ -382,18 +461,20 @@ class AutomationPanel {
     
     actions.forEach((action, index) => {
       const item = document.createElement('div');
-      item.className = 'action-item';
-      
+      const validation = this.validateAction(action);
+      item.className = 'action-item' + (validation.valid ? '' : ' invalid');
+
       item.innerHTML = `
         <div class="action-details">
-          <div class="action-type">${index + 1}. ${action.action.toUpperCase()}</div>
+          <div class="action-type">${index + 1}. ${action.action.toUpperCase()}${validation.valid ? '' : ' [INVALID]'}</div>
           <div class="action-params">${JSON.stringify(action.params)}</div>
+          ${validation.valid ? '' : `<div class="action-error">${validation.error}</div>`}
         </div>
         <div class="action-confidence">
           ${Math.round(action.confidence * 100)}% confident
         </div>
       `;
-      
+
       list.appendChild(item);
     });
     
@@ -485,6 +566,10 @@ class AutomationPanel {
 }
 
 // Initialize the panel when DOM is ready
-document.addEventListener('DOMContentLoaded', () => {
-  window.automationPanel = new AutomationPanel();
+document.addEventListener('DOMContentLoaded', async () => {
+  const panel = new AutomationPanel();
+  await panel.providerManager.ready;
+  panel.initializeUI();
+  panel.updateProviderStatus();
+  window.automationPanel = panel;
 });

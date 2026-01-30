@@ -24,12 +24,15 @@ import base64
 import json
 import subprocess
 import sys
+import time
+from functools import wraps
 
 # Load environment variables
 load_dotenv()
 
 app = Flask(__name__)
-CORS(app)  # Allow requests from browser
+CORS(app, origins=['http://localhost:*', 'chrome-untrusted://*', 'chrome://*'])
+app.config['MAX_CONTENT_LENGTH'] = 20 * 1024 * 1024  # 20MB max request
 
 # Provider configurations
 PROVIDERS = {
@@ -48,6 +51,71 @@ PROVIDERS = {
         'model': os.getenv('OLLAMA_MODEL', 'llava')  # Vision-capable model
     }
 }
+
+# Simple rate limiter
+_rate_limit_store = {}
+
+def rate_limit(max_per_minute=30):
+    def decorator(f):
+        @wraps(f)
+        def wrapped(*args, **kwargs):
+            client_ip = request.remote_addr
+            now = time.time()
+            key = f'{f.__name__}:{client_ip}'
+
+            if key in _rate_limit_store:
+                _rate_limit_store[key] = [t for t in _rate_limit_store[key] if now - t < 60]
+            else:
+                _rate_limit_store[key] = []
+
+            if len(_rate_limit_store[key]) >= max_per_minute:
+                return jsonify({'error': 'Rate limit exceeded. Try again later.'}), 429
+
+            _rate_limit_store[key].append(now)
+            return f(*args, **kwargs)
+        return wrapped
+    return decorator
+
+
+def validate_ai_actions(actions):
+    """Validate and sanitize AI-generated actions before execution."""
+    if not isinstance(actions, list):
+        return []
+
+    valid_action_types = {'click', 'type', 'scroll', 'press_keys', 'wait'}
+    validated = []
+
+    for action in actions:
+        if not isinstance(action, dict):
+            continue
+        action_type = action.get('action')
+        if action_type not in valid_action_types:
+            continue
+
+        params = action.get('params', {})
+        if not isinstance(params, dict):
+            continue
+
+        if action_type == 'click':
+            x, y = params.get('x'), params.get('y')
+            if not isinstance(x, (int, float)) or not isinstance(y, (int, float)):
+                continue
+            if x < 0 or y < 0 or x > 10000 or y > 10000:
+                continue
+
+        if action_type == 'type':
+            text = params.get('text', '')
+            if not isinstance(text, str) or len(text) == 0 or len(text) > 10000:
+                continue
+
+        if action_type == 'wait':
+            ms = params.get('ms', 0)
+            if not isinstance(ms, (int, float)) or ms < 0 or ms > 30000:
+                continue
+
+        validated.append(action)
+
+    return validated
 
 
 def call_openai(screenshot_base64, ui_tree, user_request):
@@ -375,6 +443,7 @@ def list_providers():
 
 
 @app.route('/api/get-actions', methods=['POST'])
+@rate_limit(max_per_minute=20)
 def get_actions():
     """
     Get automation actions from AI provider
@@ -395,15 +464,30 @@ def get_actions():
     """
     
     data = request.json
+    if not data:
+        return jsonify({'error': 'Request body required'}), 400
+
     provider = data.get('provider', 'openai')
     screenshot = data.get('screenshot', '')
     ui_tree = data.get('ui_tree', {})
     user_request = data.get('user_request', '')
-    execute = data.get('execute', False)  # Whether to execute actions immediately
-    
-    if not user_request:
-        return jsonify({'error': 'user_request is required'}), 400
-    
+    execute = data.get('execute', False)
+
+    # Validate provider
+    valid_providers = ('openai', 'anthropic', 'ollama')
+    if provider not in valid_providers:
+        return jsonify({'error': f'Unknown provider: {provider}. Valid: {valid_providers}'}), 400
+
+    # Validate user_request
+    if not user_request or not isinstance(user_request, str):
+        return jsonify({'error': 'user_request is required and must be a string'}), 400
+    if len(user_request) > 5000:
+        return jsonify({'error': 'user_request too long (max 5000 chars)'}), 400
+
+    # Validate screenshot size
+    if screenshot and len(screenshot) > 30_000_000:
+        return jsonify({'error': 'Screenshot too large (max ~20MB)'}), 400
+
     # Remove data URL prefix if present
     if screenshot.startswith('data:image'):
         screenshot = screenshot.split(',')[1]
@@ -417,7 +501,14 @@ def get_actions():
         result = call_ollama(screenshot, ui_tree, user_request)
     else:
         return jsonify({'error': f'Unknown provider: {provider}'}), 400
-    
+
+    # Validate AI-generated actions
+    if result.get('success') and result.get('actions'):
+        result['actions'] = validate_ai_actions(result['actions'])
+        if not result['actions']:
+            result['success'] = False
+            result['error'] = 'AI returned no valid actions'
+
     # If execute=True and we got actions, execute them
     if execute and result.get('success') and result.get('actions'):
         execution_results = []
@@ -444,18 +535,25 @@ def add_provider():
     Allows adding custom providers at runtime
     """
     data = request.json
+    if not data:
+        return jsonify({'error': 'Request body required'}), 400
+
     provider_id = data.get('id')
-    
-    if not provider_id:
-        return jsonify({'error': 'Provider ID required'}), 400
-    
-    # Store custom provider config
+    if not provider_id or not isinstance(provider_id, str):
+        return jsonify({'error': 'Provider ID required (string)'}), 400
+    if len(provider_id) > 50:
+        return jsonify({'error': 'Provider ID too long'}), 400
+
+    builtin = ('openai', 'anthropic', 'ollama')
+    if provider_id in builtin:
+        return jsonify({'error': f'Cannot overwrite built-in provider: {provider_id}'}), 400
+
     PROVIDERS[provider_id] = data.get('config', {})
-    
     return jsonify({'success': True, 'message': f'Provider {provider_id} added'})
 
 
 @app.route('/api/capture', methods=['POST'])
+@rate_limit(max_per_minute=30)
 def capture_screen():
     """
     Capture screen and UI tree via automation service
@@ -527,5 +625,6 @@ if __name__ == '__main__':
     print("=" * 70, flush=True)
     print(flush=True)
     
-    app.run(host='0.0.0.0', port=5000, debug=True)
+    debug_mode = os.getenv('FLASK_DEBUG', 'false').lower() == 'true'
+    app.run(host='0.0.0.0', port=5000, debug=debug_mode)
 
