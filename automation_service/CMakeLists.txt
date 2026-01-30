@@ -30,6 +30,10 @@ set(SOURCES
     src/screen_capture.cpp
     src/input_controller.cpp
     src/action_executor.cpp
+    src/credential_store.cpp
+    src/http_client.cpp
+    src/ai_provider.cpp
+    src/async_request.cpp
 )
 
 # Header files
@@ -39,6 +43,10 @@ set(HEADERS
     src/screen_capture.h
     src/input_controller.h
     src/action_executor.h
+    src/credential_store.h
+    src/http_client.h
+    src/ai_provider.h
+    src/async_request.h
     src/common.h
 )
 
@@ -55,6 +63,7 @@ target_link_libraries(automation_service
     Ole32               # For COM
     OleAut32            # For COM automation
     Winhttp             # For HTTP client (local LLM detection)
+    Advapi32            # For Windows Credential Manager
 )
 
 # Set output directory

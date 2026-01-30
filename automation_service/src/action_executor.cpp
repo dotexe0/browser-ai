@@ -1,10 +1,14 @@
 #include "action_executor.h"
 #include <winhttp.h>
+#include <set>
 
 ActionExecutor::ActionExecutor() : initialized_(false) {
     uiAutomation_ = std::make_unique<UIAutomation>();
     screenCapture_ = std::make_unique<ScreenCapture>();
     inputController_ = std::make_unique<InputController>();
+    credentialStore_ = std::make_unique<CredentialStore>();
+    aiProvider_ = std::make_unique<AIProvider>(*credentialStore_);
+    asyncManager_ = std::make_unique<AsyncRequestManager>();
 }
 
 ActionExecutor::~ActionExecutor() {
@@ -428,3 +432,98 @@ json ActionExecutor::CheckLocalLLM() {
     return result;
 }
 
+json ActionExecutor::RequestActions(const json& params) {
+    // Validate
+    if (!params.contains("provider") || !params.contains("user_request")) {
+        return {{"success", false}, {"error", "Missing provider or user_request"}};
+    }
+
+    std::string provider = params["provider"];
+    std::string userRequest = params["user_request"];
+
+    if (userRequest.empty() || userRequest.length() > 5000) {
+        return {{"success", false}, {"error", "user_request must be 1-5000 chars"}};
+    }
+
+    static const std::set<std::string> validProviders = {"openai", "anthropic", "ollama"};
+    if (validProviders.find(provider) == validProviders.end()) {
+        return {{"success", false}, {"error", "Unknown provider: " + provider}};
+    }
+
+    // Capture references for the lambda
+    auto* executor = this;
+
+    std::string requestId = asyncManager_->Submit([executor, provider, userRequest]() -> json {
+        // Capture screen
+        std::string screenshot;
+        json uiTree;
+
+        try {
+            ImageData pixels = executor->screenCapture_->CaptureScreen();
+            if (!pixels.empty()) {
+                int w, h;
+                executor->screenCapture_->GetScreenDimensions(w, h);
+                screenshot = executor->screenCapture_->EncodeToPNG(pixels, w, h);
+            }
+        } catch (...) {
+            LOG_ERROR(L"Screen capture failed during RequestActions");
+        }
+
+        try {
+            uiTree = executor->uiAutomation_->GetUITree();
+        } catch (...) {
+            LOG_ERROR(L"UI tree capture failed during RequestActions");
+            uiTree = json::object();
+        }
+
+        return executor->aiProvider_->GetActions(provider, screenshot, uiTree, userRequest);
+    });
+
+    return {{"request_id", requestId}, {"status", "queued"}};
+}
+
+json ActionExecutor::PollRequest(const json& params) {
+    if (!params.contains("request_id")) {
+        return {{"success", false}, {"error", "Missing request_id"}};
+    }
+    return asyncManager_->Poll(params["request_id"]);
+}
+
+json ActionExecutor::CancelRequest(const json& params) {
+    if (!params.contains("request_id")) {
+        return {{"success", false}, {"error", "Missing request_id"}};
+    }
+    return asyncManager_->Cancel(params["request_id"]);
+}
+
+json ActionExecutor::StoreApiKey(const json& params) {
+    if (!params.contains("provider") || !params.contains("api_key")) {
+        return {{"success", false}, {"error", "Missing provider or api_key"}};
+    }
+
+    std::string provider = params["provider"];
+    std::string apiKey = params["api_key"];
+
+    if (provider != "openai" && provider != "anthropic") {
+        return {{"success", false}, {"error", "Only openai and anthropic keys are stored"}};
+    }
+
+    if (apiKey.empty() || apiKey.length() > 500) {
+        return {{"success", false}, {"error", "Invalid API key length"}};
+    }
+
+    bool ok = credentialStore_->StoreKey(provider, apiKey);
+    return {{"success", ok}};
+}
+
+json ActionExecutor::DeleteApiKey(const json& params) {
+    if (!params.contains("provider")) {
+        return {{"success", false}, {"error", "Missing provider"}};
+    }
+    bool ok = credentialStore_->DeleteKey(params["provider"]);
+    return {{"success", ok}};
+}
+
+json ActionExecutor::GetProviderStatus(const json& /*params*/) {
+    return aiProvider_->GetProviderStatus();
+}

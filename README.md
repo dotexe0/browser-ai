@@ -1,286 +1,195 @@
 # browser-ai
 
-A Chromium-based browser with integrated AI panel functionality.
+A Chromium-based browser with integrated AI-powered desktop automation.
 
 ## Overview
 
-This project adds a custom AI panel interface to Chromium. The AI panel provides an integrated AI assistant experience directly within the browser UI.
+Browser-ai adds an AI automation panel to Chromium that can see your screen, understand UI elements, and execute desktop actions. The system uses a two-process architecture: the browser communicates with a C++ automation service over Native Messaging. All AI provider logic, credential storage, and async request handling run in the C++ service — no Python backend required.
+
+## Architecture
+
+```
+Browser (chrome://ai-panel)
+    | Native Messaging (stdin/stdout JSON)
+C++ Automation Service (automation_service.exe)
+    |-- Screen Capture (DXGI/D3D11)
+    |-- Input Control (SendInput)
+    |-- UI Inspection (UIAutomation)
+    |-- AI Providers (OpenAI, Anthropic, Ollama via WinHTTP)
+    |-- Credential Store (Windows Credential Manager)
+    +-- Async Requests (background thread + polling)
+```
 
 ## Project Structure
 
 ```
-src/                            # Mirrored chromium/src structure
-└── chrome/
-    └── browser/
-        └── ui/
-            ├── webui/
-            │   └── ai_panel/           # AI Panel WebUI
-            │       ├── ai_panel_ui.h
-            │       ├── ai_panel_ui.cc
-            │       ├── ai_panel_handler.h
-            │       ├── ai_panel_handler.cc
-            │       └── resources/
-            │           ├── ai_panel.html
-            │           ├── ai_panel.css
-            │           └── ai_panel.js
-            └── views/
-                └── side_panel/         # Side panel integration
-                    └── (your changes here)
+src/                                    # Mirrored chromium/src structure
+└── chrome/browser/ui/
+    ├── webui/ai_panel/                 # AI Panel WebUI
+    │   ├── ai_panel_ui.h / .cc
+    │   ├── ai_panel_handler.h / .cc
+    │   └── resources/
+    │       ├── ai_panel.html
+    │       ├── ai_panel.css
+    │       ├── ai_panel.js             # UI controller
+    │       ├── ai_provider_manager.js  # Thin provider client
+    │       └── native_messaging_helper.js  # Native Messaging transport
+    └── views/side_panel/              # Side panel integration
 
-sync-to-chromium.sh             # Script to copy files to chromium/src
-sync-from-chromium.sh           # Script to copy changes back from chromium/src
+automation_service/                     # C++ automation service
+├── src/
+│   ├── main.cpp                       # Entry point, handler registration
+│   ├── action_executor.cpp/.h         # Main orchestrator
+│   ├── native_messaging.cpp/.h        # Chrome Native Messaging protocol
+│   ├── screen_capture.cpp/.h          # GPU-accelerated capture (DXGI/D3D11)
+│   ├── ui_automation.cpp/.h           # Windows UIAutomation wrapper
+│   ├── input_controller.cpp/.h        # Mouse/keyboard via SendInput
+│   ├── credential_store.cpp/.h        # Windows Credential Manager for API keys
+│   ├── http_client.cpp/.h             # WinHTTP wrapper for API calls
+│   ├── ai_provider.cpp/.h             # OpenAI, Anthropic, Ollama routing
+│   ├── async_request.cpp/.h           # Background thread + polling
+│   └── common.h                       # Shared types and utilities
+├── CMakeLists.txt
+├── test_ping.py                       # Basic connectivity test
+├── test_automation.py                 # Full capabilities test
+└── test_new_handlers.py               # AI provider and credential tests
+
+sync-to-chromium.sh                    # Copy files to chromium/src
+sync-from-chromium.sh                  # Copy changes back from chromium/src
 ```
 
 ## Features
 
-- **AI Panel UI**: Custom WebUI controller for the AI panel
-- **Pluggable AI Providers**: OpenAI GPT-4 Vision (default), Local LLM (privacy mode)
-- **Provider Management**: Easy switching between AI backends with settings UI
-- **Modern Automation Interface**: Request input, action preview, execution log
-- **Side Panel Integration**: Integration with Chrome's side panel system (coming soon)
-- **Desktop Automation**: Screen capture, UI inspection, input control (Layer 2)
+- **AI-Powered Desktop Automation**: Describe what you want done; the AI analyzes your screen and executes actions
+- **Three AI Providers**: OpenAI GPT-4o, Anthropic Claude Sonnet 4, and Ollama (local/private)
+- **Secure Credential Storage**: API keys stored in Windows Credential Manager (OS-encrypted, per-user)
+- **Async Request Pipeline**: AI requests run on a background thread; browser polls for results
+- **Screen Capture**: GPU-accelerated via DXGI Desktop Duplication
+- **UI Inspection**: Windows UIAutomation tree for element-aware clicking
+- **Input Control**: Mouse clicks, keyboard typing, scroll, key combos via SendInput
+- **Action Preview**: Review AI-planned actions before execution
 
-## Verification & Testing
+## Quick Start
 
-Before building Chromium, you can verify Layer 1 (browser-side architecture) is working:
-
-### Quick Test (No Chromium Build Required)
+### 1. Build the Automation Service
 
 ```bash
-# Start test server
+cd automation_service
+mkdir build && cd build
+cmake ..
+cmake --build . --config Release
+```
+
+### 2. Register with Chrome
+
+```bash
+automation_service/register-manifest.bat
+```
+
+### 3. Configure AI Provider
+
+- **Ollama (local, free)**: Install [Ollama](https://ollama.com), run `ollama pull llava && ollama serve`
+- **OpenAI / Anthropic**: Enter your API key in the browser panel Settings
+
+### 4. Run
+
+Navigate to `chrome://ai-panel` (requires Chromium build) or use the test harness:
+
+```bash
 cd test
-chmod +x run-test-server.sh
 ./run-test-server.sh
-
-# Open browser to: http://localhost:8000/test/layer1-test.html
+# Open http://localhost:8000/test/layer1-test.html
 ```
 
-This will run automated tests for:
-- ✓ AI Provider interface and base class
-- ✓ OpenAI Provider implementation
-- ✓ Local LLM Provider stub
-- ✓ Provider Manager (registration, switching, configuration)
-- ✓ UI integration and styling
+## Testing
 
-**Expected result**: All 30+ tests should pass ✓
-
-See [`test/README.md`](test/README.md) for detailed testing instructions.
-
-### What Layer 1 Tests Verify
-
-- JavaScript architecture and provider abstraction
-- Provider registration and management
-- API key configuration and storage
-- Action validation and formatting
-- UI component rendering
-- CSS styling application
-
-### What Requires Chromium Build
-
-The following features require building Chromium:
-- WebUI integration (`chrome://ai-panel`)
-- C++ message handlers
-- Native Messaging with automation service
-- Actual screen capture and automation (Layer 2)
-
-## Installation
-
-### Prerequisites
-
-- Follow the standard [Chromium build prerequisites](https://chromium.googlesource.com/chromium/src/+/main/docs/windows_build_instructions.md) for your platform
-- depot_tools installed and configured
-- Git
-- Bash (Git Bash on Windows)
-
-### Setup
-
-1. **Clone this repository:**
-   ```bash
-   git clone https://github.com/dotexe0/browser-ai.git
-   cd browser-ai
-   ```
-
-2. **Get the Chromium source:**
-   ```bash
-   # Fetch depot_tools if you don't have it
-   git clone https://chromium.googlesource.com/chromium/tools/depot_tools.git
-   export PATH="$PATH:${PWD}/depot_tools"  # Linux/Mac
-   # set PATH=%PATH%;%CD%\depot_tools       # Windows cmd
-   
-   # Create chromium directory and fetch source
-   mkdir chromium
-   cd chromium
-   fetch --nohooks chromium
-   cd src
-   ```
-
-3. **Sync custom files to Chromium:**
-   ```bash
-   # From the browser-ai directory
-   cd ../..  # back to browser-ai root
-   
-   # Make the sync script executable
-   chmod +x sync-to-chromium.sh
-   
-   # Sync files to chromium
-   ./sync-to-chromium.sh
-   ```
-
-4. **Sync dependencies:**
-   ```bash
-   cd chromium/src
-   gclient sync
-   gclient runhooks
-   ```
-
-5. **Configure the build:**
-   
-   You'll need to integrate the AI panel into the Chromium build system:
-   
-   a. Add to `chrome/browser/ui/webui/BUILD.gn`:
-   ```gn
-   # Add to sources list
-   "webui/ai_panel/ai_panel_handler.cc",
-   "webui/ai_panel/ai_panel_handler.h",
-   "webui/ai_panel/ai_panel_ui.cc",
-   "webui/ai_panel/ai_panel_ui.h",
-   ```
-   
-   b. Register the WebUI in `chrome/browser/ui/webui/chrome_web_ui_controller_factory.cc`:
-   ```cpp
-   #include "chrome/browser/ui/webui/ai_panel/ai_panel_ui.h"
-   
-   // In GetWebUIType or similar function:
-   if (url.host() == "ai-panel")
-     return &NewWebUI<AIPanelUI>;
-   ```
-
-6. **Generate build files:**
-   ```bash
-   gn gen out/Default
-   # Or for a release build:
-   gn gen out/Default --args='is_debug=false'
-   ```
-
-7. **Build Chromium:**
-   ```bash
-   autoninja -C out/Default chrome
-   ```
-
-### Running
-
-After building, you can run the browser:
+### Browser UI (no build required)
 ```bash
-# Windows
-out/Default/chrome.exe
-
-# Linux
-out/Default/chrome
-
-# Mac
-out/Default/Chromium.app/Contents/MacOS/Chromium
+cd test && ./run-test-server.sh
+# Open http://localhost:8000/test/layer1-test.html (36+ unit tests)
+# Open http://localhost:8000/test/simple-demo.html (interactive demo)
 ```
 
-To access the AI panel, navigate to:
+### Automation Service
+```bash
+cd automation_service
+python test_ping.py              # Basic connectivity
+python test_automation.py        # Screen capture, input, UI inspection
+python test_new_handlers.py      # AI providers, credentials, async requests
 ```
-chrome://ai-panel
+
+### Full E2E
+```bash
+# Terminal 1 (if using Ollama):
+ollama serve
+
+# Terminal 2:
+cd test
+python test_ai_automation.py     # AI-driven Notepad automation
+python demo_automation.py        # Quick automation demo (no AI)
 ```
+
+## Native Messaging Protocol
+
+JSON over stdin/stdout with Chrome's 4-byte length prefix:
+
+| Action | Description |
+|--------|-------------|
+| `ping` | Health check |
+| `get_capabilities` | List available features |
+| `capture_screen` | Screenshot as base64 PNG |
+| `inspect_ui` | UIAutomation tree as JSON |
+| `execute_action` | Run a single action (click, type, etc.) |
+| `execute_actions` | Run multiple actions sequentially |
+| `check_local_llm` | Check if Ollama is running locally |
+| `get_actions` | Submit async AI request (returns `request_id`) |
+| `poll` | Check async request status |
+| `cancel` | Cancel async request |
+| `store_api_key` | Save API key to Windows Credential Manager |
+| `delete_api_key` | Remove stored API key |
+| `get_provider_status` | Check which providers are configured/available |
+
+## Dependencies
+
+- **Build**: CMake 3.20+, MSVC (Visual Studio 2022)
+- **Runtime**: Windows 10+ (for DXGI, UIAutomation, WinHTTP, Credential Manager)
+- **AI**: OpenAI API key, Anthropic API key, or [Ollama](https://ollama.com) with `llava` model
+- **Optional**: Chromium source + depot_tools (for full browser integration)
+
+## Chromium Integration (Optional)
+
+For full `chrome://ai-panel` integration:
+
+```bash
+./sync-to-chromium.sh
+cd chromium/src
+gn gen out/Default
+autoninja -C out/Default chrome
+```
+
+See `docs/plans/` for detailed integration guides.
 
 ## Development Workflow
 
-### Making Changes
-
-**Option 1: Work directly in chromium/src (Recommended for development)**
-
-1. Make your changes in `chromium/src/chrome/browser/ui/...`
-2. Build and test your changes
-3. When ready to commit, sync changes back to the repo:
-   ```bash
-   ./sync-from-chromium.sh
-   ```
-4. Review and commit:
-   ```bash
-   git status
-   git add src/
-   git commit -m "Your commit message"
-   git push origin main
-   ```
-
-**Option 2: Work in src/ directory and sync**
-
-1. Make changes in the `src/` directory
-2. Sync to chromium:
-   ```bash
-   ./sync-to-chromium.sh
-   ```
-3. Build and test in chromium/src
-4. Commit changes from src/ directory:
-   ```bash
-   git add src/
-   git commit -m "Your commit message"
-   git push origin main
-   ```
-
-### Adding New Files
-
-When you add new files to `chromium/src/chrome/browser/ui/`:
-
-1. Create the same file in your repo's `src/chrome/browser/ui/` directory
-2. Or work in chromium and sync back with `./sync-from-chromium.sh`
-3. Update the sync scripts if you add new directories
-
-### Testing
-
-```bash
-# Run Chromium tests
-cd chromium/src
-out/Default/unit_tests --gtest_filter="AIPanelUI*"
-```
-
-## Why This Structure?
-
-The `src/` directory mirrors the chromium source tree structure, allowing:
-
-✅ **Easy syncing** between your repo and chromium source  
-✅ **Track only your custom changes**, not the entire chromium codebase  
-✅ **Clear organization** of what files you've modified  
-✅ **Version control** for your changes without conflicts  
-✅ **Easy collaboration** - others can apply your changes to their chromium checkout
-
-The sync scripts automate file copying between your tracked `src/` directory and the ignored `chromium/src/` directory.
-
-## Contributing
-
-Contributions are welcome! Please:
-
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes in the `src/` directory
-4. Test thoroughly with a Chromium build
-5. Submit a pull request
+1. **Edit** in `src/` (tracked) or `chromium/src/` (direct)
+2. **Sync** with `./sync-to-chromium.sh` or `./sync-from-chromium.sh`
+3. **Build** the automation service with CMake
+4. **Test** with the Python test scripts
 
 ## Roadmap
 
-- [x] AI Panel WebUI structure
-- [x] AI Panel handler implementation
-- [ ] Side panel integration
-- [ ] AI backend service integration
+- [x] AI Panel WebUI
+- [x] Side panel integration
+- [x] Desktop automation (screen capture, UI inspection, input control)
+- [x] AI provider routing (OpenAI, Anthropic, Ollama)
+- [x] Secure credential storage (Windows Credential Manager)
+- [x] Async AI request pipeline
+- [x] Eliminate Python backend dependency
+- [ ] Streaming AI responses
+- [ ] Multi-monitor support
 - [ ] Keyboard shortcuts for panel access
 - [ ] Panel theming
-- [ ] Unit tests
-- [ ] Integration tests
 
 ## License
 
 This project is based on Chromium, which is licensed under the BSD license. The AI panel code follows the same license.
-
-## Acknowledgments
-
-- Built on top of the [Chromium project](https://www.chromium.org/)
-- Uses Chromium's WebUI framework for the AI panel interface
-
-## Resources
-
-- [Chromium WebUI Documentation](https://chromium.googlesource.com/chromium/src/+/main/docs/webui_explainer.md)
-- [Chromium Build Instructions](https://chromium.googlesource.com/chromium/src/+/main/docs/README.md)
-- [Depot Tools Tutorial](https://commondatastorage.googleapis.com/chrome-infra-docs/flat/depot_tools/docs/html/depot_tools_tutorial.html)

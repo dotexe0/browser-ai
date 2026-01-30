@@ -58,6 +58,30 @@ int main(int argc, char* argv[]) {
         return executor->CheckLocalLLM();
     });
     
+    messaging.RegisterHandler("get_actions", [&](const json& msg) -> json {
+        return executor->RequestActions(msg);
+    });
+
+    messaging.RegisterHandler("poll", [&](const json& msg) -> json {
+        return executor->PollRequest(msg);
+    });
+
+    messaging.RegisterHandler("cancel", [&](const json& msg) -> json {
+        return executor->CancelRequest(msg);
+    });
+
+    messaging.RegisterHandler("store_api_key", [&](const json& msg) -> json {
+        return executor->StoreApiKey(msg);
+    });
+
+    messaging.RegisterHandler("delete_api_key", [&](const json& msg) -> json {
+        return executor->DeleteApiKey(msg);
+    });
+
+    messaging.RegisterHandler("get_provider_status", [&](const json& msg) -> json {
+        return executor->GetProviderStatus(msg);
+    });
+
     messaging.RegisterHandler("ping", [&](const json& msg) -> json {
         return {
             {"success", true},

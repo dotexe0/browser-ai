@@ -1,12 +1,14 @@
 /**
  * AI Automation Panel - Main Controller
- * 
+ *
  * Orchestrates the automation UI, provider management, and execution flow.
+ * All AI and automation calls go through NativeMessagingHelper to the C++ service.
  */
 
 class AutomationPanel {
-  constructor() {
-    this.providerManager = new AIProviderManager();
+  constructor(nativeMessaging) {
+    this.native = nativeMessaging;
+    this.providerManager = new AIProviderManager(nativeMessaging);
     this.currentScreenshot = null;
     this.currentUITree = null;
     this.plannedActions = null;
@@ -20,44 +22,41 @@ class AutomationPanel {
   initializeUI() {
     // Populate provider dropdown
     this.populateProviderDropdown();
-    
-    // Check if active provider is configured
-    const activeProvider = this.providerManager.getActiveProvider();
-    if (activeProvider && activeProvider.isConfigured()) {
-      this.enableAutomation();
-      this.log('AI provider configured and ready', 'success');
-    } else {
-      this.log('Please configure an AI provider in settings', 'warning');
-    }
+
+    // Check provider status
+    this.updateProviderStatus();
+    this.log('AI panel initialized', 'success');
   }
 
   /**
-   * Populate provider dropdown
+   * Populate provider dropdown from C++ service status
    */
   populateProviderDropdown() {
     const select = document.getElementById('provider-select');
-    const providers = this.providerManager.getAvailableProviders();
-    
+    const status = this.providerManager.getProviderStatus();
+
     select.innerHTML = '';
-    
-    providers.forEach(provider => {
+
+    for (const [name, info] of Object.entries(status)) {
       const option = document.createElement('option');
-      option.value = provider.name;
-      option.textContent = provider.name;
-      
-      // Mark if not configured
-      if (!provider.configured && provider.requiresApiKey) {
+      option.value = name;
+      option.textContent = name;
+
+      if (info.type === 'cloud' && !info.has_key) {
         option.textContent += ' (needs API key)';
       }
-      
+      if (info.type === 'local' && !info.available) {
+        option.textContent += ' (not running)';
+      }
+
       select.appendChild(option);
-    });
-    
+    }
+
     // Set current selection
-    const activeProvider = this.providerManager.getActiveProvider();
-    if (activeProvider) {
-      select.value = activeProvider.name;
-      this.updateProviderInfo(activeProvider.name);
+    const active = this.providerManager.getActiveProvider();
+    if (active) {
+      select.value = active;
+      this.updateProviderInfo(active);
     }
   }
 
@@ -65,22 +64,22 @@ class AutomationPanel {
    * Update provider info display
    */
   updateProviderInfo(providerName) {
-    const provider = this.providerManager.getProvider(providerName);
     const infoDiv = document.getElementById('provider-info');
     const apiKeySection = document.getElementById('api-key-section');
-    
-    if (!provider) return;
-    
-    // Show provider info
-    let infoText = provider.supportsVision ? '✓ Supports vision' : '✗ No vision support';
-    if (provider.requiresApiKey) {
-      infoText += ' | Requires API key';
+    const status = this.providerManager.getProviderStatus();
+    const info = status[providerName];
+
+    if (!info) return;
+
+    let infoText = '';
+    if (info.type === 'cloud') {
+      infoText = info.has_key ? 'API key configured' : 'Requires API key';
       apiKeySection.classList.remove('hidden');
     } else {
-      infoText += ' | No API key needed';
+      infoText = info.available ? 'Local model available' : 'Not running';
       apiKeySection.classList.add('hidden');
     }
-    
+
     infoDiv.textContent = infoText;
   }
 
@@ -92,48 +91,48 @@ class AutomationPanel {
     document.getElementById('settings-btn').addEventListener('click', () => {
       this.toggleSettings();
     });
-    
+
     document.getElementById('close-settings').addEventListener('click', () => {
       this.toggleSettings();
     });
-    
+
     // Provider selection
     document.getElementById('provider-select').addEventListener('change', (e) => {
       this.onProviderChanged(e.target.value);
     });
-    
+
     // API key management
     document.getElementById('toggle-api-key').addEventListener('click', () => {
       this.toggleApiKeyVisibility();
     });
-    
+
     document.getElementById('save-api-key').addEventListener('click', () => {
       this.saveApiKey();
     });
-    
+
     // Clear history
     document.getElementById('clear-history').addEventListener('click', () => {
-      this.clearConversationHistory();
+      this.log('Conversation history cleared', 'info');
     });
-    
+
     // Automation controls
     document.getElementById('execute-btn').addEventListener('click', () => {
       this.executeAutomation();
     });
-    
+
     document.getElementById('capture-screen-btn').addEventListener('click', () => {
       this.captureScreen();
     });
-    
+
     // Actions confirmation
     document.getElementById('confirm-actions-btn').addEventListener('click', () => {
       this.confirmAndExecuteActions();
     });
-    
+
     document.getElementById('cancel-actions-btn').addEventListener('click', () => {
       this.cancelActions();
     });
-    
+
     // Log management
     document.getElementById('clear-log').addEventListener('click', () => {
       this.clearLog();
@@ -146,7 +145,7 @@ class AutomationPanel {
   toggleSettings() {
     const settingsPanel = document.getElementById('settings-panel');
     const mainPanel = document.getElementById('main-panel');
-    
+
     settingsPanel.classList.toggle('hidden');
     mainPanel.classList.toggle('hidden');
   }
@@ -156,20 +155,9 @@ class AutomationPanel {
    */
   onProviderChanged(providerName) {
     this.log(`Switching to provider: ${providerName}`, 'info');
-    
-    if (this.providerManager.setActiveProvider(providerName)) {
-      this.updateProviderInfo(providerName);
-      this.updateProviderStatus();
-      
-      const provider = this.providerManager.getProvider(providerName);
-      if (provider.isConfigured()) {
-        this.enableAutomation();
-        this.log(`Provider ${providerName} is ready`, 'success');
-      } else {
-        this.disableAutomation();
-        this.log(`Provider ${providerName} requires configuration`, 'warning');
-      }
-    }
+    this.providerManager.setActiveProvider(providerName);
+    this.updateProviderInfo(providerName);
+    this.updateProviderStatus();
   }
 
   /**
@@ -178,21 +166,21 @@ class AutomationPanel {
   toggleApiKeyVisibility() {
     const input = document.getElementById('api-key-input');
     const btn = document.getElementById('toggle-api-key');
-    
+
     if (input.type === 'password') {
       input.type = 'text';
-      btn.textContent = '🙈';
+      btn.textContent = 'Hide';
     } else {
       input.type = 'password';
-      btn.textContent = '👁️';
+      btn.textContent = 'Show';
     }
   }
 
   /**
-   * Save API key
+   * Save API key via C++ Credential Store
    */
   async saveApiKey() {
-    const providerName = this.providerManager.getActiveProvider().name;
+    const providerName = this.providerManager.getActiveProvider();
     const apiKey = document.getElementById('api-key-input').value.trim();
     const statusDiv = document.getElementById('api-key-status');
 
@@ -202,10 +190,10 @@ class AutomationPanel {
     }
 
     try {
-      await this.providerManager.configureProvider(providerName, apiKey);
+      await this.providerManager.storeApiKey(providerName, apiKey);
       this.showStatus(statusDiv, 'API key saved successfully', 'success');
-      this.enableAutomation();
       this.updateProviderStatus();
+      this.populateProviderDropdown();
       this.log(`API key configured for ${providerName}`, 'success');
     } catch (error) {
       this.showStatus(statusDiv, `Error: ${error.message}`, 'error');
@@ -213,34 +201,18 @@ class AutomationPanel {
   }
 
   /**
-   * Clear conversation history
-   */
-  clearConversationHistory() {
-    this.providerManager.clearConversationHistory();
-    this.log('Conversation history cleared', 'info');
-  }
-
-  /**
-   * Capture screen via backend automation service
+   * Capture screen via native messaging
    */
   async captureScreen() {
     this.log('Capturing screen...', 'info');
     this.setAutomationStatus('working');
 
     try {
-      const response = await fetch('http://localhost:5000/api/capture', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ action: 'capture' })
-      });
+      const captureData = await this.native.captureScreen();
+      this.currentScreenshot = captureData.screenshot || '';
 
-      if (!response.ok) {
-        throw new Error(`Capture failed: ${response.status}`);
-      }
-
-      const data = await response.json();
-      this.currentScreenshot = data.screenshot || '';
-      this.currentUITree = data.ui_tree || {};
+      const uiData = await this.native.inspectUI();
+      this.currentUITree = uiData.uiTree || {};
 
       if (this.currentScreenshot) {
         this.displayScreenPreview(this.currentScreenshot);
@@ -256,52 +228,35 @@ class AutomationPanel {
   }
 
   /**
-   * Sanitize user request input
-   * @param {string} input
-   * @returns {string}
-   */
-  sanitizeRequest(input) {
-    let sanitized = (input || '').trim();
-    sanitized = sanitized.slice(0, 2000);
-    sanitized = sanitized.replace(/[^\P{Cc}\n]/gu, '');
-    return sanitized;
-  }
-
-  /**
-   * Execute automation
+   * Execute automation — request actions from AI via C++ service
    */
   async executeAutomation() {
-    const userRequest = this.sanitizeRequest(document.getElementById('user-request').value);
-    
+    const userRequest = (document.getElementById('user-request').value || '').trim();
+
     if (!userRequest) {
       this.log('Please enter an automation request', 'warning');
       return;
     }
-    
+
     this.log(`Processing request: "${userRequest}"`, 'info');
     this.setAutomationStatus('working');
     document.getElementById('execute-btn').disabled = true;
-    
+
     try {
-      // Capture screen if not already captured
-      if (!this.currentScreenshot || !this.currentUITree) {
-        await this.captureScreen();
-      }
-      
-      // Get actions from AI provider
       this.log('Requesting actions from AI provider...', 'info');
-      const actions = await this.providerManager.getActions({
-        screenshot: this.currentScreenshot,
-        uiTree: this.currentUITree,
-        userRequest: userRequest
-      });
-      
+      const result = await this.providerManager.getActions(userRequest);
+
+      if (result.status === 'error' || result.error) {
+        throw new Error(result.error || 'AI request failed');
+      }
+
+      const actions = result.actions || [];
       this.log(`AI returned ${actions.length} actions`, 'success');
-      
+
       // Display actions for confirmation
       this.displayActions(actions);
       this.plannedActions = actions;
-      
+
       this.setAutomationStatus('ready');
     } catch (error) {
       this.log(`Error: ${error.message}`, 'error');
@@ -312,19 +267,11 @@ class AutomationPanel {
   }
 
   /**
-   * Confirm and execute actions via backend
+   * Confirm and execute actions via native messaging
    */
   async confirmAndExecuteActions() {
     if (!this.plannedActions || this.plannedActions.length === 0) {
       return;
-    }
-
-    for (let i = 0; i < this.plannedActions.length; i++) {
-      const validation = this.validateAction(this.plannedActions[i]);
-      if (!validation.valid) {
-        this.log(`Action ${i + 1} is invalid: ${validation.error}`, 'error');
-        return;
-      }
     }
 
     this.log('Executing actions...', 'info');
@@ -332,29 +279,19 @@ class AutomationPanel {
     document.getElementById('actions-section').classList.add('hidden');
 
     try {
-      const response = await fetch('http://localhost:5000/api/get-actions', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          provider: this.providerManager.getActiveProvider()?.providerId || 'ollama',
-          screenshot: this.currentScreenshot || '',
-          ui_tree: this.currentUITree || {},
-          user_request: document.getElementById('user-request').value.trim(),
-          execute: true,
-          actions: this.plannedActions
-        })
-      });
+      const result = await this.native.executeActions(this.plannedActions);
 
-      const data = await response.json();
-
-      if (data.all_executed) {
+      if (result.success) {
         this.log('All actions executed successfully', 'success');
-      } else if (data.execution_failed_at !== undefined) {
-        this.log(`Execution failed at action ${data.execution_failed_at + 1}`, 'error');
+      } else {
+        this.log(`Execution error: ${result.error || 'Unknown error'}`, 'error');
       }
 
       this.setAutomationStatus('ready');
       this.plannedActions = null;
+      // Clear screenshot so next request captures fresh
+      this.currentScreenshot = null;
+      this.currentUITree = null;
     } catch (error) {
       this.log(`Execution error: ${error.message}`, 'error');
       this.setAutomationStatus('error');
@@ -376,7 +313,7 @@ class AutomationPanel {
   displayScreenPreview(screenshot) {
     const preview = document.getElementById('screenshot-preview');
     const section = document.getElementById('preview-section');
-    
+
     preview.innerHTML = `<img src="data:image/png;base64,${screenshot}" alt="Screen capture">`;
     section.classList.remove('hidden');
   }
@@ -390,94 +327,31 @@ class AutomationPanel {
   }
 
   /**
-   * Validate a single automation action
-   * @param {Object} action
-   * @returns {{valid: boolean, error?: string}}
-   */
-  validateAction(action) {
-    const allowedTypes = ['click', 'type', 'scroll', 'press_keys', 'wait'];
-    if (!action || !action.action || !allowedTypes.includes(action.action)) {
-      return { valid: false, error: `Invalid action type: ${action?.action}` };
-    }
-    const params = action.params || {};
-    switch (action.action) {
-      case 'click': {
-        const x = params.x;
-        const y = params.y;
-        if (typeof x !== 'number' || typeof y !== 'number') {
-          return { valid: false, error: 'Click requires numeric x and y coordinates' };
-        }
-        if (x < 0 || x > 10000 || y < 0 || y > 10000) {
-          return { valid: false, error: 'Click coordinates out of range (0-10000)' };
-        }
-        break;
-      }
-      case 'type': {
-        const text = params.text;
-        if (typeof text !== 'string' || text.length === 0) {
-          return { valid: false, error: 'Type requires non-empty string text' };
-        }
-        if (text.length > 10000) {
-          return { valid: false, error: 'Type text exceeds maximum length of 10000' };
-        }
-        break;
-      }
-      case 'wait': {
-        const ms = params.ms;
-        if (typeof ms !== 'number') {
-          return { valid: false, error: 'Wait requires numeric ms value' };
-        }
-        if (ms < 0 || ms > 30000) {
-          return { valid: false, error: 'Wait ms out of range (0-30000)' };
-        }
-        break;
-      }
-      case 'scroll': {
-        const delta = params.delta;
-        if (typeof delta !== 'number') {
-          return { valid: false, error: 'Scroll requires numeric delta value' };
-        }
-        break;
-      }
-      case 'press_keys': {
-        const keys = params.keys;
-        if (!Array.isArray(keys) || keys.length === 0) {
-          return { valid: false, error: 'press_keys requires non-empty keys array' };
-        }
-        break;
-      }
-    }
-    return { valid: true };
-  }
-
-  /**
    * Display planned actions
    */
   displayActions(actions) {
     const section = document.getElementById('actions-section');
     const list = document.getElementById('actions-list');
-    
+
     list.innerHTML = '';
-    
+
     actions.forEach((action, index) => {
       const item = document.createElement('div');
-      const validation = this.validateAction(action);
-      item.className = 'action-item' + (validation.valid ? '' : ' invalid');
+      item.className = 'action-item';
 
       item.innerHTML = `
         <div class="action-details">
-          <div class="action-type">${index + 1}. ${action.action.toUpperCase()}${validation.valid ? '' : ' [INVALID]'}</div>
+          <div class="action-type">${index + 1}. ${action.action.toUpperCase()}</div>
           <div class="action-params">${JSON.stringify(action.params)}</div>
-          ${validation.valid ? '' : `<div class="action-error">${validation.error}</div>`}
         </div>
         <div class="action-confidence">
-          ${Math.round(action.confidence * 100)}% confident
+          ${Math.round((action.confidence || 0.7) * 100)}% confident
         </div>
       `;
 
       list.appendChild(item);
     });
-    
+
     section.classList.remove('hidden');
   }
 
@@ -486,11 +360,14 @@ class AutomationPanel {
    */
   updateProviderStatus() {
     const badge = document.getElementById('provider-status');
-    const activeProvider = this.providerManager.getActiveProvider();
-    
-    if (activeProvider && activeProvider.isConfigured()) {
-      badge.textContent = `Provider: ${activeProvider.name}`;
-      badge.className = 'status-badge ready';
+    const active = this.providerManager.getActiveProvider();
+    const status = this.providerManager.getProviderStatus();
+    const info = status[active];
+
+    if (info) {
+      const ready = info.type === 'local' ? info.available : info.has_key;
+      badge.textContent = `Provider: ${active}`;
+      badge.className = ready ? 'status-badge ready' : 'status-badge error';
     } else {
       badge.textContent = 'Not configured';
       badge.className = 'status-badge error';
@@ -507,7 +384,7 @@ class AutomationPanel {
       'working': { text: 'Working...', class: 'working' },
       'error': { text: 'Error', class: 'error' }
     };
-    
+
     const config = statusMap[status] || statusMap.ready;
     badge.textContent = config.text;
     badge.className = `status-badge ${config.class}`;
@@ -534,10 +411,10 @@ class AutomationPanel {
     const logOutput = document.getElementById('log-output');
     const entry = document.createElement('p');
     entry.className = `log-entry ${type}`;
-    
+
     const timestamp = new Date().toLocaleTimeString();
     entry.textContent = `[${timestamp}] ${message}`;
-    
+
     logOutput.appendChild(entry);
     logOutput.scrollTop = logOutput.scrollHeight;
   }
@@ -557,7 +434,7 @@ class AutomationPanel {
     element.textContent = message;
     element.className = `status-message ${type}`;
     element.style.display = 'block';
-    
+
     setTimeout(() => {
       element.style.display = 'none';
     }, 5000);
@@ -567,7 +444,8 @@ class AutomationPanel {
 
 // Initialize the panel when DOM is ready
 document.addEventListener('DOMContentLoaded', async () => {
-  const panel = new AutomationPanel();
+  const native = new NativeMessagingHelper();
+  const panel = new AutomationPanel(native);
   await panel.providerManager.ready;
   panel.initializeUI();
   panel.updateProviderStatus();

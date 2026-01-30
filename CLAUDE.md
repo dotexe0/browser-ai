@@ -4,11 +4,10 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Project Overview
 
-Browser-ai is a Chromium-based browser with AI-powered desktop automation. The system has three layers:
+Browser-ai is a Chromium-based browser with AI-powered desktop automation. The system has two layers:
 
-1. **Browser UI (Layer 1)** - Chrome WebUI at `chrome://ai-panel` with JavaScript AI providers
-2. **Automation Service (Layer 2)** - C++ Windows service for screen capture, UI inspection, and input control
-3. **AI Backend (Layer 3)** - Python Flask proxy supporting OpenAI GPT-4 Vision and Ollama (local)
+1. **Browser UI** - Chrome WebUI at `chrome://ai-panel` with thin JavaScript client
+2. **Automation Service** - C++ Windows service handling screen capture, UI inspection, input control, AI provider routing, credential storage, and async request management
 
 ## Build Commands
 
@@ -27,14 +26,6 @@ After building, register with Chrome:
 automation_service/register-manifest.bat
 ```
 
-### Python Backend
-```bash
-cd backend
-pip install -r requirements.txt
-cp env-template.txt .env  # Then edit with API keys
-python server.py          # Runs on http://localhost:5000
-```
-
 ### Chromium Build (optional, for full integration)
 ```bash
 ./sync-to-chromium.sh     # Copy custom files to chromium/src
@@ -45,7 +36,7 @@ autoninja -C out/Default chrome
 
 ## Testing
 
-### Layer 1 (Browser UI) - No build required
+### Browser UI - No build required
 ```bash
 cd test
 ./run-test-server.sh
@@ -53,33 +44,20 @@ cd test
 # Open http://localhost:8000/test/simple-demo.html (interactive demo)
 ```
 
-### Layer 2 (Automation Service)
+### Automation Service
 ```bash
 cd automation_service
-python test_ping.py        # Basic connectivity
-python test_automation.py  # Full capabilities (screen capture, input, UI inspection)
+python test_ping.py              # Basic connectivity
+python test_automation.py        # Full capabilities (screen capture, input, UI inspection)
+python test_new_handlers.py      # AI providers, credentials, async requests
 ```
 
-### Layer 3 (Backend)
+### Full E2E Test
 ```bash
-# Terminal 1: Start server
-cd backend && python server.py
-
-# Terminal 2: Run tests
-cd backend
-python test_backend.py     # Health checks
-python test_e2e.py         # Full integration
-```
-
-### Full E2E Test (all layers)
-```bash
-# Terminal 1: Backend
-cd backend && python server.py
-
-# Terminal 2: Ollama (if using local AI)
+# Terminal 1: Ollama (if using local AI)
 ollama serve
 
-# Terminal 3: E2E test
+# Terminal 2: E2E test
 cd test
 python test_ai_automation.py   # Opens Notepad, AI types text
 python demo_automation.py      # Quick automation demo (no AI)
@@ -89,14 +67,14 @@ python demo_automation.py      # Quick automation demo (no AI)
 
 ```
 Browser (chrome://ai-panel)
-    ↓ WebUI Bridge (chrome.send())
-C++ WebUI Handler (ai_panel_handler.cc)
-    ↓ HTTP
-Python Backend (server.py)
-    ↓ Subprocess + Native Messaging
+    | Native Messaging (stdin/stdout JSON)
 C++ Automation Service (automation_service.exe)
-    ↓ Windows API
-Desktop (UIAutomation, DXGI, SendInput)
+    |-- Screen Capture (DXGI/D3D11)
+    |-- Input Control (SendInput)
+    |-- UI Inspection (UIAutomation)
+    |-- AI Providers (OpenAI, Anthropic, Ollama via WinHTTP)
+    |-- Credential Store (Windows Credential Manager)
+    +-- Async Requests (background thread + polling)
 ```
 
 ### Key Directories
@@ -108,17 +86,22 @@ Desktop (UIAutomation, DXGI, SendInput)
   - `ui_automation.cpp` - Windows UIAutomation wrapper
   - `screen_capture.cpp` - GPU-accelerated capture (DXGI/D3D11)
   - `input_controller.cpp` - Mouse/keyboard via SendInput
-- `backend/` - Python AI proxy
-  - `server.py` - Flask server with provider routing
+  - `credential_store.cpp` - Windows Credential Manager for API keys
+  - `http_client.cpp` - WinHTTP wrapper for AI API calls
+  - `ai_provider.cpp` - OpenAI, Anthropic, Ollama routing
+  - `async_request.cpp` - Background thread + polling for AI requests
 
 ### AI Provider System
 
-JavaScript providers in `src/.../resources/`:
-- `ai_provider_interface.js` - Base class
-- `ai_provider_manager.js` - Provider registry and switching
-- `openai_provider.js`, `ollama_provider.js`, `local_llm_provider.js`
+The C++ automation service handles all AI provider logic:
+- `ai_provider.cpp` - Routes requests to OpenAI (GPT-4o), Anthropic (Claude Sonnet 4), or Ollama (llava)
+- `credential_store.cpp` - Stores API keys in Windows Credential Manager (encrypted by OS)
+- `async_request.cpp` - Runs AI calls on a background thread, browser polls for results
 
-To add a new provider: extend `AIProvider` class, register with `AIProviderManager`, add backend handler in `server.py`.
+Browser JavaScript is a thin client:
+- `native_messaging_helper.js` - Native Messaging transport
+- `ai_provider_manager.js` - Thin wrapper for provider selection and async polling
+- `ai_panel.js` - UI controller
 
 ### Native Messaging Protocol
 
@@ -127,6 +110,10 @@ JSON over stdin/stdout with Chrome's 4-byte length prefix:
 {"action": "capture_screen"}
 {"action": "execute_action", "params": {"action": "click", "params": {"x": 100, "y": 200}}}
 {"action": "inspect_ui"}
+{"action": "get_actions", "provider": "openai", "user_request": "Open Notepad"}
+{"action": "poll", "request_id": "abc12345"}
+{"action": "store_api_key", "provider": "openai", "api_key": "sk-..."}
+{"action": "get_provider_status"}
 ```
 
 ## Development Workflow
@@ -135,16 +122,15 @@ Two options for Chromium files:
 1. **Direct**: Edit in `chromium/src/`, then `./sync-from-chromium.sh` to save changes
 2. **Tracked**: Edit in `src/`, then `./sync-to-chromium.sh` to copy to Chromium
 
-Layer 1 + 2 can be tested without building Chromium using `test/layer1-test.html`.
+Browser UI + Automation Service can be tested without building Chromium using `test/layer1-test.html`.
 
 ## Dependencies
 
-- **C++**: Windows SDK (UIAutomation, D3D11, DXGI), nlohmann/json (header-only in third_party/)
-- **Python**: Flask, Flask-CORS, requests, python-dotenv
-- **AI**: OpenAI API key OR Ollama with `llava` model
+- **C++**: Windows SDK (UIAutomation, D3D11, DXGI, WinHTTP, wincred.h), nlohmann/json (header-only in third_party/)
+- **AI**: OpenAI API key OR Anthropic API key OR Ollama with `llava` model
 
 ## Configuration
 
-- `backend/.env` - API keys (OPENAI_API_KEY, ANTHROPIC_API_KEY, OLLAMA_MODEL)
+- API keys are stored in Windows Credential Manager (managed via the Settings panel or `store_api_key` action)
 - `automation_service/manifest.json.in` - Native Messaging manifest template
 - `src/.../BUILD.gn` - Chromium build integration

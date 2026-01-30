@@ -148,6 +148,76 @@ class NativeMessagingHelper {
     const response = await this.sendMessage({action: 'check_local_llm'});
     return response;
   }
+
+  /**
+   * Store an API key in the C++ service (Windows Credential Manager)
+   */
+  async storeApiKey(provider, apiKey) {
+    const response = await this.sendMessage({
+      action: 'store_api_key', provider, api_key: apiKey
+    });
+    if (!response || !response.success) {
+      throw new Error(response?.error || 'Failed to store API key');
+    }
+    return response;
+  }
+
+  /**
+   * Delete an API key
+   */
+  async deleteApiKey(provider) {
+    return this.sendMessage({action: 'delete_api_key', provider});
+  }
+
+  /**
+   * Get provider status (which have keys, which are available)
+   */
+  async getProviderStatus() {
+    return this.sendMessage({action: 'get_provider_status'});
+  }
+
+  /**
+   * Request AI actions (async — returns request_id)
+   */
+  async requestActions(provider, userRequest) {
+    return this.sendMessage({
+      action: 'get_actions', provider, user_request: userRequest
+    });
+  }
+
+  /**
+   * Poll for async request result
+   */
+  async pollRequest(requestId) {
+    return this.sendMessage({action: 'poll', request_id: requestId});
+  }
+
+  /**
+   * Cancel an async request
+   */
+  async cancelRequest(requestId) {
+    return this.sendMessage({action: 'cancel', request_id: requestId});
+  }
+
+  /**
+   * Poll until a request completes. Returns the final result.
+   * @param {string} requestId
+   * @param {number} intervalMs - polling interval (default 500ms)
+   * @param {number} timeoutMs - max wait time (default 120000ms)
+   */
+  async pollUntilComplete(requestId, intervalMs = 500, timeoutMs = 120000) {
+    const start = Date.now();
+    while (Date.now() - start < timeoutMs) {
+      const result = await this.pollRequest(requestId);
+      if (result.status === 'complete' || result.status === 'error' || result.status === 'cancelled') {
+        return result;
+      }
+      await new Promise(r => setTimeout(r, intervalMs));
+    }
+    // Timeout — try to cancel
+    await this.cancelRequest(requestId);
+    throw new Error('AI request timed out');
+  }
 }
 
 // Export for use in other modules
