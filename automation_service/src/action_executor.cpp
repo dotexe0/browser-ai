@@ -1,4 +1,5 @@
 #include "action_executor.h"
+#include <winhttp.h>
 
 ActionExecutor::ActionExecutor() : initialized_(false) {
     uiAutomation_ = std::make_unique<UIAutomation>();
@@ -32,14 +33,18 @@ bool ActionExecutor::Initialize() {
 }
 
 json ActionExecutor::GetCapabilities() {
+    json llmCheck = CheckLocalLLM();
+    bool llmAvailable = llmCheck.value("available", false);
+
     return {
         {"success", true},
         {"capabilities", {
             {"screen_capture", initialized_},
             {"ui_automation", initialized_},
             {"input_control", true},
-            {"local_llm", false}  // Not yet implemented
-        }}
+            {"local_llm", llmAvailable}
+        }},
+        {"local_llm_info", llmCheck}
     };
 }
 
@@ -320,11 +325,106 @@ WORD ActionExecutor::ParseVirtualKey(const std::string& keyStr) {
 }
 
 json ActionExecutor::CheckLocalLLM() {
-    // Stub for future implementation
-    return {
-        {"success", true},
-        {"available", false},
-        {"error", "Local LLM not yet implemented"}
-    };
+    // Check if Ollama is running by hitting its /api/tags endpoint
+    HINTERNET hSession = WinHttpOpen(
+        L"BrowserAI/1.0",
+        WINHTTP_ACCESS_TYPE_NO_PROXY,
+        WINHTTP_NO_PROXY_NAME,
+        WINHTTP_NO_PROXY_BYPASS,
+        0);
+
+    if (!hSession) {
+        return {{"success", true}, {"available", false},
+                {"error", "Failed to create HTTP session"}};
+    }
+
+    HINTERNET hConnect = WinHttpConnect(
+        hSession, L"localhost",
+        11434,  // Ollama default port
+        0);
+
+    if (!hConnect) {
+        WinHttpCloseHandle(hSession);
+        return {{"success", true}, {"available", false},
+                {"error", "Cannot connect to Ollama (port 11434)"}};
+    }
+
+    HINTERNET hRequest = WinHttpOpenRequest(
+        hConnect, L"GET", L"/api/tags",
+        nullptr, WINHTTP_NO_REFERER,
+        WINHTTP_DEFAULT_ACCEPT_TYPES, 0);
+
+    if (!hRequest) {
+        WinHttpCloseHandle(hConnect);
+        WinHttpCloseHandle(hSession);
+        return {{"success", true}, {"available", false},
+                {"error", "Failed to create HTTP request"}};
+    }
+
+    // Set a short timeout (3 seconds)
+    DWORD timeout = 3000;
+    WinHttpSetOption(hRequest, WINHTTP_OPTION_CONNECT_TIMEOUT, &timeout, sizeof(timeout));
+    WinHttpSetOption(hRequest, WINHTTP_OPTION_RECEIVE_TIMEOUT, &timeout, sizeof(timeout));
+
+    BOOL sent = WinHttpSendRequest(hRequest, WINHTTP_NO_ADDITIONAL_HEADERS, 0,
+                                    WINHTTP_NO_REQUEST_DATA, 0, 0, 0);
+
+    if (!sent || !WinHttpReceiveResponse(hRequest, nullptr)) {
+        WinHttpCloseHandle(hRequest);
+        WinHttpCloseHandle(hConnect);
+        WinHttpCloseHandle(hSession);
+        return {{"success", true}, {"available", false},
+                {"error", "Ollama is not running on localhost:11434"}};
+    }
+
+    // Read response body
+    std::string responseBody;
+    DWORD bytesAvailable = 0;
+    while (WinHttpQueryDataAvailable(hRequest, &bytesAvailable) && bytesAvailable > 0) {
+        std::vector<char> buf(bytesAvailable);
+        DWORD bytesRead = 0;
+        WinHttpReadData(hRequest, buf.data(), bytesAvailable, &bytesRead);
+        responseBody.append(buf.data(), bytesRead);
+    }
+
+    WinHttpCloseHandle(hRequest);
+    WinHttpCloseHandle(hConnect);
+    WinHttpCloseHandle(hSession);
+
+    // Parse Ollama response to list available models
+    json result = {{"success", true}, {"available", true}};
+    try {
+        json ollamaResp = json::parse(responseBody);
+        if (ollamaResp.contains("models") && ollamaResp["models"].is_array()) {
+            json models = json::array();
+            for (const auto& model : ollamaResp["models"]) {
+                std::string name = model.value("name", "unknown");
+                models.push_back(name);
+            }
+            result["models"] = models;
+            result["model_count"] = models.size();
+
+            // Check for vision-capable models
+            bool hasVision = false;
+            for (const auto& model : ollamaResp["models"]) {
+                std::string name = model.value("name", "");
+                if (name.find("llava") != std::string::npos ||
+                    name.find("cogagent") != std::string::npos ||
+                    name.find("bakllava") != std::string::npos ||
+                    name.find("moondream") != std::string::npos) {
+                    hasVision = true;
+                    break;
+                }
+            }
+            result["has_vision_model"] = hasVision;
+        }
+    } catch (...) {
+        // Ollama responded but we can't parse — still available
+        result["models"] = json::array();
+        result["model_count"] = 0;
+        result["has_vision_model"] = false;
+    }
+
+    return result;
 }
 

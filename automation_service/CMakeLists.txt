@@ -54,6 +54,7 @@ target_link_libraries(automation_service
     windowscodecs       # For WIC (image encoding)
     Ole32               # For COM
     OleAut32            # For COM automation
+    Winhttp             # For HTTP client (local LLM detection)
 )
 
 # Set output directory
